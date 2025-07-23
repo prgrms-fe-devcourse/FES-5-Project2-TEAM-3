@@ -1,6 +1,9 @@
+
+import Footer from './components/footer/Footer';
 import './App.css'
 import { RouterProvider } from 'react-router-dom'
 import {router} from './router'
+
 
 
 function App() {
@@ -11,4 +14,5 @@ function App() {
       {/* <Footer/> */}
     </div>
 }
-export default App
+
+export default App;
