@@ -1,0 +1,25 @@
+
+
+
+
+.container {
+  display: flex;
+  gap : 3.5rem;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: center;
+    align-items: flex-start;
+
+    h1 {
+      font-size: 4rem;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 500;
+    }
+  }
+}
