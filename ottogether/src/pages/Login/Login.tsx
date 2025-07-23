@@ -7,6 +7,8 @@ import passwordIcon from '@/assets/icons/key-square.svg';
 import toShowIcon from '@/assets/icons/eye.svg';
 import toHideIcon from '@/assets/icons/eye-slash.svg';
 import { useNavigate } from 'react-router-dom';
+import FindId from '../../components/FindId/FindId';
+import FindPassword from '../../components/FindPassword/FindPassword';
 
 
 function Login() {
@@ -122,6 +124,9 @@ function Login() {
           </a>
         </div>
       </section>
+      {showFindId && <FindId onClose={() => setShowFindId(false)} />}
+      {showFindPassword && <FindPassword onClose={() => setShowFindPassword(false)} />}
+
 
       
     </div>
