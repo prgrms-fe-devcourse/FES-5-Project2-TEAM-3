@@ -73,11 +73,11 @@ function Register() {
       <figure>
         <img src={characterImg} alt="엄지척 범쌤" />
       </figure>
-      <section className={S.registerSection}>
+      <section className={S["register-section"]}>
         <h2>Register</h2>
-        <form className={S.registerForm} onSubmit={handleRegister}>
-          <div className={S.inputWrapper}>
-            <img className={S.inputIcon} src={userIcon} alt="유저 아이콘" />
+        <form className={S["register-form"]} onSubmit={handleRegister}>
+          <div className={S["input-wrapper"]}>
+            <img className={S["input-icon"]} src={userIcon} alt="유저 아이콘" />
             <input 
               type="text" 
               name="닉네임" 
@@ -87,8 +87,8 @@ function Register() {
               onChange={handleInput}
              />
           </div>
-          <div className={S.inputWrapper}>
-            <img className={S.inputIcon} src={emailIcon} alt="이메일 아이콘" />
+          <div className={S["input-wrapper"]}>
+            <img className={S["input-icon"]} src={emailIcon} alt="이메일 아이콘" />
             <input 
               type="email" 
               name="이메일" 
@@ -98,8 +98,8 @@ function Register() {
               onChange={handleInput}
              />
           </div>
-          <div className={S.inputWrapper}>
-            <img className={S.inputIcon} src={passwordIcon} alt="비밀번호 아이콘" />
+          <div className={S["input-wrapper"]}>
+            <img className={S["input-icon"]} src={passwordIcon} alt="비밀번호 아이콘" />
             <input 
               type={showPassword ? "text" : "password"}
               name="비밀번호" 
@@ -109,14 +109,14 @@ function Register() {
               onChange={handleInput}
              />
             <img 
-              className={S.toShowIcon} 
+              className={S["to-show-icon"]} 
               src={showPassword ? toHideIcon : toShowIcon} 
               alt="비밀번호 보기"
               onClick={()=>setShowPassword(prev => !prev)}
              />
           </div>
-          <div className={S.inputWrapper}>
-            <img className={S.inputIcon} src={passwordIcon} alt="비밀번호 아이콘" />
+          <div className={S["input-wrapper"]}>
+            <img className={S["input-icon"]} src={passwordIcon} alt="비밀번호 아이콘" />
             <input 
               type={showPasswordConfirm ? "text" : "password"}
               name="비밀번호 확인" 
@@ -126,7 +126,7 @@ function Register() {
               onChange={handleInput}
              />
             <img 
-              className={S.toShowIcon} 
+              className={S["to-show-icon"]} 
               src={showPasswordConfirm ? toHideIcon : toShowIcon} 
               alt="비밀번호 보기"
               onClick={()=>setShowPasswordConfirm(prev => !prev)}
@@ -134,7 +134,7 @@ function Register() {
           </div>
 
           <button 
-            className={S.registerButton} 
+            className={S["register-button"]} 
             type="submit"
             disabled={
               !userNickName.trim() ||
