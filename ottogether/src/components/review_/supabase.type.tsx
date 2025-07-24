@@ -45,6 +45,7 @@ export type Database = {
         Row: {
           bio: string | null
           favorite_genre: string[] | null
+          joined_time: string
           nickname: string
           profile_image_url: string | null
           url: string | null
@@ -53,6 +54,7 @@ export type Database = {
         Insert: {
           bio?: string | null
           favorite_genre?: string[] | null
+          joined_time?: string
           nickname?: string
           profile_image_url?: string | null
           url?: string | null
@@ -61,6 +63,7 @@ export type Database = {
         Update: {
           bio?: string | null
           favorite_genre?: string[] | null
+          joined_time?: string
           nickname?: string
           profile_image_url?: string | null
           url?: string | null
@@ -76,6 +79,7 @@ export type Database = {
           id: number
           is_visible: boolean | null
           likes: number | null
+          movie_id: string | null
           updated_at: string | null
           user_id: string | null
         }
@@ -86,6 +90,7 @@ export type Database = {
           id?: number
           is_visible?: boolean | null
           likes?: number | null
+          movie_id?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -96,6 +101,7 @@ export type Database = {
           id?: number
           is_visible?: boolean | null
           likes?: number | null
+          movie_id?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -129,6 +135,7 @@ export type Database = {
           rating: number
           text_content: string
           updated_at: string
+          writer_id: number
         }
         Insert: {
           created_at?: string
@@ -139,6 +146,7 @@ export type Database = {
           rating: number
           text_content?: string
           updated_at?: string
+          writer_id?: number
         }
         Update: {
           created_at?: string
@@ -149,6 +157,7 @@ export type Database = {
           rating?: number
           text_content?: string
           updated_at?: string
+          writer_id?: number
         }
         Relationships: []
       }

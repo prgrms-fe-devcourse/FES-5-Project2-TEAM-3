@@ -1,19 +1,13 @@
 import { createClient } from "@supabase/supabase-js"
 
-async function getData(){
+export async function getData(table : string){
 	const supabase = createClient(import.meta.env.VITE_PROJECT_URL, import.meta.env.VITE_API_KEY);
 	const {data, error} = await supabase
-		.from('review')
+		.from(table)
 		.select('*');
-	
-	console.log('data : ', data, 'error : ', error);
-	return data;
-}
 
-function SupaData() {
-	getData();
-	return (
-		<div>hi</div>
-	)
+	if (error)
+		console.error('error occured');
+	else
+		return data;
 }
-export default SupaData
