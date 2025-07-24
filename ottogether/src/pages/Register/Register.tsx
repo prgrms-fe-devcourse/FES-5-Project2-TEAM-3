@@ -8,6 +8,8 @@ import emailIcon from '@/assets/icons/sms.svg';
 import passwordIcon from '@/assets/icons/key-square.svg';
 import toShowIcon from '@/assets/icons/eye.svg';
 import toHideIcon from '@/assets/icons/eye-slash.svg';
+import toExpandIcon from '@/assets/icons/expand.svg';
+import toCollapseIcon from '@/assets/icons/collapse.svg';
 
 
 function Register() {
@@ -30,6 +32,7 @@ function Register() {
   const [ showPassword, setShowPassword ] = useState<boolean>(false);
   const [ showPasswordConfirm, setShowPasswordConfirm ] = useState<boolean>(false);
   const [ agreement, SetAgreement ] = useState<boolean | null>(null);
+  const [ isOpen, setIsOpen ] = useState<boolean>(false);
   const [ error, setError ] = useState<string>('');
 
   const agreeFieldRef = useRef<HTMLInputElement>(null);
@@ -170,43 +173,59 @@ function Register() {
              />
           </div>
 
-          <section className={S["agreement-section"]}>
+          <div className={S.accordion}>
             <h4>개인정보 수집 및 이용 동의</h4>
-            <p><strong>입력하신 이름과 전화번호는 아래 동의 항목에 따라 수집 및 이용</strong>되며, 회원 정보 확인을 위한 목적으로만 사용됩니다. </p>
-            <p>본 동의는 거부하실 수 있으며, 거부하실 경우 <strong>정상적으로 가입하신 이메일 / 비밀번호 찾기 기능을 이용하실 수 없습니다.</strong></p>
-            <ol>
-              <li key="purpose">수집 목적 : 회원 정보 확인</li>
-              <li key="information">수집 항목 : 이름, 전화번호</li>
-              <li key="retention-period">보유 및 이용 기간 : 회원 탈퇴 시까지</li>
-            </ol>
-            
-            <fieldset aria-label='정보 제공 동의 선택창'>
-              <legend>개인정보 제공에 동의하십니까?</legend>
+            <button 
+              type="button"
+              className={S.accordionToggle}
+              onClick={() => setIsOpen(prev => !prev)}
+              aria-expanded={isOpen}
+              aria-controls='agreement-section'
+            >
+              { isOpen ? <img src={toCollapseIcon} alt="닫기" />
+                : <img src={toExpandIcon} alt="열기" />
+              }
+            </button>
+          </div>
+          {
+            isOpen && (
+              <section className={S["agreement-section"]}>
+                <p><strong>입력하신 이름과 전화번호는 아래 동의 항목에 따라 수집 및 이용</strong>되며, 회원 정보 확인을 위한 목적으로만 사용됩니다. </p>
+                <p>본 동의는 거부하실 수 있으며, 거부하실 경우 <strong>정상적으로 가입하신 이메일 / 비밀번호 찾기 기능을 이용하실 수 없습니다.</strong></p>
+                <ol>
+                  <li key="purpose">수집 목적 : 회원 정보 확인</li>
+                  <li key="information">수집 항목 : 이름, 전화번호</li>
+                  <li key="retention-period">보유 및 이용 기간 : 회원 탈퇴 시까지</li>
+                </ol>
+              </section>
+            )
+          }
+          <fieldset aria-label='정보 제공 동의 선택창'>
+            <legend>개인정보 제공에 동의하십니까?</legend>
 
-              <label htmlFor="agree">
-                <input 
-                ref={agreeFieldRef}
-                tabIndex={-1}
-                type="radio" 
-                name="agreement"
-                id="agree"
-                value="true"
-                checked={agreement === true} 
-                onChange={()=>SetAgreement(true)}
-                /> 
-                네, 동의합니다.</label>
-              <label htmlFor="disagree">
-                <input 
-                type="radio" 
-                name="agreement"
-                id="disagree"
-                value="false"
-                checked={agreement === false} 
-                onChange={()=>SetAgreement(false)}
-                /> 
-                동의하지 않습니다.</label>
-            </fieldset>  
-          </section>
+            <label htmlFor="agree">
+              <input 
+              ref={agreeFieldRef}
+              tabIndex={-1}
+              type="radio" 
+              name="agreement"
+              id="agree"
+              value="true"
+              checked={agreement === true} 
+              onChange={()=>SetAgreement(true)}
+              /> 
+              네, 동의합니다.</label>
+            <label htmlFor="disagree">
+              <input 
+              type="radio" 
+              name="agreement"
+              id="disagree"
+              value="false"
+              checked={agreement === false} 
+              onChange={()=>SetAgreement(false)}
+              /> 
+              동의하지 않습니다.</label>
+          </fieldset>  
 
           <button 
             className={S["register-button"]} 
