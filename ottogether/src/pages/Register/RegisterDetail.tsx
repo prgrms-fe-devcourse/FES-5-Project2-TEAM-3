@@ -71,8 +71,8 @@ function RegisterDetail() {
       <form className={S['register-detail-form']} onSubmit={handleSubmitRegisterDetail}>
         <section>
           <h4>이름과 전화번호를 입력해 주세요.</h4>
-          <div className={S.inputWrapper}>
-            <img className={S.inputIcon} src={userIcon} alt="유저 아이콘" />
+          <div className={S["input-wrapper"]}>
+            <img className={S["input-icon"]} src={userIcon} alt="유저 아이콘" />
             <input 
               type="text" 
               name="이름" 
@@ -81,8 +81,8 @@ function RegisterDetail() {
               onChange={handleInput}
               />
           </div>
-          <div className={S.inputWrapper}>
-            <img className={S.inputIcon} src={phoneIcon} alt="전화 아이콘" />
+          <div className={S["input-wrapper"]}>
+            <img className={S["input-icon"]} src={phoneIcon} alt="전화 아이콘" />
             <input 
               type="text" 
               name="전화번호" 
@@ -95,16 +95,19 @@ function RegisterDetail() {
 
         <section>
           <h4>사용 중이시거나 관심 있는 OTT 플랫폼을 선택해주세요.</h4>
-          <ul className={S["ott-grid"]}>
+          <ul className={S["ott-selection"]}>
             { ottListTotal.map(ott => (
               <li key={ott}>
-                <button 
-                  type='button'
-                  className={ottList.includes(ott) ? S.selected : ''}
-                  onClick={() => handleOttClick(ott)}
-                >
-                  <img src={`/ott/${ott}.png`} alt={ott} />
-                </button>
+                <figure className={S["ott-item"]}>
+                  <button 
+                    type='button'
+                    className={ottList.includes(ott) ? S.selected : ''}
+                    onClick={() => handleOttClick(ott)}
+                  >
+                    <img src={`/ott/${ott}.png`} alt={`${ott} 로고`} />
+                  </button>
+                  <figcaption>{ott}</figcaption>
+                </figure>
               </li>
             ))}
           </ul>
@@ -112,21 +115,23 @@ function RegisterDetail() {
 
         <section>
           <h4>관심 있는 장르를 선택해주세요.</h4>
-          {
-            genreListtotal.map((genre, index) => (
-              <div key={genre} className={S.genreItem}>
-                <input 
-                type="checkbox"
-                id={`genre-${index}`}
-                value={genre}
-                checked={genres.includes(genre)}
-                onChange={(e) => handleGenreChange(e)}
-                className={S.checkbox}
-                />
-                <label htmlFor={`genre-${index}`} className={S.genreLabel}>{genre}</label>
-              </div>
-            ))
-          }
+          <div className={S["genre-list"]}>
+            {
+              genreListtotal.map((genre, index) => (
+                <div key={genre} className={S["genre-item"]}>
+                  <input 
+                  type="checkbox"
+                  id={`genre-${index}`}
+                  value={genre}
+                  checked={genres.includes(genre)}
+                  onChange={(e) => handleGenreChange(e)}
+                  className={S.checkbox}
+                  />
+                  <label htmlFor={`genre-${index}`} className={S["genre-label"]}>{genre}</label>
+                </div>
+              ))
+            }
+          </div>
         </section>
 
         <section>
@@ -172,7 +177,7 @@ function RegisterDetail() {
         <button 
           type="button" 
           onClick={() => navigate('/register/profile')} 
-          className={S.skipBtn}
+          className={S["skip-button"]}
           aria-label="다음 페이지로 이동합니다"
           disabled={!isSkippable}
         >다음에 입력하기</button>
