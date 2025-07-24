@@ -1,5 +1,5 @@
 .container {
-	max-width: 80%;
+	max-width: 800px;
 
 	margin: 0 auto;
 	padding: 2rem 1rem;
@@ -40,7 +40,7 @@
 
 /* text input */
 .input-wrapper {
-	max-width: 800px;
+	max-width: 90%;
 	display: flex;
 	align-items: center;
 	background: var(--color-white-100);
@@ -101,6 +101,11 @@
 		flex-shrink: 0;
 	}
 
+	button:hover {
+		transform: scale(1.05);
+		transition: transform 0.2s ease;
+	}
+
 	button.selected {
 		border-color: var(--color-primary-300);
 	}
@@ -159,14 +164,119 @@
 }
 
 /* agreement fieldset */
-ol {
-	padding-left: 1.5rem;
+.agreement-section {
+	p {
+		/* margin-bottom: 0.2rem; */
+		line-height: 1.2;
+		color: var(--color-grey-300);
+	}
+
+	ol {
+		margin-bottom: 1rem;
+		padding: 1.5rem 2rem;
+		border: 1px solid var(--foreground);
+		list-style-type: decimal;
+		color: var(--color-grey-100);
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	label[for="agree"],
+	label[for="disagree"] {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		cursor: pointer;
+	}
+
+	fieldset {
+		border: none;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.8rem;
+
+		legend {
+			margin-bottom: 1rem;
+		}
+	}
+
+	input[type="radio"] {
+		appearance: none;
+		margin-right: 1rem;
+		width: 1.2rem;
+		height: 1.2rem;
+		border-radius: 50%;
+		border: 2px solid var(--color-grey-300);
+		background-color: var(--foreground);
+		position: relative;
+		cursor: pointer;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		transition: background-color 0.2s ease, border-color 0.2s ease;
+	}
+
+	input[type="radio"]:checked::before {
+		content: "✔︎";
+		font-size: 0.6rem;
+		color: var(--foreground);
+
+		position: absolute;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		border: 2px solid var(--color-primary-300);
+		background-color: var(--primary);
+	}
+
+	input[type="radio"]:focus {
+		outline: 2px solid var(--color-error-300);
+		outline-offset: 2px;
+	}
 }
 
-input[type="radio"],
-label[for="agree"],
-label[for="disagree"] {
-	display: inline-block;
-	margin-right: 1rem;
+/* button */
+.register-button {
+	font-family: "Poppins";
+	font-weight: 500;
+	font-size: 1rem;
+	background-color: var(--color-primary-400);
+	opacity: 40%;
+	color: var(--foreground);
+	border-radius: 12px;
+	padding: 0.9rem;
+	border: none;
+	cursor: not-allowed;
+	transition: background 0.2s ease;
+}
+
+.register-button:enabled {
+	background-color: var(--primary);
 	cursor: pointer;
+	opacity: 1;
+
+	&:hover {
+		filter: brightness(1.05);
+	}
+}
+
+.skip-button {
+	background: none;
+	border: none;
+	font-size: 0.9rem;
+	color: var(--color-grey-200);
+	text-decoration: underline;
+	cursor: pointer;
+
+	&:disabled {
+		color: var(--color-grey-600);
+	}
 }
