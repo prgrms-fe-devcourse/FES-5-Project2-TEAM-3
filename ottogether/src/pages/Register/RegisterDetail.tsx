@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import S from './RegisterDetail.module.css';
 import userIcon from '@/assets/icons/user-square.svg';
@@ -19,18 +19,21 @@ function RegisterDetail() {
   const nameId = useId();
   const phoneId = useId();
 
-  /* input state 정의 */
+  /* input state & ref 정의 */
   const [ name, setName ] = useState<string>('');
   const [ phoneNumber, setPhoneNumber ] = useState<string>('');
   const [ ottList, setOttList ] = useState<string[]>([]);
   const [ genres, setGenres ] = useState<string[]>([]);
   const [ agreement, SetAgreement ] = useState<boolean | null>(null);
+  const agreeFieldRef = useRef<HTMLInputElement>(null);
 
   const ottListTotal = ['Netflix', 'Tving', 'DisneyPlus', 'Wavve', 'CoupangPlay', 'AppleTV', 'AmazonPrimeVideo'];
   const genreListtotal = ['액션', '모험', 'SF & 판타지', '코미디', '범죄', '로맨스', '드라마', '가족', '애니메이션', '아동', '음악', '공포', '미스터리', '스릴러', '다큐멘터리', '전쟁', '서부', '리얼리티', '연속극', '토크쇼', '역사', '뉴스', '정치'];
 
+  // 입력하기 버튼 활성화 조건 설정
+  const isSubmittable = (agreement === true && name.trim() !== '' && phoneNumber.trim() !== '') || ( agreement === false );
   // 다음에 입력하기 활성화 조건 설정
-  const isSkippable = !name.trim() && !phoneNumber.trim() && ottList.length === 0 && genres.length === 0 && agreement === null
+  const isSkippable = !name.trim() && !phoneNumber.trim() && ottList.length === 0 && genres.length === 0 && (agreement === null || agreement === false)
           
   const handleInput = (e:React.ChangeEvent<HTMLInputElement>) => {
     if(e.target.id === nameId) {
@@ -46,7 +49,6 @@ function RegisterDetail() {
         ? prev.filter(p => p !== platform)
         : [...prev, platform]
     )
-    // console.log(ottList);
   }
 
   const handleGenreChange = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -56,11 +58,34 @@ function RegisterDetail() {
       ? prev.filter(g => g !== selectedGenre)
       : [...prev, selectedGenre]
     )
-    // console.log(genres);
   }
 
-  const handleSubmitRegisterDetail = () => {
+  const handleSubmitRegisterDetail = (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
+    // 정보제공 동의 X + 입력값 있음
+    if( agreement === false && (name.trim() !== '' || phoneNumber.trim() !== '')) {
+      const confirmDelete = confirm('개인정보 제공에 동의하지 않으시는 경우, 입력하신 값은 저장되지 않습니다. 계속하시겠습니까?');
+      if(confirmDelete) {
+        setName('');
+        setPhoneNumber('');
+        navigate('register/profile');
+      } else {
+        agreeFieldRef.current?.scrollIntoView();
+        agreeFieldRef.current?.focus();
+      }
+    }
+
+    // 정보제공 동의 X + 입력값 없음
+    if( agreement === false && name.trim() === '' && phoneNumber.trim() !== '') {
+      navigate('register/profile');
+    }
+
+    // 정보제공 동의 O + 입력값 있음
+    if( agreement === true && name.trim() && phoneNumber.trim() ) {
+      // supabase.auth()
+      navigate('register/profile');
+    }
   }
 
   return (
@@ -134,7 +159,7 @@ function RegisterDetail() {
           </div>
         </section>
 
-        <section>
+        <section className={S["agreement-section"]}>
           <h4>개인정보 수집 및 이용 동의</h4>
           <p>개인정보 수집 및 이용에 동의해주세요. 입력하신 정보는 회원 정보 확인을 위한 목적으로만 사용됩니다. </p>
           <p>본 동의는 거부하실 수 있으며, 거부하실 경우 정상적으로 가입하신 이메일 / 비밀번호 찾기 기능을 이용하실 수 없습니다.</p>
@@ -147,30 +172,35 @@ function RegisterDetail() {
           <fieldset aria-label='정보 제공 동의 선택창'>
             <legend>개인정보 제공에 동의하십니까?</legend>
 
-            <input 
+            <label htmlFor="agree">
+              <input 
+              ref={agreeFieldRef}
+              tabIndex={-1}
               type="radio" 
               name="agreement"
               id="agree"
               value="true"
               checked={agreement === true} 
               onChange={()=>SetAgreement(true)}
-            /> 
-            <label htmlFor="agree">네, 동의합니다.</label>
-            <input 
+              /> 
+              네, 동의합니다.</label>
+            <label htmlFor="disagree">
+              <input 
               type="radio" 
               name="agreement"
               id="disagree"
               value="false"
               checked={agreement === false} 
               onChange={()=>SetAgreement(false)}
-            /> 
-            <label htmlFor="disagree">동의하지 않습니다.</label>
+              /> 
+              동의하지 않습니다.</label>
           </fieldset>  
         </section>
         
         <button 
           type="submit" 
-          disabled={agreement === null || ( agreement === true && (!name.trim() || !phoneNumber.trim()))}
+          className={S["register-button"]}
+          disabled={!isSubmittable}
           aria-label="입력한 정보를 제출합니다"
         >입력하기</button>
 
