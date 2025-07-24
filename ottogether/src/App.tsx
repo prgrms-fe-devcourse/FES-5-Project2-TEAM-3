@@ -1,6 +1,5 @@
 
 import Footer from './components/footer/Footer';
-import './App.css'
 import { RouterProvider } from 'react-router-dom'
 import {router} from './router'
 
@@ -11,8 +10,14 @@ function App() {
     <div className='App'>
 			{/* <Header/> */}
 			<RouterProvider router={router}/>
-      {/* <Footer/> */}
+      <Footer/>
     </div>
+
+    
+
+
+
+    )
 }
 
 export default App;
