@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import S from './Header.module.css';
-import logo from '@/assets/logo.svg';
 import searchIcon from '@/assets/icons/search-white.svg';
 import searchIconBlack from '@/assets/icons/search-black.svg';
 import bellIcon from '@/assets/icons/notification.svg';
@@ -97,7 +96,7 @@ function Header() {
     <header className={S.header}>
       <h1>
         <a href='/'>
-          <img src={logo} alt="OTTogether 로고" className={S.logo} />
+          <img src='./logo.svg' alt="OTTogether 로고" className={S.logo} />
         </a>
       </h1>
 
