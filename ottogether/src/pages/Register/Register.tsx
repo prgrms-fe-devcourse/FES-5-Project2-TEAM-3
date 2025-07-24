@@ -201,7 +201,7 @@ function Register() {
             )
           }
           <fieldset aria-label='정보 제공 동의 선택창'>
-            <legend>개인정보 제공에 동의하십니까?</legend>
+            <legend className='a11y-hidden'>개인정보 제공에 동의하십니까?</legend>
 
             <label htmlFor="agree">
               <input 
