@@ -69,7 +69,7 @@ function RegisterDetail() {
       if(confirmDelete) {
         setName('');
         setPhoneNumber('');
-        navigate('register/profile');
+        navigate('/register/profile');
       } else {
         agreeFieldRef.current?.scrollIntoView();
         agreeFieldRef.current?.focus();
@@ -77,14 +77,14 @@ function RegisterDetail() {
     }
 
     // 정보제공 동의 X + 입력값 없음
-    if( agreement === false && name.trim() === '' && phoneNumber.trim() !== '') {
-      navigate('register/profile');
+    if( agreement === false && name.trim() === '' && phoneNumber.trim() === '') {
+      navigate('/register/profile');
     }
 
     // 정보제공 동의 O + 입력값 있음
     if( agreement === true && name.trim() && phoneNumber.trim() ) {
       // supabase.auth()
-      navigate('register/profile');
+      navigate('/register/profile');
     }
   }
 
