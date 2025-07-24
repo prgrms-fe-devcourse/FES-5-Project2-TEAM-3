@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import S from "./FindId.module.css"
-import userIcon from "@/assets/icons/user-square-white.svg"
-import phoneIcon from "@/assets/icons/phone-white.svg"
-import emailIcon from "@/assets/icons/sms-white.svg"
-import closeIcon from "@/assets/icons/close.svg"
+import S from "./FindId.module.css";
+import userIcon from "@/assets/icons/user-square-white.svg";
+import phoneIcon from "@/assets/icons/phone-white.svg";
+import emailIcon from "@/assets/icons/sms-white.svg";
+import closeIcon from "@/assets/icons/close.svg";
 
 type Props = {
   onClose: () => void;
 };
-
 
 function FindId({ onClose }: Props) {
   const [name, setName] = useState('');
@@ -38,7 +37,7 @@ function FindId({ onClose }: Props) {
     setFoundEmail(null);
 
     const { data, error: supaError } = await supabase
-      .from('users') // 수파베이스 연결 후 테이블 이름으로 변경
+      .from('users') // 실제 테이블명으로 수정 필요
       .select('email')
       .eq('name', name)
       .eq('phone', phone)
@@ -66,7 +65,7 @@ function FindId({ onClose }: Props) {
 
   return (
     <div className={S.overlay} onClick={onClose}>
-    <div className={S.container} onClick={(e) => e.stopPropagation()}>
+      <div className={S.container} onClick={(e) => e.stopPropagation()}>
         <button className={S.closeButton} onClick={onClose}>
           <img src={closeIcon} alt="닫기 버튼" />
         </button>
@@ -74,10 +73,8 @@ function FindId({ onClose }: Props) {
         {mode === 'form' && (
           <div className={S.findIdContainer}>
             <h2 className={S.title}>이메일 찾기</h2>
-            <div className={S.descriontionWrapper}>
-              <h3>
-              가입하신 이메일을 잊으셨나요?
-              </h3>
+            <div className={S.descriptionWrapper}>
+              <h3>가입하신 이메일을 잊으셨나요?</h3>
               <p>
                 회원님의 성함과 전화번호를 적어주세요.<br />
                 입력하신 정보와 동일한 회원이 있는지 확인 후<br />
@@ -143,4 +140,5 @@ function FindId({ onClose }: Props) {
     </div>
   );
 }
-export default FindId
+
+export default FindId;
