@@ -96,7 +96,7 @@ function Header() {
     <header className={S.header}>
       <h1>
         <a href='/'>
-          <img src='./logo.svg' alt="OTTogether 로고" className={S.logo} />
+          <img src='/logo.svg' alt="OTTogether 로고" className={S.logo} />
         </a>
       </h1>
 

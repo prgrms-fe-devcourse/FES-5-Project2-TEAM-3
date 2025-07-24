@@ -6,9 +6,12 @@ import emailIcon from '@/assets/icons/sms.svg';
 import passwordIcon from '@/assets/icons/key-square.svg';
 import toShowIcon from '@/assets/icons/eye.svg';
 import toHideIcon from '@/assets/icons/eye-slash.svg';
+import { useNavigate } from 'react-router-dom';
 
 
 function Register() {
+
+  const navigate = useNavigate();
 
   /* register Form용 아이디 생성 */
   const nicknameId = useId();
@@ -52,6 +55,17 @@ function Register() {
       return;
     }
     // authRegister();
+    sessionStorage.setItem('registerInfo', JSON.stringify({
+      nickname: userNickName,
+      email: userEmail
+    }));
+
+    navigate('/register/detail', { 
+      state: {
+        nickname: userNickName,
+        email: userEmail
+      }
+    });
   }
 
   return (
