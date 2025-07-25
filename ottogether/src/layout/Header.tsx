@@ -66,13 +66,26 @@ function Header() {
     if ( e.key === 'Enter' ) handleSearch();
   };
 
+  /* 로그아웃 */
+  const handleLogOut = async () => {
+    // AuthProvider 구현 필요
+  }
+
   /* 로그인 상태별 버튼 리스트 변경 */
   let buttonList = null;
   if (isLoggedIn) {
     buttonList = (
       <>
-        <button type='button' className={S["outline-button"]}>Log Out</button>
-        <button type='button' className={S["filled-button"]}>My Page</button>
+        <button 
+          type='button' 
+          className={S["outline-button"]} 
+          onClick={handleLogOut}
+        >Log Out</button>
+        <button 
+          type='button' 
+          className={S["filled-button"]}
+          onClick={()=> navigate('/my-page')}
+        >My Page</button>
         <div className={S['notification-wrapper']}>
           <img src={bellIcon} alt="알림" className={S.icon} />
           { hasNewNoti && <span className={S["red-dot"]} /> }
@@ -87,7 +100,11 @@ function Header() {
           className={S["outline-button"]}
           onClick={()=> navigate('/register')}
         >Sign Up</button>
-        <button type='button' className={S["filled-button"]}>Log In</button>
+        <button 
+          type='button' 
+          className={S["filled-button"]}
+          onClick={()=> navigate('/login')}
+        >Log In</button>
       </>
     )
   }
