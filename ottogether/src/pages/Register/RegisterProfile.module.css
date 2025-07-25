@@ -214,3 +214,22 @@ textarea {
 		margin-bottom: 1.2rem;
 	}
 }
+
+/* 반응형 구조 */
+@media (max-width: 768px) {
+	form {
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"preview"
+			"form"
+			"button";
+	}
+
+	.input-wrapper {
+		max-width: 100%;
+	}
+
+	.button-group {
+		align-items: stretch;
+	}
+}
