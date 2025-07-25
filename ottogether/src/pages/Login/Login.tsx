@@ -9,6 +9,7 @@ import toHideIcon from '@/assets/icons/eye-slash.svg';
 import { useNavigate } from 'react-router-dom';
 import FindId from '../../components/FindId/FindId';
 import FindPassword from '../../components/FindPassword/FindPassword';
+import { supabase } from '../../supabase/supabase';
 
 
 function Login() {
@@ -35,13 +36,8 @@ function Login() {
     if(error){
       setError("아이디 또는 비밀번호가 잘못 되었습니다.");
     }else{
-      // Swal.fire({
-      //   title: '로그인에 성공했습니다!',
-      //   text: '메인 페이지로 이동합니다.',
-      //   icon: 'success',
-      // }).then(() => {
-      //   navigate('/');
-      // });
+      alert('로그인 완료!');
+      navigate('/');
     }   
   }
 

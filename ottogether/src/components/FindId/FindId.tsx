@@ -5,6 +5,7 @@ import userIcon from "@/assets/icons/user-square-white.svg";
 import phoneIcon from "@/assets/icons/phone-white.svg";
 import emailIcon from "@/assets/icons/sms-white.svg";
 import closeIcon from "@/assets/icons/close.svg";
+import { supabase } from "../../supabase/supabase";
 
 type Props = {
   onClose: () => void;
@@ -32,35 +33,30 @@ function FindId({ onClose }: Props) {
 
 
 
-  //supabase Auth 접근 로직 필요.
+//  supabase Auth 접근 로직 필요.
 
+  const handleFindId = async () => {
+  setIsLoading(true);
+  setError('');
+  setFoundEmail(null);
 
+  const { data, error: supaError } = await supabase
+    .from('users')
+    .select('email')
+    .eq('name', name)
+    .eq('phone', phone)
+    .single();
 
+  setIsLoading(false);
 
+  if (supaError || !data) {
+    setError('일치하는 계정 정보를 찾을 수 없습니다.');
+    return;
+  }
 
-
-  const handleFindId = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-    setFoundEmail(null);
-
-    const { data, error: supaError } = await supabase
-      .from('users') // 실제 테이블명으로 수정 필요
-      .select('email')
-      .eq('name', name)
-      .eq('phone', phone)
-      .single();
-
-    if (supaError || !data) {
-      setError('입력하신 정보와 동일한 회원이 없습니다.');
-    } else {
-      setFoundEmail(data.email);
-      setMode('result');
-    }
-
-    setIsLoading(false);
-  };
+  setFoundEmail(data.email);
+  setMode('result');
+};
 
 
 
