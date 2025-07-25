@@ -6,7 +6,7 @@ import Layout from '../layout/Layout';
 import RegisterDetail from '../pages/Register/RegisterDetail';
 import RegisterProfile from '../pages/Register/RegisterProfile';
 import QuotesPage from '../pages/Quotes/QuotesPage';
-
+import Login from '../pages/Login/Login';
 
 export const router = createBrowserRouter([
   {
@@ -26,8 +26,8 @@ export const router = createBrowserRouter([
          element: <QuotesPage /> 
       },
       {
-        // path: '/login',
-        // element: <Login />,
+        path: '/login',
+        element: <Login />
       },
       {
         path: '/register/detail',
