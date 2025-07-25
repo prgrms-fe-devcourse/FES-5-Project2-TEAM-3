@@ -1,10 +1,10 @@
-export function formatIsoToDdMonthYyyy(isoString: string): string {
+export function formatDate(isoString: string): string {
   try {
     const date = new Date(isoString);
 
     // Date 객체가 유효한지 확인 (잘못된 문자열인 경우 'Invalid Date' return)
     if (isNaN(date.getTime())) {
-      console.error("formatIsoToDdMonthYyyy: Invalid date string provided.", isoString);
+      console.error("formatDate: Invalid date string provided.", isoString);
       return "Invalid Date";
     }
 

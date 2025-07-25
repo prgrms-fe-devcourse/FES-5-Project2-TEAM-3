@@ -2,7 +2,7 @@ import S from "./MemberCard.module.css"
 import { getData } from "../review_/SupaData"
 import type { Tables, TablesInsert, TablesUpdate } from '../review_/supabase.type';
 import { useEffect, useState } from "react";
-import { formatIsoToDdMonthYyyy } from "../../util/formatIsoToDdMonthYyyy";
+import { formatDate } from "../../util/formatDate";
 
 type Profile = Tables<'profile'>;
 
@@ -32,7 +32,7 @@ function MemberCard() {
 				<img src={data.profile_image_url as string} alt="profileImage" />
 				<div>
 					<h2>{data.nickname}</h2>
-					<p><strong>Joined :</strong> {formatIsoToDdMonthYyyy(data.joined_time)}</p>
+					<p><strong>Joined :</strong> {formatDate(data.joined_time)}</p>
 					<p><strong>Favorite Genre :</strong> {data.favorite_genre?.join(', ')}</p>
 					<p><strong>Total Reviews :</strong> 0 | <strong>Total Quotes :</strong> 0 </p>
 				</div>
