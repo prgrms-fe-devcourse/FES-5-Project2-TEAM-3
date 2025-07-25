@@ -3,6 +3,8 @@ import NotFound from '../pages/NotFound/NotFound';
 import Register from '../pages/Register/Register';
 import Home from '../pages/Home/Home';
 import Layout from '../layout/Layout';
+import RegisterDetail from '../pages/Register/RegisterDetail';
+import RegisterProfile from '../pages/Register/RegisterProfile';
 import Login from '../pages/Login/Login';
 
 export const router = createBrowserRouter([
@@ -15,12 +17,28 @@ export const router = createBrowserRouter([
         element: <Home /> 
       },
       {
-        path: '/Register',
+        path: '/register',
         element: <Register />
       },
       {
-        path: '/login',
-        element: <Login />
+        // path: '/login',
+        // element: <Login />
+      },
+      {
+        path: '/register/detail',
+        element: <RegisterDetail />
+      },
+      {
+        path: '/register/profile',
+        element: <RegisterProfile />
+      },
+      {
+        path: '/register/detail',
+        element: <RegisterDetail />
+      },
+      {
+        path: '/register/profile',
+        element: <RegisterProfile />
       },
     ]
   },
