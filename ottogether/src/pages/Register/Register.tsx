@@ -31,7 +31,7 @@ function Register() {
   const [ userPasswordConfirm, setUserPasswordConfirm ] = useState<string>('');
   const [ showPassword, setShowPassword ] = useState<boolean>(false);
   const [ showPasswordConfirm, setShowPasswordConfirm ] = useState<boolean>(false);
-  const [ agreement, SetAgreement ] = useState<boolean | null>(null);
+  const [ agreement, setAgreement ] = useState<boolean | null>(null);
   const [ isOpen, setIsOpen ] = useState<boolean>(false);
   const [ error, setError ] = useState<string>('');
 
@@ -212,7 +212,7 @@ function Register() {
               id="agree"
               value="true"
               checked={agreement === true} 
-              onChange={()=>SetAgreement(true)}
+              onChange={()=>setAgreement(true)}
               /> 
               네, 동의합니다.</label>
             <label htmlFor="disagree">
@@ -222,7 +222,7 @@ function Register() {
               id="disagree"
               value="false"
               checked={agreement === false} 
-              onChange={()=>SetAgreement(false)}
+              onChange={()=>setAgreement(false)}
               /> 
               동의하지 않습니다.</label>
           </fieldset>  

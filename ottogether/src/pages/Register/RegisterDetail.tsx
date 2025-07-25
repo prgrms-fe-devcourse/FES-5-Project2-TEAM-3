@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import S from './RegisterDetail.module.css';
-
+import { ottListTotal, genreListTotal } from '../../lib/data';
 
 function RegisterDetail() {
   
@@ -10,10 +10,6 @@ function RegisterDetail() {
   /* input state & ref 정의 */
   const [ ottList, setOttList ] = useState<string[]>([]);
   const [ genres, setGenres ] = useState<string[]>([]);
-
-  const ottListTotal = ['Netflix', 'Tving', 'DisneyPlus', 'Wavve', 'CoupangPlay', 'AppleTV', 'AmazonPrimeVideo'];
-  const genreListTotal = ['액션', '모험', 'SF & 판타지', '코미디', '범죄', '로맨스', '드라마', '가족', '애니메이션', '아동', '음악', '공포', '미스터리', '스릴러', '다큐멘터리', '전쟁', '서부', '리얼리티', '연속극', '토크쇼', '역사', '뉴스', '정치'];
-
   
   // 다음에 입력하기 활성화 조건 설정
   const isSkippable = ottList.length === 0 && genres.length === 0
