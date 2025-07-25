@@ -1,3 +1,6 @@
+/* Supabase Auth Sign Up */
+/* 이메일, 비밀번호, (optional: 전화번호, 이름)을 받아 Auth.User 테이블에 회원가입 처리 */
+
 import { supabase } from "../supabase";
 
 export type RegisterReturns = 
