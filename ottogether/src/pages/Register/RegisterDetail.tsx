@@ -1,16 +1,42 @@
-import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 import S from './RegisterDetail.module.css';
 import { ottListTotal, genreListTotal } from '../../lib/data';
+import { getUserInfo } from '../../supabase/auth/getUserInfo';
+import { upsertTable } from '../../supabase/upsertTable';
 
 function RegisterDetail() {
   
   const navigate = useNavigate();
+  const location = useLocation();
 
   /* input state & ref 정의 */
+  const [ userId, setUserId ] = useState<string>('');
   const [ ottList, setOttList ] = useState<string[]>([]);
   const [ genres, setGenres ] = useState<string[]>([]);
+  const [ error, setError ] = useState<string | null>(null);
   
+  /* user_id 가져오기 */
+  useEffect(() => {
+    const fetchUserId = async () => {
+      // location.state 전달 값
+      if (location.state?.userId) {
+        setUserId(location.state.userId);
+        return;
+      }
+      // Supabase 세션에서 추출
+      const id = await getUserInfo('id');
+      if (id) {
+        setUserId(id);
+      } else {
+        console.error('userId를 찾을 수 없습니다.');
+        setError('사용자 정보를 불러올 수 없습니다. 로그인 후 다시 시도해주세요.');
+      }
+    }
+    fetchUserId();
+    console.log(userId);
+  }, []);
+
   // 다음에 입력하기 활성화 조건 설정
   const isSkippable = ottList.length === 0 && genres.length === 0
 
@@ -31,10 +57,33 @@ function RegisterDetail() {
     )
   }
 
-  const handleSubmitRegisterDetail = (e:React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitRegisterDetail = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // supabase.()
-    navigate('/register/profile');
+
+    if(!userId) {
+      setError('사용자 정보를 불러올 수 없습니다.');
+      return;
+    }
+
+    const result = await upsertTable({
+      method: 'upsert',
+      tableName: 'profile',
+      uploadData: {
+        user_id: userId,
+        preferred_ott: ottList,
+        favorite_genre: genres,
+        updated_at: new Date().toISOString(),
+      },
+      matchKey: "user_id"
+    });
+
+    if(result.error) {
+      console.error('데이터 업데이트 실패:', result.error.message);
+      setError('데이터 업데이트에 실패했습니다.');
+    } else {
+      console.log('업데이트 성공:', result.result);
+      navigate('/register/profile', { state: { userId } });
+    }
   }
 
   return (
@@ -83,7 +132,7 @@ function RegisterDetail() {
             }
           </div>
         </section>
-        
+        { error && <p className={S.error}>{error}</p>}
         <button 
           type="submit" 
           className={S["register-button"]}
