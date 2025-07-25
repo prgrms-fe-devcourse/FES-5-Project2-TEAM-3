@@ -5,6 +5,7 @@ import Home from '../pages/Home/Home';
 import Layout from '../layout/Layout';
 import RegisterDetail from '../pages/Register/RegisterDetail';
 import RegisterProfile from '../pages/Register/RegisterProfile';
+import QuotesPage from '../pages/Quotes/QuotesPage';
 import Login from '../pages/Login/Login';
 
 export const router = createBrowserRouter([
@@ -21,16 +22,12 @@ export const router = createBrowserRouter([
         element: <Register />
       },
       {
+         path: '/quotes',
+         element: <QuotesPage /> 
+      },
+      {
         path: '/login',
         element: <Login />
-      },
-      {
-        path: '/register/detail',
-        element: <RegisterDetail />
-      },
-      {
-        path: '/register/profile',
-        element: <RegisterProfile />
       },
       {
         path: '/register/detail',
