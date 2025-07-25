@@ -30,6 +30,15 @@ function FindId({ onClose }: Props) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
+
+
+  //supabase Auth 접근 로직 필요.
+
+
+
+
+
+
   const handleFindId = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -52,6 +61,16 @@ function FindId({ onClose }: Props) {
 
     setIsLoading(false);
   };
+
+
+
+
+
+
+
+
+
+  
 
   const getMaskedEmail = (email: string) => {
     const [localPart, domain] = email.split('@');
