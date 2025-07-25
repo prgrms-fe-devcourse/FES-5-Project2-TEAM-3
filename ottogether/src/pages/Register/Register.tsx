@@ -307,7 +307,7 @@ function Register() {
             }
           >Register</button>
         </form>
-        { error && <p>{error}</p>}
+        { error && <p className={S.error}>{error}</p>}
       </section>
     </div>
   )

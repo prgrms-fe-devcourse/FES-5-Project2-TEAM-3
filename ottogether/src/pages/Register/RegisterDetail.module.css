@@ -21,6 +21,12 @@
 	}
 }
 
+.error {
+	color: var(--color-error-500);
+	font-size: 0.8rem;
+	font-weight: 400;
+}
+
 /* form */
 .register-detail-form {
 	display: flex;
