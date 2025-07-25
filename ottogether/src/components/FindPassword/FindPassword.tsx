@@ -9,9 +9,9 @@ type Props = {
 };
 
 function FindPassword({ onClose }: Props) {
-  const [email, setEmail] = useState('yooha922@gmail.com');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-  const [mode, setMode] = useState<'form' | 'result'>('result');
+  const [mode, setMode] = useState<'form' | 'result'>('form');
   const [resultStep, setResultStep] = useState<'sent' | 'notReceived'>('sent');
 
   const navigate = useNavigate();
@@ -145,7 +145,7 @@ function FindPassword({ onClose }: Props) {
                 </button>
 
                 <button
-                  className={S.retryButton}
+                  className={S.rewriteButton}
                   onClick={() => {
                     setEmail("");
                     setError("");
