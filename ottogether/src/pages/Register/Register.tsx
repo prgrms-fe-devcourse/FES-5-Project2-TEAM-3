@@ -194,7 +194,7 @@ function Register() {
                 <p>본 동의는 거부하실 수 있으며, 거부하실 경우 <strong>정상적으로 가입하신 이메일 / 비밀번호 찾기 기능을 이용하실 수 없습니다.</strong></p>
                 <ol>
                   <li key="purpose">수집 목적 : 회원 정보 확인</li>
-                  <li key="information">수집 항목 : 이름, 전화번호</li>
+                  <li key="information">수집 항목 : 이름, 전화번호, 이메일 주소</li>
                   <li key="retention-period">보유 및 이용 기간 : 회원 탈퇴 시까지</li>
                 </ol>
               </section>
