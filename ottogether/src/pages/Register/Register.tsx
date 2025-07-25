@@ -10,7 +10,8 @@ import toShowIcon from '@/assets/icons/eye.svg';
 import toHideIcon from '@/assets/icons/eye-slash.svg';
 import toExpandIcon from '@/assets/icons/expand.svg';
 import toCollapseIcon from '@/assets/icons/collapse.svg';
-
+import { authRegister, type RegisterReturns } from '../../supabase/auth/authRegister';
+import { formatPhoneNumber } from '../../util/formatPhoneNumber';
 
 function Register() {
 
@@ -33,9 +34,15 @@ function Register() {
   const [ showPasswordConfirm, setShowPasswordConfirm ] = useState<boolean>(false);
   const [ agreement, setAgreement ] = useState<boolean | null>(null);
   const [ isOpen, setIsOpen ] = useState<boolean>(false);
+  const [ prevValue, setPrevValue ] = useState('');
+  const [ cursorPos, setCursorPos ] = useState<number | null>(null);
   const [ error, setError ] = useState<string>('');
 
   const agreeFieldRef = useRef<HTMLInputElement>(null);
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+
+  // 핸드폰번호 정규식
+  const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
 
   // 입력하기 버튼 활성화 조건 설정
   const isSubmittable = (agreement === true && userName.trim() !== '' && userPhoneNumber.trim() !== '') || ( agreement === false );
@@ -47,25 +54,87 @@ function Register() {
     }
   }, [userPassword, userPasswordConfirm])
   
+  /* 핸드폰번호 형식 불일치 에러 초기화 */
+  useEffect(() => {
+    if (error && phoneRegex.test(userPhoneNumber)) {
+      setError('');
+    }
+  }, [userPhoneNumber])
 
+  /* user 입력값 state에 저장 */
   const handleInput = (e:React.ChangeEvent<HTMLInputElement>) => {
     if(e.target.id === nameId) {
-      setUserName(e.target.value);
-    } else if(e.target.id === phoneId) {
-      setUserPhoneNumber(e.target.value);
+      setUserName(e.target.value.trim());
     } else if(e.target.id === emailId) {
-      setUserEmail(e.target.value);
+      setUserEmail(e.target.value.trim());
     } else if(e.target.id === passwordId) {
-      setUserPassword(e.target.value);
+      setUserPassword(e.target.value.trim());
     } else if(e.target.id === passwordConfirmId) {
-      setUserPasswordConfirm(e.target.value);
+      setUserPasswordConfirm(e.target.value.trim());
     }
   }
 
-  const handleRegister = (e:React.FormEvent<HTMLFormElement>) => {
+  /* 전화번호 형식 검사 및 포맷팅에 따른 커서 위치 조정 */
+  const handlePhoneInput = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target;
+    const raw = input.value.trim().replace(/\D/g, '');
+    const cursor = input.selectionStart ?? raw.length;
+
+    const formattedBefore = formatPhoneNumber(prevValue);
+    const formattedAfter = formatPhoneNumber(raw);
+
+    // 커서 위치 보정
+    let adjustment = 0;
+    if ( formattedAfter.length >= formattedBefore.length) { // 추가 입력 중인 상태
+      if(formattedAfter[cursor-1] === '-' || formattedAfter[cursor] === '-') adjustment = 1;
+    } else if ( formattedAfter.length < formattedBefore.length ) { // 삭제 중인 상태
+      if(formattedBefore[cursor - 1] === '-') adjustment = -1;
+    }
+
+    setCursorPos(cursor + adjustment);
+    setPrevValue(raw);
+    setUserPhoneNumber(formattedAfter);
+  }
+
+  const handlePhoneKeydown = (e:React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Backspace' ) return;
+
+    const input = e.currentTarget;
+    const cursorPos = input.selectionStart ?? input.value.length;
+
+    // 커서가 앞 문자가 "-" 이면 두 글자 지움
+    if( cursorPos > 0 && input.value[cursorPos - 1] === '-') {
+      e.preventDefault();
+      const raw = (
+        input.value.slice(0, cursorPos - 2) +
+        input.value.slice(cursorPos) )
+        .replace(/\D/g, '');
+      setUserPhoneNumber(raw);
+    }
+  }
+
+  useEffect(() => {
+    if( cursorPos !== null && phoneInputRef.current ) {
+      requestAnimationFrame(() => {
+        phoneInputRef.current?.setSelectionRange(cursorPos, cursorPos);
+      })
+    }
+  }, [cursorPos])
+  
+
+  /* 회원가입 form submit */
+  const handleRegister = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // 비밀번호 불일치 여부 확인
     if(userPassword !== userPasswordConfirm ) {
       setError("입력하신 비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    // 전화번호 형식 검사
+    if(!phoneRegex.test(userPhoneNumber)) {
+      setError('올바른 핸드폰번호 형식이 아닙니다.');
       return;
     }
 
@@ -83,20 +152,17 @@ function Register() {
       }
     }
 
-    // authRegister();
-    sessionStorage.setItem('registerInfo', JSON.stringify({
-      name: userName,
-      phone: userPhoneNumber,
-      email: userEmail
-    }));
-
-    navigate('/register/detail', { 
-      state: {
-        name: userName,
-        phone: userPhoneNumber,
-        email: userEmail
-      }
-    });
+    // supabase auth 통신
+    const result:RegisterReturns = await authRegister(userEmail, userPassword, userPhoneNumber, { name: userName });
+    if (result.success) {
+      navigate('/register/detail', { 
+        state: {
+          userId: result.userId
+        }
+      });
+    } else {
+      setError(result.error || '회원가입 중 오류가 발생했습니다.')
+    }
   }
 
   return (
@@ -124,7 +190,10 @@ function Register() {
               name="전화번호" 
               id={phoneId} 
               placeholder='Phone Number' 
-              onChange={handleInput}
+              ref={phoneInputRef}
+              value={formatPhoneNumber(userPhoneNumber)}
+              onChange={handlePhoneInput}
+              onKeyDown={handlePhoneKeydown}
               />
           </div>
           <div className={S["input-wrapper"]}>
