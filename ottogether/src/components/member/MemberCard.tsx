@@ -2,7 +2,7 @@ import S from "./MemberCard.module.css"
 import { getData } from "../review_/SupaData"
 import type { Tables, TablesInsert, TablesUpdate } from '../review_/supabase.type';
 import { useEffect, useState } from "react";
-import { formatIsoToDdMonthYyyy } from "./member_utils";
+import { formatIsoToDdMonthYyyy } from "../../util/formatIsoToDdMonthYyyy";
 
 type Profile = Tables<'profile'>;
 
