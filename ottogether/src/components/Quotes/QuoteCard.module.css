@@ -1,0 +1,140 @@
+/* QuoteCard.module.css */
+
+.card {
+  width: 987px;
+  background-color: var(--gray700, #3a3a3a);
+  border-radius: 10px;
+  margin: 20px auto;
+  overflow: hidden;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.body {
+  position: relative;
+  padding: 0 25px;
+  box-sizing: border-box;
+}
+
+.top {
+  width: 100%;
+  height: 121px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+}
+
+.quoteIconLeft,
+.quoteIconRight {
+  width: 45px;
+  height: 45px;
+  color: #ffcc00;
+}
+
+.quoteIconLeft {
+  margin-left: 2px;
+}
+.quoteIconRight {
+  margin-right: 2px;
+}
+
+.content {
+  width: 800px;
+  height: 70px;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 35px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: keep-all;
+  color: var(--foreground, #ffffff);
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0px;
+  border-top: 1px solid #4b4b4b;
+  box-sizing: border-box;
+  height: 40px; 
+}
+
+.left {
+  width: 40px;
+  height: 40px;
+}
+
+.likeBtn {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+   background-color: transparent;
+}
+
+.likeBtn img {
+  width: 20px;
+  height: 20px;
+}
+
+.likeBtn span {
+  margin-left: 6px;
+  font-size: 14px;
+  color: var(--foreground, #ffffff);
+}
+
+/* .person {
+  flex: 1;
+  text-align: center;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--foreground, #ffffff);
+} */
+
+.person {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 12px;       /* .bottom 의 상단 여백(12px)만큼 띄워서 baseline 맞춤 */
+  font-style: italic;
+  font-size: 14px;
+  color: var(--foreground);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 137px;
+  justify-content: flex-end;
+}
+
+.editBtn,
+.removeBtn {
+  background: none;
+  border: none;
+  color: var(--foreground, #ffffff);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.editBtn:hover,
+.removeBtn:hover {
+  text-decoration: underline;
+}
+
+.right > div {
+  color: white;
+  font-weight: bold;
+}

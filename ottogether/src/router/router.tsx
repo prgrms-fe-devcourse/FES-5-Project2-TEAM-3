@@ -5,6 +5,8 @@ import Home from '../pages/Home/Home';
 import Layout from '../layout/Layout';
 import RegisterDetail from '../pages/Register/RegisterDetail';
 import RegisterProfile from '../pages/Register/RegisterProfile';
+import QuotesPage from '../pages/Quotes/QuotesPage';
+
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +20,10 @@ export const router = createBrowserRouter([
       {
         path: '/register',
         element: <Register />
+      },
+      {
+         path: '/quotes',
+         element: <QuotesPage /> 
       },
       {
         // path: '/login',

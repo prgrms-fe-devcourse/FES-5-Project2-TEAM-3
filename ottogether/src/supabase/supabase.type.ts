@@ -79,6 +79,8 @@ export type Database = {
           likes: number | null
           updated_at: string | null
           user_id: string | null
+          movie_id: string | null
+          person: string | null;
         }
         Insert: {
           author?: string
@@ -89,6 +91,8 @@ export type Database = {
           likes?: number | null
           updated_at?: string | null
           user_id?: string | null
+          movie_id?: string | null
+          person?: string | null;
         }
         Update: {
           author?: string
@@ -99,6 +103,8 @@ export type Database = {
           likes?: number | null
           updated_at?: string | null
           user_id?: string | null
+          movie_id?: string | null
+          person?: string | null;
         }
         Relationships: []
       }
