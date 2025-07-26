@@ -307,7 +307,7 @@ function Register() {
             }
           >Register</button>
         </form>
-        { error && <p className={S.error}>{error}</p>}
+        { error && <p className={S.error} aria-live='polite'>{error}</p>}
       </section>
     </div>
   )

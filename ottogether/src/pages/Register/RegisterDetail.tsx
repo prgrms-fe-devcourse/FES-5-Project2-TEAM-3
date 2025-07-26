@@ -132,7 +132,7 @@ function RegisterDetail() {
             }
           </div>
         </section>
-        { error && <p className={S.error}>{error}</p>}
+        { error && <p className={S.error} aria-live='polite'>{error}</p>}
         <button 
           type="submit" 
           className={S["register-button"]}
