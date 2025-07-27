@@ -146,7 +146,15 @@ function RegisterDetail() {
           className={S["register-button"]}
           disabled={isSkippable || isSubmitting}
           aria-label="OTT 플랫폼과 관심 장르 정보를 제출합니다"
-        >입력하기</button>
+        >{
+            isSubmitting ? (
+              <>
+                저장 중... {' '}
+                <span className={S.spinner}></span>
+              </>
+            ) 
+            : "입력하기"
+            }</button>
 
         <button 
           type="button" 
