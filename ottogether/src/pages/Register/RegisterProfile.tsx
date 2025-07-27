@@ -42,34 +42,46 @@ function RegisterProfile() {
   const [ avatarPreview, setAvatarPreview ] = useState<string | null>(null);
   const [ userBio, setUserBio ] = useState<string>('');
   const [ userUrl, setUserUrl ] = useState<string>('');
-  const [ filedErrors, setFieldErrors ] = useState<FieldErrorState>({});
-
+  
+  const [ fieldErrors, setFieldErrors ] = useState<FieldErrorState>({});
   const [ uploadFailCount, setUploadFailCount ] = useState(0);
+
   const [ isSubmitting, setIsSubmitting ] = useState<boolean>(false);
   
   const nicknameRef = useRef<HTMLInputElement>(null);
   const urlRef = useRef<HTMLInputElement>(null);
 
+  // 파일 최대 용량 2MB로 제한
+  const MAX_FILE_SIZE = 2 * 1024 * 1024;
+
   /* user_id 가져오기 */
   useEffect(() => {
+    let isMounted = true;
+
     const fetchUserId = async () => {
-      // location.state 전달 값
-      if (location.state?.userId) {
-        setUserId(location.state.userId);
-        return;
-      }
-      // Supabase 세션에서 추출
-      const id = await getUserInfo('id');
-      if (id) {
+      try {
+        // location.state 전달 값
+        if (location.state?.userId) {
+          setUserId(location.state.userId);
+          return;
+        }
+        // Supabase 세션에서 추출
+        const id = await getUserInfo('id');
+
+        if (!id) throw new Error('userId를 찾을 수 없습니다.');
         setUserId(id);
-      } else {
-        console.error('userId를 찾을 수 없습니다.');
-        alert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');
-        navigate('/login');
+      } catch {
+        if (isMounted) {
+          alert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');
+          navigate('/login');
+        }
       }
-    }
+    };
     fetchUserId();
-  }, []);
+    return () => {
+      isMounted = false;
+    }
+  }, [location.state?.userId, navigate]);
 
   // 다음에 입력하기 활성화 조건 설정
   const isSkippable = 
@@ -122,29 +134,26 @@ function RegisterProfile() {
   const handleFileUpload = (e:React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     const id = e.target.id;
-    const filedKey = id === avatarId ? 'avatar' : id === headerId ? 'header' : null;
-    if(!filedKey) return;
-
-    // 최대 용량 2MB로 제한
-    const MAX_FILE_SIZE = 2 * 1024 * 1024;
+    const fieldKey = id === avatarId ? 'avatar' : id === headerId ? 'header' : null;
+    if(!fieldKey) return;
 
     // 에러 메시지 핸들링
     if (!file) {
-      setFieldErrors(prev => ({...prev, [filedKey]: ErrorCode.FileUploadFail}));
+      setFieldErrors(prev => ({...prev, [fieldKey]: ErrorCode.FileUploadFail}));
       console.error(ErrorCode.FileUploadFail);
       return;
     }
     if (!file.type.startsWith("image/")) {
-      setFieldErrors(prev => ({...prev, [filedKey]: ErrorCode.InvalidFileType}));
+      setFieldErrors(prev => ({...prev, [fieldKey]: ErrorCode.InvalidFileType}));
       console.error(ErrorCode.InvalidFileType);
       return;
     } 
     if (file.size > MAX_FILE_SIZE) {
-      setFieldErrors(prev => ({...prev, [filedKey]: ErrorCode.FileTooLarge}));
+      setFieldErrors(prev => ({...prev, [fieldKey]: ErrorCode.FileTooLarge}));
       console.error(ErrorCode.FileTooLarge);
       return;
     } 
-    setFieldErrors(prev => ({...prev, [filedKey]: undefined}));
+    setFieldErrors(prev => ({...prev, [fieldKey]: undefined}));
 
     // 미리보기 이미지 설정
     if(id === headerId) {
@@ -160,38 +169,51 @@ function RegisterProfile() {
   const handleHeaderImage = async () => {
     if(!userHeader) return getRandomHeader();
     
-    const result = await uploadImage( 
+    try {
+      const result = await uploadImage( 
       { 
         bucketName: "headers",
         file: userHeader,
         path: `userHeader-${userId}`
       });
-    if(result.success) {
-      setFieldErrors(prev => ({...prev, header: undefined}));
-      return result.url;
-    } else {
-      console.error('Header 업로드 실패:', result.error);
-      setFieldErrors(prev => ({...prev, header: ErrorCode.HeaderUploadFail}));
+      if(result.success) {
+        setFieldErrors(prev => ({...prev, header: undefined}));
+        return result.url;
+      } else {
+        console.error('Header 업로드 실패:', result.error);
+        setFieldErrors(prev => ({...prev, header: ErrorCode.HeaderUploadFail}));
+        return null;
+      }
+    } catch (err) {
+      console.error('Header 업로드 실패:', err);
+      setFieldErrors(prev => ({...prev, header: ErrorCode.Unexpected}));
       return null;
     }
+    
   }
 
   /* 업로드한 파일이 있을 경우 Storage에 저장, 없으면 랜덤프로필 - Avatar */
   const handleAvatarImage = async () => {
     if(!userAvatar) return getRandomAvatar();
       
-    const result = await uploadImage( 
+    try {
+      const result = await uploadImage( 
       { 
         bucketName: "avatars",
         file: userAvatar,
         path: `userAvatar-${userId}`
       });
-    if(result.success) {
-      setFieldErrors(prev => ({...prev, avatar: undefined}));
-      return result.url;
-    } else {
-      console.error('Avatar 업로드 실패:', result.error);
-      setFieldErrors(prev => ({...prev, avatar: ErrorCode.AvatarUploadFail}));
+      if(result.success) {
+        setFieldErrors(prev => ({...prev, avatar: undefined}));
+        return result.url;
+      } else {
+        console.error('Avatar 업로드 실패:', result.error);
+        setFieldErrors(prev => ({...prev, avatar: ErrorCode.AvatarUploadFail}));
+        return null;
+      }
+    } catch (err) {
+      console.error('Avatar 업로드 실패:', err);
+      setFieldErrors(prev => ({...prev, avatar: ErrorCode.Unexpected}));
       return null;
     }
   } 
@@ -218,7 +240,7 @@ function RegisterProfile() {
       }
 
       // 닉네임 유효성 확인
-      if (filedErrors.nickname) {
+      if (fieldErrors.nickname) {
         setIsSubmitting(false);
         nicknameRef.current?.focus();
         return;
@@ -226,15 +248,21 @@ function RegisterProfile() {
 
       // 중복 닉네임 검증
       if ( userNickname ) {
-        const nicknameExists = await checkNicknameExists(userNickname);
+        try {
+          const nicknameExists = await checkNicknameExists(userNickname);
 
-        if(nicknameExists) {
-          setFieldErrors(prev => ({...prev, nickname: ErrorCode.NicknameExists}));
-          setIsSubmitting(false);
-          nicknameRef.current?.focus();
+          if(nicknameExists) {
+            setFieldErrors(prev => ({...prev, nickname: ErrorCode.NicknameExists}));
+            setIsSubmitting(false);
+            nicknameRef.current?.focus();
+            return;
+          } else {
+            setFieldErrors(prev => ({...prev, nickname: undefined}));
+          }
+        } catch (err) {
+          console.error('중복 닉네임 검사 에러:', err);
+          setFieldErrors(prev => ({...prev, nickname: ErrorCode.Unexpected}));
           return;
-        } else {
-          setFieldErrors(prev => ({...prev, nickname: undefined}));
         }
       }
 
@@ -303,7 +331,7 @@ function RegisterProfile() {
                 onChange={handleNicknameInput}
                 />
             </div>
-            { filedErrors.nickname && <p className={S.error} aria-live='polite'>{ErrorMessages[filedErrors.nickname]}</p> }
+            { fieldErrors.nickname && <p className={S.error} aria-live='polite'>{ErrorMessages[fieldErrors.nickname]}</p> }
           </section>
           <section>
             <h4>프로필 상단에 표시될 헤더 이미지를 업로드 해주세요.</h4>
@@ -328,7 +356,7 @@ function RegisterProfile() {
                 업로드된 파일 : {userHeader.name}
               </p>
             )}
-            { filedErrors.header && <p className={S.error} aria-live='polite'>{ErrorMessages[filedErrors.header]}</p> }
+            { fieldErrors.header && <p className={S.error} aria-live='polite'>{ErrorMessages[fieldErrors.header]}</p> }
           </section>
           <section>
             <h4>프로필 이미지를 업로드 해주세요.</h4>
@@ -353,7 +381,7 @@ function RegisterProfile() {
                 업로드된 파일 : {userAvatar.name}
               </p>
             )}
-            { filedErrors.avatar && <p className={S.error} aria-live='polite'>{ErrorMessages[filedErrors.avatar]}</p> }
+            { fieldErrors.avatar && <p className={S.error} aria-live='polite'>{ErrorMessages[fieldErrors.avatar]}</p> }
           </section>
           <section>
             <h4>자기소개를 입력해주세요.</h4>
@@ -365,7 +393,7 @@ function RegisterProfile() {
                 onChange={handleBioInput}
                 />
             </div>
-            { filedErrors.bio && <p className={S.error} aria-live='polite'>{ErrorMessages[filedErrors.bio]}</p> }
+            { fieldErrors.bio && <p className={S.error} aria-live='polite'>{ErrorMessages[fieldErrors.bio]}</p> }
           </section>
           <section>
             <h4>공유하고 싶은 URL을 입력해주세요.</h4>
@@ -379,7 +407,7 @@ function RegisterProfile() {
                 onChange={handleUrlInput}
                 />
             </div>
-             { filedErrors.url && <p className={S.error} aria-live='polite'>{ErrorMessages[filedErrors.url]}</p> }
+             { fieldErrors.url && <p className={S.error} aria-live='polite'>{ErrorMessages[fieldErrors.url]}</p> }
           </section>
         </div>
         <div className={S["preview-section"]}>
@@ -434,7 +462,7 @@ function RegisterProfile() {
             ) 
             : "입력하기"
             }</button>
-          { filedErrors.submit && <p className={S.error} aria-live='polite'>{ErrorMessages[filedErrors.submit]}</p> }
+          { fieldErrors.submit && <p className={S.error} aria-live='polite'>{ErrorMessages[fieldErrors.submit]}</p> }
           <button 
             type="button" 
             onClick={() => navigate('/my-page')} 
