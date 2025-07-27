@@ -18,7 +18,6 @@ export async function toggleQuoteLike(
   }
 
   if (existingLike) {
-    // 좋아요 취소
     const { error: deleteError } = await supabase
       .from('quotes_like')
       .delete()
@@ -36,7 +35,6 @@ export async function toggleQuoteLike(
 
     return { liked: false, error: updateError };
   } else {
-    // 좋아요 추가
     const { error: insertError } = await supabase
       .from('quotes_like')
       .insert({ user_id: userId, quote_id: quoteId });
