@@ -241,9 +241,6 @@ textarea {
 .user-bio {
 	max-height: 80px;
 	overflow-y: scroll;
-
-	scrollbar-width: thin;
-	scrollbar-color: var(--color-grey-500) var(--color-grey-800);
 }
 
 .user-bio::-webkit-scrollbar {
