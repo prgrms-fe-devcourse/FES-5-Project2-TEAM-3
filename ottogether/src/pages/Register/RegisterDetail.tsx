@@ -150,7 +150,12 @@ function RegisterDetail() {
             isSubmitting ? (
               <>
                 저장 중... {' '}
-                <span className={S.spinner}></span>
+                <span 
+                  role='status'
+                  aria-live='polite'
+                  aria-label='저장 중입니다'
+                  className={S.spinner}>
+                </span>
               </>
             ) 
             : "입력하기"
