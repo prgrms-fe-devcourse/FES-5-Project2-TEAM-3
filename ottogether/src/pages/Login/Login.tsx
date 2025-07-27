@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import FindId from '../../components/FindId/FindId';
 import FindPassword from '../../components/FindPassword/FindPassword';
 import { supabase } from '../../supabase/supabase';
+import { useUser } from '../../contexts/userContexts';
 
 
 function Login() {
@@ -25,21 +26,34 @@ function Login() {
   const [showFindId, setShowFindId] = useState(false);
   const [showFindPassword, setShowFindPassword] = useState(false);
   const [error,setError] = useState<string|null>(null);
-  
-  const handleLogin = async (e:React.FormEvent<HTMLFormElement>) => {
+  const { setUser } = useUser();
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
-    })
-    if(error){
-      setError("아이디 또는 비밀번호가 잘못 되었습니다.");
-    }else{
+    });
+
+    if (error) {
+      setError('아이디 또는 비밀번호가 잘못 되었습니다.');
+    } else {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setUser({
+        id: user?.id ?? null,
+        email: user?.email ?? null,
+        name: user?.user_metadata?.name ?? null,
+        phone: user?.phone ?? null,
+      });
+
       alert('로그인 완료!');
       navigate('/');
-    }   
-  }
+    }
+  };
 
 
   return (
