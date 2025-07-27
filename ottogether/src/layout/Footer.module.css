@@ -1,0 +1,55 @@
+.footer {
+	background-color: var(--color-grey-900);
+	padding: 3rem 5rem;
+	box-sizing: border-box;
+	min-height: 200px;
+	border-top: 1px solid var(--foreground);
+}
+
+.footer-inner {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 32px;
+}
+
+.footer-logo {
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+.footer-logo img {
+	height: 32px;
+}
+
+.footer-content {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+
+.footer-team {
+	font-size: 13px;
+	color: var(--color-white-100);
+}
+
+.footer-links {
+	display: flex;
+	gap: 24px;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.footer-links a {
+	color: var(--color-grey-500);
+	font-size: 13px;
+	text-decoration: none;
+}
+
+.footer-links a:hover {
+	text-decoration: underline;
+}
