@@ -15,6 +15,7 @@ function RegisterDetail() {
   const [ ottList, setOttList ] = useState<string[]>([]);
   const [ genres, setGenres ] = useState<string[]>([]);
   const [ error, setError ] = useState<string | null>(null);
+  const [ isSubmitting, setIsSubmitting ] = useState<boolean>(false);
   
   /* user_id 가져오기 */
   useEffect(() => {
@@ -30,11 +31,11 @@ function RegisterDetail() {
         setUserId(id);
       } else {
         console.error('userId를 찾을 수 없습니다.');
-        setError('사용자 정보를 불러올 수 없습니다. 로그인 후 다시 시도해주세요.');
+        alert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');
+        navigate('/login');
       }
     }
     fetchUserId();
-    console.log(userId);
   }, []);
 
   // 다음에 입력하기 활성화 조건 설정
@@ -60,11 +61,16 @@ function RegisterDetail() {
   const handleSubmitRegisterDetail = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // 비동기 처리 중 중복 제출 방지
+    if(isSubmitting) return;
+
     if(!userId) {
       setError('사용자 정보를 불러올 수 없습니다.');
       return;
     }
 
+    setIsSubmitting(true);
+    
     const result = await upsertTable({
       method: 'upsert',
       tableName: 'profile',
@@ -76,6 +82,8 @@ function RegisterDetail() {
       },
       matchKey: "user_id"
     });
+
+    setIsSubmitting(false);
 
     if(result.error) {
       console.error('데이터 업데이트 실패:', result.error.message);
@@ -136,7 +144,7 @@ function RegisterDetail() {
         <button 
           type="submit" 
           className={S["register-button"]}
-          disabled={isSkippable}
+          disabled={isSkippable || isSubmitting}
           aria-label="OTT 플랫폼과 관심 장르 정보를 제출합니다"
         >입력하기</button>
 
@@ -145,7 +153,7 @@ function RegisterDetail() {
           onClick={() => navigate('/register/profile')} 
           className={S["skip-button"]}
           aria-label="정보 입력을 건너뛰고 다음 단계로 이동합니다"
-          disabled={!isSkippable}
+          disabled={!isSkippable || isSubmitting}
         >다음에 입력하기</button>
       </form>
     </div>
