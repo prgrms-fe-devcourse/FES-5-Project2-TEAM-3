@@ -11,6 +11,7 @@ import { uploadImage } from '../../supabase/storage/uploadImage';
 import { getUserInfo } from '../../supabase/auth/getUserInfo';
 import { getRandomAvatar, getRandomHeader } from '../../util/getRandomProfile';
 import { upsertTable } from '../../supabase/upsertTable';
+import React from 'react';
 
 function RegisterProfile() {
 
@@ -229,6 +230,7 @@ function RegisterProfile() {
                 type="file" 
                 name="헤더 이미지" 
                 id={headerId} 
+                accept='image/*'
                 aria-describedby='header-file-upload' 
                 onChange={handleFileUpload}
                 />
@@ -252,6 +254,7 @@ function RegisterProfile() {
                 type="file" 
                 name="프로필 이미지" 
                 id={avatarId} 
+                accept='image/*'
                 aria-describedby='avatar-file-upload' 
                 onChange={handleFileUpload}
                 />
@@ -307,7 +310,14 @@ function RegisterProfile() {
               <h5>닉네임</h5>
               <span>{ userNickname.trim() || '닉네임을 입력해 주세요.' }</span>
               <h5>소개</h5>
-              <span>{ userBio.trim() || '소개를 입력해 주세요.' }</span>
+              <span className={S["user-bio"]}>{ userBio.trim() 
+                ? userBio.split('\n').map((line, idx) => (
+                  <React.Fragment key={idx}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                )) 
+                : '소개를 입력해 주세요.' }</span>
               <h5>URL</h5>
               <span>{ userUrl.trim() || '공유하고 싶은 URL을 입력해 주세요.' }</span>
             </div>

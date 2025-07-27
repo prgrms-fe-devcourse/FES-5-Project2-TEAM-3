@@ -229,13 +229,38 @@ textarea {
 		font-weight: 600;
 		margin-bottom: 0.5rem;
 	}
-
 	span {
 		display: block;
 		font-size: 0.8rem;
 		color: var(--color-grey-300);
 		margin-bottom: 1.2rem;
 	}
+}
+
+/* 바이오 영역 스크롤바 */
+.user-bio {
+	max-height: 80px;
+	overflow-y: scroll;
+
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-grey-500) var(--color-grey-800);
+}
+
+.user-bio::-webkit-scrollbar {
+	width: 8px;
+}
+.user-bio::-webkit-scrollbar-track {
+	background: var(--color-grey-800);
+	border-radius: 6px;
+	opacity: 80%;
+}
+.user-bio::-webkit-scrollbar-thumb {
+	background-color: var(--color-grey-500);
+	border-radius: 6px;
+	transition: background 0.3s;
+}
+.user-bio::-webkit-scrollbar-thumb:hover {
+	background: var(--color-grey-300);
 }
 
 /* 반응형 구조 */
