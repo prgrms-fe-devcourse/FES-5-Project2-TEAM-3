@@ -7,6 +7,7 @@ import RegisterDetail from '../pages/Register/RegisterDetail';
 import RegisterProfile from '../pages/Register/RegisterProfile';
 import QuotesPage from '../pages/Quotes/QuotesPage';
 import Login from '../pages/Login/Login';
+import EditPassword from '../pages/EditPassword/EditPassword';
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
       {
         path: '/register/profile',
         element: <RegisterProfile />
+      },
+      {
+        path: '/edit-password',
+        element: <EditPassword />
       },
     ]
   },
