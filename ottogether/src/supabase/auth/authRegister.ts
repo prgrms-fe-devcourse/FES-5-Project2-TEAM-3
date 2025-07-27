@@ -28,7 +28,7 @@ export const authRegister = async (
   // 에러 메시지 처리
   let errorMsg = '회원가입에 실패했습니다.';
   if ( error || !data.user?.id ) {
-    if ( error?.message.includes("User alerady registered") ) {
+    if ( error?.message.includes("User already registered") ) {
       errorMsg = '이미 가입된 이메일입니다.';
     } else if ( error?.message.includes("Password should be at least 6 characters") ) {
       errorMsg = '비밀번호는 최소 6자리 이상이어야 합니다.';
@@ -39,6 +39,7 @@ export const authRegister = async (
     } 
     else {
       errorMsg = '회원가입 정보가 유효하지 않습니다.';
+      console.error(error?.message);
     }
 
     return { 
