@@ -110,20 +110,23 @@ export type Database = {
       }
       quotes_like: {
         Row: {
-          created_at: string
-          "review-id": number
-          "user-id": number
-        }
-        Insert: {
-          created_at: string
-          "review-id"?: number
-          "user-id"?: number
-        }
-        Update: {
-          created_at?: string
-          "review-id"?: number
-          "user-id"?: number
-        }
+         id: number;
+         user_id: string;
+         quote_id: number;
+         created_at: string;
+      };
+      Insert: {
+        id?: number;
+        user_id?: string;
+        quote_id?: number;
+        created_at?: string;
+      };
+      Update: {
+       id?: number;
+       user_id?: string;
+       quote_id?: number;
+       created_at?: string;
+        };
         Relationships: []
       }
       review: {
