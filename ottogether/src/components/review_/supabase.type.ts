@@ -43,31 +43,40 @@ export type Database = {
       }
       profile: {
         Row: {
+          avatar_url: string | null
           bio: string | null
+          created_at: string
           favorite_genre: string[] | null
-          joined_time: string
-          nickname: string
-          profile_image_url: string | null
+          header_url: string | null
+          nickname: string | null
+          preferred_ott: string[] | null
+          updated_at: string | null
           url: string | null
-          user_id: number
+          user_id: string
         }
         Insert: {
+          avatar_url?: string | null
           bio?: string | null
+          created_at?: string
           favorite_genre?: string[] | null
-          joined_time?: string
-          nickname?: string
-          profile_image_url?: string | null
+          header_url?: string | null
+          nickname?: string | null
+          preferred_ott?: string[] | null
+          updated_at?: string | null
           url?: string | null
-          user_id?: number
+          user_id?: string
         }
         Update: {
+          avatar_url?: string | null
           bio?: string | null
+          created_at?: string
           favorite_genre?: string[] | null
-          joined_time?: string
-          nickname?: string
-          profile_image_url?: string | null
+          header_url?: string | null
+          nickname?: string | null
+          preferred_ott?: string[] | null
+          updated_at?: string | null
           url?: string | null
-          user_id?: number
+          user_id?: string
         }
         Relationships: []
       }
@@ -130,6 +139,7 @@ export type Database = {
       }
       review: {
         Row: {
+          comment_count: number
           created_at: string
           dislike_count: number
           id: number
@@ -141,6 +151,7 @@ export type Database = {
           user_id: number
         }
         Insert: {
+          comment_count?: number
           created_at?: string
           dislike_count?: number
           id?: number
@@ -152,6 +163,7 @@ export type Database = {
           user_id?: number
         }
         Update: {
+          comment_count?: number
           created_at?: string
           dislike_count?: number
           id?: number
