@@ -45,12 +45,12 @@
 		font-weight: 600;
 		line-height: 1.25;
 	}
+}
 
-	p {
-		color: var(--color-error-500);
-		font-size: 0.8rem;
-		font-weight: 400;
-	}
+.error {
+	color: var(--color-error-500);
+	font-size: 0.8rem;
+	font-weight: 400;
 }
 
 .register-form {

@@ -1,4 +1,3 @@
-
 export type Json =
   | string
   | number
@@ -22,7 +21,7 @@ export type Database = {
           review_id: number
           text_content: string
           updated_at: string
-          writer_id: number
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -30,7 +29,7 @@ export type Database = {
           review_id?: number
           text_content?: string
           updated_at?: string
-          writer_id?: number
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -38,34 +37,46 @@ export type Database = {
           review_id?: number
           text_content?: string
           updated_at?: string
-          writer_id?: number
+          user_id?: string
         }
         Relationships: []
       }
       profile: {
         Row: {
+          avatar_url: string | null
           bio: string | null
+          created_at: string
           favorite_genre: string[] | null
-          nickname: string
-          profile_image_url: string | null
+          header_url: string | null
+          nickname: string | null
+          preferred_ott: string[] | null
+          updated_at: string | null
           url: string | null
-          user_id: number
+          user_id: string
         }
         Insert: {
+          avatar_url?: string | null
           bio?: string | null
+          created_at?: string
           favorite_genre?: string[] | null
-          nickname?: string
-          profile_image_url?: string | null
+          header_url?: string | null
+          nickname?: string | null
+          preferred_ott?: string[] | null
+          updated_at?: string | null
           url?: string | null
-          user_id?: number
+          user_id?: string
         }
         Update: {
+          avatar_url?: string | null
           bio?: string | null
+          created_at?: string
           favorite_genre?: string[] | null
-          nickname?: string
-          profile_image_url?: string | null
+          header_url?: string | null
+          nickname?: string | null
+          preferred_ott?: string[] | null
+          updated_at?: string | null
           url?: string | null
-          user_id?: number
+          user_id?: string
         }
         Relationships: []
       }
@@ -77,10 +88,10 @@ export type Database = {
           id: number
           is_visible: boolean | null
           likes: number | null
+          movie_id: string | null
+          person: string | null
           updated_at: string | null
           user_id: string | null
-          movie_id: string | null
-          person: string | null;
         }
         Insert: {
           author?: string
@@ -89,10 +100,10 @@ export type Database = {
           id?: number
           is_visible?: boolean | null
           likes?: number | null
+          movie_id?: string | null
+          person?: string | null
           updated_at?: string | null
           user_id?: string | null
-          movie_id?: string | null
-          person?: string | null;
         }
         Update: {
           author?: string
@@ -101,33 +112,37 @@ export type Database = {
           id?: number
           is_visible?: boolean | null
           likes?: number | null
+          movie_id?: string | null
+          person?: string | null
           updated_at?: string | null
           user_id?: string | null
-          movie_id?: string | null
-          person?: string | null;
         }
         Relationships: []
       }
       quotes_like: {
         Row: {
           created_at: string
-          "review-id": number
-          "user-id": number
+          id: number | null
+          quote_id: number | null
+          user_id: string | null
         }
         Insert: {
           created_at: string
-          "review-id"?: number
-          "user-id"?: number
+          id?: number | null
+          quote_id?: number | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string
-          "review-id"?: number
-          "user-id"?: number
+          id?: number | null
+          quote_id?: number | null
+          user_id?: string | null
         }
         Relationships: []
       }
       review: {
         Row: {
+          comment_count: number
           created_at: string
           dislike_count: number
           id: number
@@ -136,8 +151,10 @@ export type Database = {
           rating: number
           text_content: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
+          comment_count?: number
           created_at?: string
           dislike_count?: number
           id?: number
@@ -146,8 +163,10 @@ export type Database = {
           rating: number
           text_content?: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
+          comment_count?: number
           created_at?: string
           dislike_count?: number
           id?: number
@@ -156,6 +175,7 @@ export type Database = {
           rating?: number
           text_content?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -163,20 +183,20 @@ export type Database = {
         Row: {
           created_at: string
           reaction_type: Database["public"]["Enums"]["Like/Dislike"] | null
-          "review-id": number
-          "user-id": number
+          review_id: number
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           reaction_type?: Database["public"]["Enums"]["Like/Dislike"] | null
-          "review-id"?: number
-          "user-id"?: number
+          review_id?: number
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           reaction_type?: Database["public"]["Enums"]["Like/Dislike"] | null
-          "review-id"?: number
-          "user-id"?: number
+          review_id?: number
+          user_id?: string | null
         }
         Relationships: []
       }
