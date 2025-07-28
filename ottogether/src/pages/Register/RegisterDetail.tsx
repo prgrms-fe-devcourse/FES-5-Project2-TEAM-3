@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import S from './RegisterDetail.module.css';
-import { ottListTotal, genreListTotal } from '../../lib/data';
 import { getUserInfo } from '../../supabase/auth/getUserInfo';
 import { upsertTable } from '../../supabase/upsertTable';
+import OttSelector from '../../components/Search/OttSelector';
+import GenreSelector from '../../components/Search/GenreSelector';
 
 function RegisterDetail() {
   
@@ -61,6 +62,7 @@ function RegisterDetail() {
   // 다음에 입력하기 활성화 조건 설정
   const isSkippable = ottList.length === 0 && genres.length === 0
 
+  /* OTT 플랫폼 선택 */
   const handleOttClick = (platform:string) => {
     setOttList(prev => 
       prev.includes(platform) 
@@ -69,6 +71,7 @@ function RegisterDetail() {
     )
   }
 
+  /* 관심 장르 선택 */
   const handleGenreChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const selectedGenre = e.target.value;
     setGenres(prev => 
@@ -164,46 +167,19 @@ function RegisterDetail() {
       <h3>더 좋은 콘텐츠를 추천해드리기 위한 추가 정보를 입력해주세요 🥰</h3>
 
       <form className={S['register-detail-form']} onSubmit={handleSubmitRegisterDetail}>
-        <section>
-          <h4>사용 중이시거나 관심 있는 OTT 플랫폼을 선택해주세요.</h4>
-          <ul className={S["ott-selection"]}>
-            { ottListTotal.map(ott => (
-              <li key={ott}>
-                <figure className={S["ott-item"]}>
-                  <button 
-                    type='button'
-                    className={ottList.includes(ott) ? S.selected : ''}
-                    onClick={() => handleOttClick(ott)}
-                  >
-                    <img src={`/ott/${ott}.png`} alt={`${ott} 로고`} />
-                  </button>
-                  <figcaption>{ott}</figcaption>
-                </figure>
-              </li>
-            ))}
-          </ul>
-        </section>
 
-        <section>
-          <h4>관심 있는 장르를 선택해주세요.</h4>
-          <div className={S["genre-list"]}>
-            {
-              genreListTotal.map((genre, index) => (
-                <div key={genre} className={S["genre-item"]}>
-                  <input 
-                  type="checkbox"
-                  id={`genre-${index}`}
-                  value={genre}
-                  checked={genres.includes(genre)}
-                  onChange={(e) => handleGenreChange(e)}
-                  className={S.checkbox}
-                  />
-                  <label htmlFor={`genre-${index}`} className={S["genre-label"]}>{genre}</label>
-                </div>
-              ))
-            }
-          </div>
-        </section>
+        <OttSelector
+          selected={ottList}
+          label={"사용 중이시거나 관심 있는 OTT 플랫폼을 선택해주세요."}
+          onToggle={handleOttClick}
+        />
+
+        <GenreSelector 
+          selected={genres}
+          onToggle={handleGenreChange}
+          label={"관심 있는 장르를 선택해주세요."}
+        />
+        
         { error && <p className={S.error} aria-live='polite'>{error}</p>}
         <button 
           type="submit" 
