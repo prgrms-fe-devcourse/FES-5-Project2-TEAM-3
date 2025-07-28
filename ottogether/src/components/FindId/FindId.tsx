@@ -41,8 +41,8 @@ function FindId({ onClose }: Props) {
   setFoundEmail(null);
 
   const { data, error: supaError } = await supabase
-    .from('users')
-    .select('email')
+    .from('profile')
+    .select('email_address')
     .eq('name', name)
     .eq('phone', phone)
     .single();
@@ -54,16 +54,9 @@ function FindId({ onClose }: Props) {
     return;
   }
 
-  setFoundEmail(data.email);
+  setFoundEmail(data.email_address);
   setMode('result');
 };
-
-
-
-
-
-
-
 
 
   

@@ -3,16 +3,17 @@ import S from "./FindPassword.module.css";
 import closeIcon from "@/assets/icons/close.svg";
 import emailIcon from "@/assets/icons/sms-white.svg";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../supabase/supabase";
 
 type Props = {
   onClose: () => void;
 };
 
 function FindPassword({ onClose }: Props) {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-  const [mode, setMode] = useState<'form' | 'result'>('form');
-  const [resultStep, setResultStep] = useState<'sent' | 'notReceived'>('sent');
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [mode, setMode] = useState<"form" | "result">("form");
+  const [resultStep, setResultStep] = useState<"sent" | "notReceived">("sent");
 
   const navigate = useNavigate();
 
@@ -27,15 +28,6 @@ function FindPassword({ onClose }: Props) {
 
 
 
-  // Auth 접근 로직
-
-  // 이메일 전송 로직
-
-
-
-
-
-
   const handleSendEmail = async () => {
     if (!email) {
       setError("이메일을 입력해주세요.");
@@ -43,24 +35,39 @@ function FindPassword({ onClose }: Props) {
     }
 
     try {
-      setError('');
-      // console.log("비밀번호 재설정 이메일 전송 시도");
+      setError("");
+
+      const { data: profileData, error: profileError } = await supabase
+        .from("profile")
+        .select("uuid")
+        .eq("email", email)
+        .single();
+
+      if (profileError || !profileData) {
+        setError("입력하신 정보와 동일한 회원이 없습니다.");
+        return;
+      }
+
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (resetError) {
+        setError("이메일 전송 중 오류가 발생했습니다.");
+        return;
+      }
+      setMode("result");
+
+
     } catch (err) {
-      setError("입력하신 정보와 동일한 회원이 없습니다.");
+      setError("오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
 
 
 
-
-
-
-
-
-
-
-
+  
   return (
     <div className={S.overlay} onClick={onClose}>
       <div className={S.container} onClick={(e) => e.stopPropagation()}>
