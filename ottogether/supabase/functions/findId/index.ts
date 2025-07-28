@@ -1,86 +1,81 @@
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 Deno.serve(async (req) => {
-  // Validate request method
-  if (req.method !== 'POST') {
-    return new Response('Method Not Allowed', { status: 405 });
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    });
   }
 
-  // Create service role client for admin operations
   const supabase = createClient(
-    Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
   );
 
   try {
     const { name, phone } = await req.json();
 
-    // Validate input
-    if (!name && !phone) {
-      return new Response(JSON.stringify({ 
-        error: 'Provide either name or phone number' 
-      }), { 
+    if (!name || !phone) {
+      return new Response(JSON.stringify({ error: "이름과 전화번호를 모두 입력하세요." }), {
         status: 400,
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
       });
     }
 
-    // Search users by name in user_metadata
-    const nameQuery = name 
-      ? await supabase.auth.admin.listUsers({
-          filter: {
-            query: `user_metadata->>'name' = '${name}'`
-          }
-        })
-      : null;
+    // Auth 유저 전체 불러오기
+    const { data: users, error } = await supabase.auth.admin.listUsers();
 
-    // Search users by phone
-    const phoneQuery = phone
-      ? await supabase.auth.admin.listUsers({
-          filter: {
-            query: `user_metadata->>'phone' = '${phone}'`
-          }
-        })
-      : null;
-    // Combine results, prioritizing phone match
-    const matchedUsers = phoneQuery?.data?.users.length 
-      ? phoneQuery.data.users 
-      : nameQuery?.data?.users || [];
-
-    // Return matched user emails (safely)
-    if (matchedUsers.length > 0) {
-      const maskedEmails = matchedUsers.map(user => {
-        const email = user.email || 'No email found';
-        // Mask email for privacy
-        return email.replace(/^(.)(.*)(@.*)$/, 
-          (_, first, middle, domain) => 
-            `${first}${'*'.repeat(middle.length)}${domain}`
-        );
-      });
-
-      return new Response(JSON.stringify({ 
-        message: 'Potential email(s) found',
-        maskedEmails 
-      }), { 
-        headers: { 'Content-Type': 'application/json' } 
+    if (error) {
+      console.error("Auth 조회 오류:", error);
+      return new Response(JSON.stringify({ error: "유저 조회 실패" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
       });
     }
 
-    // No users found
-    return new Response(JSON.stringify({ 
-      error: 'No matching users found' 
-    }), { 
-      status: 404,
-      headers: { 'Content-Type': 'application/json' }
+    // user_metadata에서 name과 phone이 일치하는 유저 찾기
+    const matchedUser = users.users.find(
+      (u) =>
+        u.user_metadata?.name === name &&
+        u.user_metadata?.phone === phone
+    );
+
+    if (!matchedUser) {
+      return new Response(JSON.stringify({ error: "일치하는 계정 정보를 찾을 수 없습니다." }), {
+        status: 404,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+      });
+    }
+
+    // 이메일 마스킹
+    const email = matchedUser.email;
+    if (!email) {
+      return new Response(JSON.stringify({ error: "이메일 정보를 찾을 수 없습니다." }), {
+        status: 404,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+      });
+    }
+
+    const [local, domain] = email.split("@");
+    const masked = local.slice(0, 3) + "*".repeat(local.length - 3) + "@" + domain;
+
+    return new Response(JSON.stringify({ maskedEmail: masked }), {
+      status: 200,
+      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
     });
-
   } catch (error) {
-    console.error('Recovery error:', error);
-    return new Response(JSON.stringify({ 
-      error: 'Internal server error' 
-    }), { 
+    console.error("Error:", error);
+    return new Response(JSON.stringify({ error: "서버 에러 발생" }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
     });
   }
 });

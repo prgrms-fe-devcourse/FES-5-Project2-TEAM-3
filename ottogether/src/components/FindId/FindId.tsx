@@ -39,13 +39,16 @@ function FindId({ onClose }: Props) {
     setFoundEmail(null);
 
     try {
-      const response = await fetch('https://ifvtongrzrnoyiflqmcs.supabase.co/functions/v1/findId', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, phone }),
-      });
+      const response = await fetch(
+        'https://ifvtongrzrnoyiflqmcs.supabase.co/functions/v1/findId',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name, phone }),
+        }
+      );
 
       const result = await response.json();
 
@@ -55,7 +58,7 @@ function FindId({ onClose }: Props) {
         return;
       }
 
-      setFoundEmail(result.maskedEmails?.[0] || '');
+      setFoundEmail(result.maskedEmail);
       setMode('result');
     } catch (err) {
       console.error('요청 실패:', err);
@@ -64,20 +67,6 @@ function FindId({ onClose }: Props) {
 
     setIsLoading(false);
   };
-
-
-  
-
-  const getMaskedEmail = (email: string) => {
-    const [localPart, domain] = email.split('@');
-    if (localPart.length <= 3) {
-      return '*'.repeat(localPart.length) + '@' + domain;
-    }
-    const visible = localPart.slice(0, 3);
-    const masked = '*'.repeat(localPart.length - 3);
-    return `${visible}${masked}@${domain}`;
-  };
-
 
 
   return (
@@ -116,7 +105,18 @@ function FindId({ onClose }: Props) {
                   type="tel"
                   placeholder="Phone number"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {
+                    let value = e.target.value.replace(/\D/g, "");
+                    if (value.length < 4) {
+                      value = value;
+                    } else if (value.length < 8) {
+                      value = value.replace(/(\d{3})(\d{1,4})/, "$1-$2");
+                    } else {
+                      value = value.replace(/(\d{3})(\d{4})(\d{1,4})/, "$1-$2-$3");
+                    }
+                    setPhone(value);
+                  }}
+                  maxLength={13}
                   required
                 />
               </div>
@@ -139,7 +139,7 @@ function FindId({ onClose }: Props) {
 
             <div className={S.emailBox}>
               <img src={emailIcon} alt="이메일 아이콘" />
-              <span>{getMaskedEmail(foundEmail)}</span>
+              <span>{foundEmail}</span>
             </div>
 
             <button
