@@ -5,7 +5,6 @@ import userIcon from "@/assets/icons/user-square-white.svg";
 import phoneIcon from "@/assets/icons/phone-white.svg";
 import emailIcon from "@/assets/icons/sms-white.svg";
 import closeIcon from "@/assets/icons/close.svg";
-import { supabase } from "../../supabase/supabase";
 
 type Props = {
   onClose: () => void;
@@ -33,30 +32,38 @@ function FindId({ onClose }: Props) {
 
 
 
-//  supabase Auth 접근 로직 필요.
+  const handleFindId = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    setFoundEmail(null);
 
-  const handleFindId = async () => {
-  setIsLoading(true);
-  setError('');
-  setFoundEmail(null);
+    try {
+      const response = await fetch('https://ifvtongrzrnoyiflqmcs.supabase.co/functions/v1/findId', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, phone }),
+      });
 
-  const { data, error: supaError } = await supabase
-    .from('profile')
-    .select('email_address')
-    .eq('name', name)
-    .eq('phone', phone)
-    .single();
+      const result = await response.json();
 
-  setIsLoading(false);
+      if (!response.ok) {
+        setError(result.error || '일치하는 계정 정보를 찾을 수 없습니다.');
+        setIsLoading(false);
+        return;
+      }
 
-  if (supaError || !data) {
-    setError('일치하는 계정 정보를 찾을 수 없습니다.');
-    return;
-  }
+      setFoundEmail(result.maskedEmails?.[0] || '');
+      setMode('result');
+    } catch (err) {
+      console.error('요청 실패:', err);
+      setError('서버 요청 중 오류가 발생했습니다.');
+    }
 
-  setFoundEmail(data.email_address);
-  setMode('result');
-};
+    setIsLoading(false);
+  };
 
 
   
@@ -70,6 +77,8 @@ function FindId({ onClose }: Props) {
     const masked = '*'.repeat(localPart.length - 3);
     return `${visible}${masked}@${domain}`;
   };
+
+
 
   return (
     <div className={S.overlay} onClick={onClose}>
