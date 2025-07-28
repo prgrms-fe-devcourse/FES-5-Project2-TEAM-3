@@ -11,7 +11,7 @@ function SearchResult() {
   const [ selectedOtt, setSelectedOtt ] = useState<string[]>([]);
   const [ selectedGenres, setSelectedGenres
    ] = useState<string[]>([]);
-  const [ ratingRange, setRatingRange ] = useState<[number, number]>([0, 10]);
+  const [ ratingRange, setRatingRange ] = useState<[number, number]>([0, 5]);
   const [ releaseRange, setReleaseRange ] = useState<[string, string]>(['', '']);
 
   /* OTT 플랫폼 Toggle */
@@ -37,7 +37,7 @@ function SearchResult() {
   const clearFilter = () => {
     setSelectedOtt([]);
     setSelectedGenres([]);
-    setRatingRange([0, 10]);
+    setRatingRange([0, 5]);
     setReleaseRange(['', '']);
   }
 

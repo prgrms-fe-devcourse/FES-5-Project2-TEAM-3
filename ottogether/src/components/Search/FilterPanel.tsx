@@ -55,7 +55,15 @@ function FilterPanel({
             value={ratingMin}
             onChange={(e) => onRatingChage(Number(e.target.value), ratingMax)}
           />
-
+          {' ~ '}
+          <input 
+            type="number"
+            min={ratingMin}
+            max={5}
+            step={0.1}
+            value={ratingMax}
+            onChange={(e) => onRatingChage(ratingMin, Number(e.target.value))}
+          />
         </div>
       </section>
 
