@@ -12,12 +12,13 @@ function RegisterDetail() {
 
   /* input state & ref 정의 */
   const [ userId, setUserId ] = useState<string>('');
+  const [ userEmail, setUserEmail ] = useState<string>('');
   const [ ottList, setOttList ] = useState<string[]>([]);
   const [ genres, setGenres ] = useState<string[]>([]);
   const [ error, setError ] = useState<string | null>(null);
   const [ isSubmitting, setIsSubmitting ] = useState<boolean>(false);
   
-  /* user_id 가져오기 */
+  /* user_id, email_address 가져오기 */
   useEffect(() => {
     const fetchUserId = async () => {
       // location.state 전달 값
@@ -35,7 +36,26 @@ function RegisterDetail() {
         navigate('/login');
       }
     }
+
+    const fetchUserEmail = async () => {
+      // location.state 전달 값
+      if (location.state?.userEmail) {
+        setUserEmail(location.state.userEmail);
+        return;
+      }
+      // Supabase 세션에서 추출
+      const email = await getUserInfo('email');
+      if (email) {
+        setUserEmail(email);
+      } else {
+        console.error('user Email을 찾을 수 없습니다.');
+        alert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');
+        navigate('/login');
+      }
+    }
+
     fetchUserId();
+    fetchUserEmail();
   }, []);
 
   // 다음에 입력하기 활성화 조건 설정
@@ -58,38 +78,82 @@ function RegisterDetail() {
     )
   }
 
-  const handleSubmitRegisterDetail = async (e:React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // 비동기 처리 중 중복 제출 방지
-    if(isSubmitting) return;
-
-    if(!userId) {
-      setError('사용자 정보를 불러올 수 없습니다.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    const result = await upsertTable({
+  /* Supabase Upsert 통신 */
+  const submitProfileInfo = async ({
+    userId,
+    userEmail,
+    ottList = [],
+    genres = []
+  }: {
+    userId: string;
+    userEmail: string;
+    ottList?: string[];
+    genres?: string[];
+  }) => {
+    return await upsertTable({
       method: 'upsert',
       tableName: 'profile',
       uploadData: {
         user_id: userId,
+        email_address: userEmail,
         preferred_ott: ottList,
         favorite_genre: genres,
         updated_at: new Date().toISOString(),
       },
       matchKey: "user_id"
     });
+  };
 
+  /* Skip 버튼 클릭 시 - user_id와 이메일만 저장 */
+  const handleSkipDetail = async () => {
+    // 비동기 처리 중 중복 제출 방지
+    if(isSubmitting) return;
+
+    // 유저 정보가 없을 경우 다시 로그인하도록 알림
+    if(!userId) {
+      alert('로그인 정보가 만료되었습니다. 다시 로그인하신 후 시도해주세요.');
+      navigate('/login');
+    }
+
+    setIsSubmitting(true);
+    const result = await submitProfileInfo( { userId, userEmail });
+    setIsSubmitting(false);
+
+    if (result.error) {
+      console.error('skip 데이터 저장 실패:', result.error.message);
+      setError('데이터 저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
+    navigate('/register/profile', { state: { userId } });
+  }
+
+  /* Submit 버튼 클릭 시 - OTT 리스트와 장르 정보 저장 */
+  const handleSubmitRegisterDetail = async (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // 비동기 처리 중 중복 제출 방지
+    if(isSubmitting) return;
+
+    // 유저 정보가 없을 경우 다시 로그인하도록 알림
+    if(!userId) {
+      alert('로그인 정보가 만료되었습니다. 다시 로그인하신 후 시도해주세요.');
+      navigate('/login');
+    }
+
+    setIsSubmitting(true);
+    const result = await submitProfileInfo({
+      userId,
+      userEmail,
+      ottList,
+      genres
+    });
     setIsSubmitting(false);
 
     if(result.error) {
-      console.error('데이터 업데이트 실패:', result.error.message);
+      console.error('Submit 데이터 업데이트 실패:', result.error.message);
       setError('데이터 업데이트에 실패했습니다.');
     } else {
-      console.log('업데이트 성공:', result.result);
+      // console.log('업데이트 성공:', result.result);
       navigate('/register/profile', { state: { userId } });
     }
   }
@@ -163,7 +227,7 @@ function RegisterDetail() {
 
         <button 
           type="button" 
-          onClick={() => navigate('/register/profile')} 
+          onClick={handleSkipDetail} 
           className={S["skip-button"]}
           aria-label="정보 입력을 건너뛰고 다음 단계로 이동합니다"
           disabled={!isSkippable || isSubmitting}
