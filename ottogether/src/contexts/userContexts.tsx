@@ -1,46 +1,58 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getUserInfo } from '../supabase/Auth/getUserInfo';
 import { supabase } from '../supabase/supabase';
 
+
 type UserType = {
-  id: string | null;
-  email: string | null;
-  name: string | null;
-  phone: string | null;
-};
+  id: string;
+  email: string;
+  name?: string;
+  phone?: string;
+} | null;
 
 type UserContextType = {
-  user: UserType | null;
-  setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
+  user: UserType;
+  setUser: React.Dispatch<React.SetStateAction<UserType>>;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<UserType | null>(null);
-
-  const fetchUserInfo = async () => {
-    const id = await getUserInfo('id');
-    const email = await getUserInfo('email');
-    const name = await getUserInfo('name');
-    const phone = await getUserInfo('phone');
-
-    setUser({ id, email, name, phone });
-  };
+export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<UserType>(null);
 
   useEffect(() => {
-    fetchUserInfo(); // 초기 실행
+    
+    const getUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (data?.user) {
+        setUser({
+          id: data.user.id,
+          email: data.user.email ?? '',
+          name: data.user.user_metadata?.name ?? '',
+          phone: data.user.phone ?? '',
+        });
+      } else {
+        setUser(null);
+      }
+    };
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+    getUser();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        fetchUserInfo();
+        const u = session.user;
+        setUser({
+          id: u.id,
+          email: u.email ?? '',
+          name: u.user_metadata?.name ?? '',
+          phone: u.phone ?? '',
+        });
       } else {
         setUser(null);
       }
     });
 
     return () => {
-      listener.subscription.unsubscribe();
+      authListener.subscription.unsubscribe();
     };
   }, []);
 
@@ -49,12 +61,12 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       {children}
     </UserContext.Provider>
   );
-}
+};
 
-export function useUser() {
+export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error("useUser는 반드시 UserProvider 내부에서 사용되어야 합니다.");
+    throw new Error('useUser는 반드시 UserProvider 안에서 사용되어야 합니다.');
   }
   return context;
-}
+};
