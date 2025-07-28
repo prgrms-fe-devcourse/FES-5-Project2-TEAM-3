@@ -1,0 +1,29 @@
+/* genre selection */
+.genre-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+.genre-item {
+	display: inline-block;
+	margin: 0.4rem 0.8rem 0 0;
+
+	.checkbox {
+		display: none;
+	}
+
+	.genre-label {
+		display: inline-block;
+		padding: 0.5rem 0.8rem;
+		border: 1px solid var(--color-grey-500);
+		border-radius: 8px;
+		cursor: pointer;
+	}
+
+	.checkbox:checked + .genre-label {
+		background-color: var(--color-primary-300);
+		color: var(--background);
+		font-weight: 500;
+		border-color: var(--primary);
+	}
+}

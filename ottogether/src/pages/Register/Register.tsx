@@ -133,7 +133,7 @@ function Register() {
     }
 
     // 전화번호 형식 검사
-    if(!phoneRegex.test(userPhoneNumber)) {
+    if(agreement && !phoneRegex.test(userPhoneNumber)) {
       setError('올바른 핸드폰번호 형식이 아닙니다.');
       return;
     }
@@ -144,7 +144,6 @@ function Register() {
       if(confirmDelete) {
         setUserName('');
         setUserPhoneNumber('');
-        navigate('/register/detail');
       } else {
         agreeFieldRef.current?.scrollIntoView();
         agreeFieldRef.current?.focus();
@@ -153,11 +152,13 @@ function Register() {
     }
 
     // supabase auth 통신
-    const result:RegisterReturns = await authRegister(userEmail, userPassword, userPhoneNumber, { name: userName });
+    const result:RegisterReturns = await authRegister(userEmail, userPassword, 
+      agreement ? { phone: userPhoneNumber.trim(), name: userName.trim() } : undefined);
     if (result.success) {
       navigate('/register/detail', { 
         state: {
-          userId: result.userId
+          userId: result.userId,
+          userEmail: userEmail,
         }
       });
     } else {
