@@ -16,15 +16,14 @@ export const authRegister = async (
   }
 ): Promise<RegisterReturns> => {
 
-  const userMetadata: Record<string, string> = {};
-  if(options?.name) userMetadata.name = options.name;
-
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    phone: options?.phone,
     options: {
-      data: userMetadata
+      data: {
+        ...(options?.name && { name: options.name }),
+        ...(options?.phone && { phone: options.phone })
+      }
     }
   });
 

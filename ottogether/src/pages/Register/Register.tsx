@@ -133,7 +133,7 @@ function Register() {
     }
 
     // 전화번호 형식 검사
-    if(!phoneRegex.test(userPhoneNumber)) {
+    if(agreement && !phoneRegex.test(userPhoneNumber)) {
       setError('올바른 핸드폰번호 형식이 아닙니다.');
       return;
     }
