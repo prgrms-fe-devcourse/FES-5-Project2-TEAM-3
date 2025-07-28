@@ -17,7 +17,7 @@ export async function toggleQuoteLike(
     return { error: fetchError };
   }
 
-  if (existingLike) {
+  if (existingLike?.id !== undefined && existingLike?.id !== null) {
     const { error: deleteError } = await supabase
       .from('quotes_like')
       .delete()
@@ -37,7 +37,7 @@ export async function toggleQuoteLike(
   } else {
     const { error: insertError } = await supabase
       .from('quotes_like')
-      .insert({ user_id: userId, quote_id: quoteId });
+      .insert({ user_id: userId, quote_id: quoteId, created_at: new Date().toISOString() });
 
     if (insertError) {
       console.error('좋아요 삽입 오류:', insertError.message);
