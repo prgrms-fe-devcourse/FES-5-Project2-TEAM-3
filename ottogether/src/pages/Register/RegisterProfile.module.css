@@ -19,6 +19,12 @@
 	}
 }
 
+.error {
+	color: var(--color-error-500);
+	font-size: 0.8rem;
+	font-weight: 400;
+}
+
 /* 전체 grid */
 form {
 	width: 100%;
@@ -152,6 +158,23 @@ textarea {
 	}
 }
 
+.spinner {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	border: 2px solid #fff;
+	border-radius: 50%;
+	border-top-color: transparent;
+	animation: spin 1.2s ease-in-out infinite;
+	vertical-align: middle;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
 .skip-button {
 	background: none;
 	border: none;
@@ -182,7 +205,7 @@ textarea {
 
 	.header-image {
 		width: 100%;
-		height: 200px;
+		height: 150px;
 		object-fit: cover;
 	}
 
@@ -206,13 +229,35 @@ textarea {
 		font-weight: 600;
 		margin-bottom: 0.5rem;
 	}
-
 	span {
 		display: block;
 		font-size: 0.8rem;
 		color: var(--color-grey-300);
 		margin-bottom: 1.2rem;
 	}
+}
+
+/* 바이오 영역 스크롤바 */
+.user-bio {
+	max-height: 80px;
+	overflow-y: scroll;
+}
+
+.user-bio::-webkit-scrollbar {
+	width: 8px;
+}
+.user-bio::-webkit-scrollbar-track {
+	background: var(--color-grey-800);
+	border-radius: 6px;
+	opacity: 80%;
+}
+.user-bio::-webkit-scrollbar-thumb {
+	background-color: var(--color-grey-500);
+	border-radius: 6px;
+	transition: background 0.3s;
+}
+.user-bio::-webkit-scrollbar-thumb:hover {
+	background: var(--color-grey-300);
 }
 
 /* 반응형 구조 */

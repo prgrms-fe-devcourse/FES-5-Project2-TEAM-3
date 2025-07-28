@@ -1,16 +1,43 @@
-import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 import S from './RegisterDetail.module.css';
 import { ottListTotal, genreListTotal } from '../../lib/data';
+import { getUserInfo } from '../../supabase/auth/getUserInfo';
+import { upsertTable } from '../../supabase/upsertTable';
 
 function RegisterDetail() {
   
   const navigate = useNavigate();
+  const location = useLocation();
 
   /* input state & ref 정의 */
+  const [ userId, setUserId ] = useState<string>('');
   const [ ottList, setOttList ] = useState<string[]>([]);
   const [ genres, setGenres ] = useState<string[]>([]);
+  const [ error, setError ] = useState<string | null>(null);
+  const [ isSubmitting, setIsSubmitting ] = useState<boolean>(false);
   
+  /* user_id 가져오기 */
+  useEffect(() => {
+    const fetchUserId = async () => {
+      // location.state 전달 값
+      if (location.state?.userId) {
+        setUserId(location.state.userId);
+        return;
+      }
+      // Supabase 세션에서 추출
+      const id = await getUserInfo('id');
+      if (id) {
+        setUserId(id);
+      } else {
+        console.error('userId를 찾을 수 없습니다.');
+        alert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');
+        navigate('/login');
+      }
+    }
+    fetchUserId();
+  }, []);
+
   // 다음에 입력하기 활성화 조건 설정
   const isSkippable = ottList.length === 0 && genres.length === 0
 
@@ -31,10 +58,40 @@ function RegisterDetail() {
     )
   }
 
-  const handleSubmitRegisterDetail = (e:React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitRegisterDetail = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // supabase.()
-    navigate('/register/profile');
+
+    // 비동기 처리 중 중복 제출 방지
+    if(isSubmitting) return;
+
+    if(!userId) {
+      setError('사용자 정보를 불러올 수 없습니다.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    const result = await upsertTable({
+      method: 'upsert',
+      tableName: 'profile',
+      uploadData: {
+        user_id: userId,
+        preferred_ott: ottList,
+        favorite_genre: genres,
+        updated_at: new Date().toISOString(),
+      },
+      matchKey: "user_id"
+    });
+
+    setIsSubmitting(false);
+
+    if(result.error) {
+      console.error('데이터 업데이트 실패:', result.error.message);
+      setError('데이터 업데이트에 실패했습니다.');
+    } else {
+      console.log('업데이트 성공:', result.result);
+      navigate('/register/profile', { state: { userId } });
+    }
   }
 
   return (
@@ -83,20 +140,33 @@ function RegisterDetail() {
             }
           </div>
         </section>
-        
+        { error && <p className={S.error} aria-live='polite'>{error}</p>}
         <button 
           type="submit" 
           className={S["register-button"]}
-          disabled={isSkippable}
+          disabled={isSkippable || isSubmitting}
           aria-label="OTT 플랫폼과 관심 장르 정보를 제출합니다"
-        >입력하기</button>
+        >{
+            isSubmitting ? (
+              <>
+                저장 중... {' '}
+                <span 
+                  role='status'
+                  aria-live='polite'
+                  aria-label='저장 중입니다'
+                  className={S.spinner}>
+                </span>
+              </>
+            ) 
+            : "입력하기"
+            }</button>
 
         <button 
           type="button" 
           onClick={() => navigate('/register/profile')} 
           className={S["skip-button"]}
           aria-label="정보 입력을 건너뛰고 다음 단계로 이동합니다"
-          disabled={!isSkippable}
+          disabled={!isSkippable || isSubmitting}
         >다음에 입력하기</button>
       </form>
     </div>

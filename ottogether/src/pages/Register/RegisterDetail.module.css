@@ -21,6 +21,12 @@
 	}
 }
 
+.error {
+	color: var(--color-error-500);
+	font-size: 0.8rem;
+	font-weight: 400;
+}
+
 /* form */
 .register-detail-form {
 	display: flex;
@@ -148,6 +154,23 @@
 
 	&:hover {
 		filter: brightness(1.05);
+	}
+}
+
+.spinner {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	border: 2px solid #fff;
+	border-radius: 50%;
+	border-top-color: transparent;
+	animation: spin 1.2s ease-in-out infinite;
+	vertical-align: middle;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
 	}
 }
 
