@@ -49,8 +49,12 @@ export const router = createBrowserRouter([
         element: <SearchResult />
       },
       {
-        path: '/review',
-        element: <Review />
+        path: '/edit-password',
+        element: <EditPassword />
+      },
+      {
+         path: '/review',
+         element: <Review />
       },
     ]
   },
