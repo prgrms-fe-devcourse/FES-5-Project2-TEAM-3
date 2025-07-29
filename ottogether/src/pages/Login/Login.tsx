@@ -23,8 +23,6 @@ function Login() {
   const [showFindPassword, setShowFindPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { isAuth } = useAuth();
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
