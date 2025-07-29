@@ -1,13 +1,13 @@
 import { Outlet } from "react-router-dom"
 import Header from "./Header"
 import Footer from "./Footer"
-import ScrollToTop from "./ScrollToTop"
+import ScrollManager from "./ScrollManager"
 
 function Layout() {
   return (
     <>
       <Header />
-      <ScrollToTop />
+      <ScrollManager />
       <main>
         <Outlet />
       </main>
