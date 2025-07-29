@@ -25,7 +25,9 @@ function FindPassword({ onClose }: Props) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
-  const handleSendEmail = async () => {
+  const handleSendEmail = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault(); // ✅ Enter 시 새로고침 방지
+
     if (!email) {
       setError("이메일을 입력해주세요.");
       return;
@@ -46,16 +48,18 @@ function FindPassword({ onClose }: Props) {
         return;
       }
 
-      console.log("검색할 이메일:", email);
-      console.log("결과:", profileData, profileError);
-
       // 비밀번호 재설정 메일 전송
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/edit-password`,
       });
 
       if (resetError) {
-        setError("이메일 전송 중 오류가 발생했습니다.");
+        const msg = resetError.message || "";
+        if (msg.includes("429") || msg.includes("Too Many Requests")) {
+          setError("재전송 제한으로 잠시 후 다시 시도해주세요.");
+        } else {
+          setError("이메일 전송 중 오류가 발생했습니다.");
+        }
         return;
       }
 
@@ -75,9 +79,8 @@ function FindPassword({ onClose }: Props) {
         </button>
 
         {mode === "form" && (
-          <div className={S["findpw-container"]}>
+          <form className={S["findpw-container"]} onSubmit={handleSendEmail}>
             <h2 className={S["title"]}>비밀번호 재설정</h2>
-
             <div className={S["description-wrapper"]}>
               <h3>비밀번호를 잊으셨나요?</h3>
               <p>
@@ -85,7 +88,6 @@ function FindPassword({ onClose }: Props) {
                 입력하신 이메일 주소로 비밀번호 변경 이메일을 보낼게요.
               </p>
             </div>
-
             <div className={S["findpw-wrapper"]}>
               <div className={S["input-wrapper"]}>
                 <img src={emailIcon} alt="이메일 아이콘" />
@@ -96,19 +98,17 @@ function FindPassword({ onClose }: Props) {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <button className={S["send-email-button"]} onClick={handleSendEmail}>
+              <button type="submit" className={S["send-email-button"]}>
                 이메일 전송
               </button>
             </div>
-
             {error && <p className={S["error"]}>{error}</p>}
-          </div>
+          </form>
         )}
 
         {mode === "result" && email && (
           <div className={S["result-container"]}>
             <h2 className={S["title"]}>비밀번호 재설정</h2>
-
             <div className={S["description-wrapper"]}>
               <h3>입력하신 이메일로 새로운 비밀번호를 전송했습니다.</h3>
               <p>
@@ -122,7 +122,6 @@ function FindPassword({ onClose }: Props) {
                   <img src={emailIcon} alt="이메일 아이콘" />
                   <span>{email}</span>
                 </div>
-
                 <button
                   className={S["login-button"]}
                   onClick={() => {
@@ -132,13 +131,13 @@ function FindPassword({ onClose }: Props) {
                 >
                   로그인 페이지로
                 </button>
-
                 <a
                   className={S["sending-error-message"]}
                   onClick={() => setResultStep("not-received")}
                 >
                   이메일을 받지 못하셨나요?
                 </a>
+                {error && <p className={S["error"]}>{error}</p>}
               </div>
             ) : (
               <div className={S["result-wrapper"]}>
@@ -150,9 +149,16 @@ function FindPassword({ onClose }: Props) {
                     });
 
                     if (resendError) {
-                      setError("이메일 재전송에 실패했습니다. 다시 시도해주세요.");
+                      const status = (resendError as any).status || (resendError as any).code;
+
+                      if (status === 429) {
+                        setError("재전송 제한으로 잠시 후 다시 시도해주세요.");
+                      } else {
+                        setError("이메일 재전송에 실패했습니다. 다시 시도해주세요.");
+                      }
                       return;
                     }
+
                     setError("");
                     setResultStep("sent");
                   }}
@@ -171,6 +177,7 @@ function FindPassword({ onClose }: Props) {
                 >
                   이메일 다시 입력하기
                 </button>
+                {error && <p className={S["error"]}>{error}</p>}
               </div>
             )}
           </div>
