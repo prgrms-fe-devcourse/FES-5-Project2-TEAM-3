@@ -23,6 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Supabase CLI 임시 폴더
+.supabase
+supabase/.temp
+
 # Privates
 .env
 
