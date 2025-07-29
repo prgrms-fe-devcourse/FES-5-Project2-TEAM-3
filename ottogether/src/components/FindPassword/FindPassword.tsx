@@ -26,7 +26,7 @@ function FindPassword({ onClose }: Props) {
   }, [onClose]);
 
   const handleSendEmail = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault(); // ✅ Enter 시 새로고침 방지
+    if (e) e.preventDefault();
 
     if (!email) {
       setError("이메일을 입력해주세요.");
@@ -36,7 +36,6 @@ function FindPassword({ onClose }: Props) {
     try {
       setError("");
 
-      // profile 테이블에서 이메일 확인
       const { data: profileData, error: profileError } = await supabase
         .from("profile")
         .select("user_id")
@@ -48,7 +47,6 @@ function FindPassword({ onClose }: Props) {
         return;
       }
 
-      // 비밀번호 재설정 메일 전송
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/edit-password`,
       });
