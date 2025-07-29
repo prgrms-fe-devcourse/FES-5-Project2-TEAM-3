@@ -1,6 +1,6 @@
 import S from "./MemberCard.module.css"
 import { getData } from "../review_/SupaData"
-import type { Tables, TablesInsert, TablesUpdate } from '../review_/supabase.type';
+import type { Tables } from '../review_/supabase.type';
 import { useEffect, useState } from "react";
 import { formatDate } from "../../util/formatDate";
 
