@@ -1,8 +1,10 @@
 import S from './SearchResult.module.css'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom";
 import FilterPanel from "../../components/Search/FilterPanel"
 import SearchBar from '../../components/Search/SearchBar';
+import { genreListTotal, ottListTotal } from '../../lib/data';
+import { isDefaultFilter } from '../../util/isDefaultFilter';
 
 function SearchResult() {
 
@@ -16,12 +18,38 @@ function SearchResult() {
 
   // 필터 제어 state
   const [ isFilterOpen, setIsFilterOpen ] = useState<boolean>(false);
-  const [ selectedOtt, setSelectedOtt ] = useState<string[]>([]);
+  const [ selectedOtt, setSelectedOtt ] = useState<string[]>(ottListTotal);
   const [ selectedGenres, setSelectedGenres
-   ] = useState<string[]>([]);
+   ] = useState<string[]>(genreListTotal);
   const [ ratingRange, setRatingRange ] = useState<[number, number]>([0, 5]);
   const [ releaseRange, setReleaseRange ] = useState<[string, string]>(['', '']);
+  
+  /* 검색어 갱신 */
+  useEffect(() => {
+    if (query !== null) {
+      setSearchKeyword(query);
+      setInputKeyword('');
+    }
+  }, [query]);
 
+  /* 검색창에서 엔터 키 입력 시 핸들링 */
+  const handleSearchKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
+    if ( e.key === 'Enter' ) {
+      setSearchKeyword(inputKeyword);
+      setInputKeyword('');
+    }
+  };
+
+  /* 필터 상태 초기화 */
+  const isFiltered = !isDefaultFilter(
+    selectedOtt, 
+    selectedGenres, 
+    ratingRange[0], 
+    ratingRange[1], 
+    releaseRange[0], 
+    releaseRange[1]
+  );
+  
   /* OTT 플랫폼 Toggle */
   const handleToggleOtt = (ott:string) => {
     setSelectedOtt(prev => 
@@ -43,8 +71,8 @@ function SearchResult() {
 
   /* clear filter */
   const clearFilter = () => {
-    setSelectedOtt([]);
-    setSelectedGenres([]);
+    setSelectedOtt(ottListTotal);
+    setSelectedGenres(genreListTotal);
     setRatingRange([0, 5]);
     setReleaseRange(['', '']);
   }
@@ -59,24 +87,17 @@ function SearchResult() {
     });
   }
 
-  /* 검색창에서 엔터 키 입력 시 핸들링 */
-  const handleSearchKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
-    if ( e.key === 'Enter' ) {
-      setSearchKeyword(inputKeyword);
-      setInputKeyword('');
-    }
-  };
 
   return (
     <div className={S.container}>
-      <h2>검색어 : {searchKeyword}</h2>
-      
       <SearchBar
         keyword={inputKeyword}
         onChange={setInputKeyword}
         onEnter={handleSearchKeyDown}
         onRightIconClick={()=>setIsFilterOpen(true)}
-      />
+        isFiltered={isFiltered}
+        />
+      <h2>검색어 : {searchKeyword}</h2>
       <FilterPanel
         isOpen={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}
