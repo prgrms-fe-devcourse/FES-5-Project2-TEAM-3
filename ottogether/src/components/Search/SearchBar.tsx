@@ -3,6 +3,7 @@ import searchIcon from '@/assets/icons/search-white.svg';
 import searchIconBlack from '@/assets/icons/search-black.svg';
 import filterOnIcon from '@/assets/icons/filter-on.svg';
 import filterOffIcon from '@/assets/icons/filter-off.svg';
+import { useState } from 'react';
 
 interface SearchBarProps {
   keyword: string;
@@ -24,8 +25,10 @@ function SearchBar({
   className = '',
 }:SearchBarProps) {
 
+  const [ isComposing, setIsComposing ] = useState(false);
+
   const handleKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') onEnter(e);
+    if (e.key === 'Enter' && !isComposing) onEnter(e);
   };
   
   const filterIcon = isFiltered ? filterOnIcon : filterOffIcon;
@@ -44,6 +47,8 @@ function SearchBar({
         value={keyword}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
+        onCompositionStart={()=>setIsComposing(true)}
+        onCompositionEnd={()=>setIsComposing(false)}
         autoFocus={isPopup}
       />
       <button 
