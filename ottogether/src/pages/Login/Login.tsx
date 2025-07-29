@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import FindId from '../../components/FindId/FindId';
 import FindPassword from '../../components/FindPassword/FindPassword';
 import { supabase } from '../../supabase/supabase';
-import { useAuth } from '../../contexts/AuthProvider';
 
 function Login() {
   const userId = useId();
