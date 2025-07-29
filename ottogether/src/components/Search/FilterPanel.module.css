@@ -82,21 +82,57 @@ h4 {
 	line-height: 1.2rem;
 }
 
-/* 평점 section */
+/* 평점 & 방영일 section */
 .rangeRow {
 	display: flex;
 	align-items: center;
 	gap: 1rem;
 
-	input[type="number"] {
+	input {
 		min-width: 5rem;
-		opacity: 1;
+		padding: 0.5rem 0.75rem;
+
+		outline: none;
+		border: 1px solid var(--color-grey-300);
+		border-radius: 8px;
+		background-color: var(--color-grey-50);
+		transition: border-color 0.2s;
 	}
 
-	input::-webkit-inner-spin-button,
-	input::-webkit-outer-spin-button {
-		opacity: 1;
-		background: transparent;
+	input[type="number"] {
+		font-family: "Poppins";
+		font-size: 1rem;
+		font-weight: 300;
+		text-align: center;
+
+		&:focus,
+		&:hover {
+			border-color: var(--color-primary-300);
+		}
+
+		&::-webkit-inner-spin-button,
+		&::-webkit-outer-spin-button {
+			opacity: 1;
+		}
+	}
+
+	input[type="date"] {
+		min-width: 11rem;
+		min-height: 2rem;
+		text-align: center;
+		text-align-last: center;
+		font-feature-settings: "tnum";
+		font-variant-numeric: tabular-nums;
+
+		font-family: "Poppins" "Noto Sans KR";
+		font-size: 1rem;
+		font-weight: 300;
+		text-align: center;
+
+		&::-webkit-datetime-edit {
+			font-family: "Poppins";
+			font-weight: 300;
+		}
 	}
 }
 
