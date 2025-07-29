@@ -46,7 +46,27 @@ export const upsertTable = async ( {
     if(!matchKey || !uploadData[matchKey]) {
       throw new Error('upsert 시에는 matchKey(예: user_id)가 필요하며, 해당 데이터의 값이 uploadData에 포함되어 있어야 합니다.')
     }
-    const { data: result, error } = await query.upsert(uploadData, {
+
+    const matchValue = uploadData[matchKey];
+
+    // 기존 데이터 조회
+    const { data: existingRow, error: fetchError } = await query
+      .select('*')
+      .eq(matchKey, matchValue)
+      .single();
+    
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      // PGRST116 = no rows found
+      return { result: null, error: fetchError };
+    }
+
+    // 병합: 기존 데이터 + 새로운 데이터 (겹치는 건 덮어씀)
+    const mergedData = {
+      ...( existingRow ?? {} ),
+      ...uploadData
+    };
+
+    const { data: result, error } = await query.upsert(mergedData, {
       onConflict: matchKey,
     });
 
