@@ -10,17 +10,19 @@ export type RegisterReturns =
 export const authRegister = async (
   email: string,
   password: string,
-  phone: string,
-  options: { name:string }
+  options?: { 
+    name?:string 
+    phone?: string,
+  }
 ): Promise<RegisterReturns> => {
 
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    phone,
     options: {
       data: {
-        name: options.name
+        ...(options?.name && { name: options.name }),
+        ...(options?.phone && { phone: options.phone })
       }
     }
   });
