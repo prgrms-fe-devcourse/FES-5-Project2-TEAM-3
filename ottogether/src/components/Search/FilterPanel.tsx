@@ -78,6 +78,7 @@ function FilterPanel({
         <section className={S.section}>
           <h4>평점 범위</h4>
           <div className={S.rangeRow}>
+            {'⭐️'}
             <input 
               type="number"
               min={0}
