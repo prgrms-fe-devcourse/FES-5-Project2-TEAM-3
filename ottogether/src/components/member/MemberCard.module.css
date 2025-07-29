@@ -39,7 +39,8 @@
 		font-size: 20px;
 		flex-grow: 1;
 	}
-
-
 }
 
+.profile-image{
+	background-color: white;
+}

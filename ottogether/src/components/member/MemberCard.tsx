@@ -51,9 +51,9 @@ function MemberCard() {
 		{ 
 		profileData && profileData.map(data => (
 			<div key={data.user_id} className={S.cell} onClick={() => onClickCell(data)}>
-				<img src={data.avatar_url as string} alt="profileImage" />
+				<img className={S['profile-image']} src={data.avatar_url as string ?? "./beomTeacher.svg"} alt="profileImage" />
 				<div>
-					<h2>{data.nickname}</h2>
+					<h2>{data.nickname ?? 'Nickname'}</h2>
 					<p><strong>Joined :</strong> {formatDate(data.created_at)}</p>
 					<p><strong>Favorite Genre :</strong> {data.favorite_genre?.join(', ')}</p>
 					<p><strong>Total Reviews :</strong> {getUserLikeCount(data.user_id, "review")} | <strong>Total Quotes :</strong> {getUserLikeCount(data.user_id, "quotes")} </p>

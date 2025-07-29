@@ -1,0 +1,47 @@
+.section-header{
+	padding-top: 57px;
+	width: 1100px;
+	display: flex;
+	gap: 8px;
+	margin: 0 auto;
+	justify-content: flex-end;
+	align-items: center;
+
+	button{
+		width: 30px;
+		height: 30px;
+		font-size: 11px;
+		border-radius: 12px;
+		border: none;
+		background-color: #E8DEF8;
+		color: #4F378A;
+
+		&:hover {
+      cursor: pointer;     
+      transform: scale(1.05);
+      transition: all 0.2s ease-in-out;
+    }
+	}
+
+	.first-btn{
+		background-color: #4F378A;
+		color: white;
+	}
+
+	p{
+		user-select: none;
+	}
+}
+
+.button-group{
+	display: flex;
+	gap: 17px;
+}
+
+.divider {
+	width: 1100px;
+	padding-top: 18px;
+  border-bottom: 2px solid #625B71;
+	margin: 0 auto;
+}
+

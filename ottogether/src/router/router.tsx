@@ -10,6 +10,7 @@ import Login from '../pages/Login/Login';
 import EditPassword from '../pages/EditPassword/EditPassword';
 import SearchResult from '../pages/SearchResult/SearchResult';
 import Review from '../pages/Review_/Review';
+import Members from '../pages/Members/Members';
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
       {
          path: '/review',
          element: <Review />
+      },
+      {
+         path: '/members',
+         element: <Members />
       },
     ]
   },
