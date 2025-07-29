@@ -4,8 +4,6 @@ import { genreListTotal, ottListTotal } from "../lib/data";
 
 const RATING_MIN = 0;
 const RATING_MAX = 5;
-const ottList = ottListTotal;
-const genreList = genreListTotal;
 
 export const isDefaultFilter = (
   selectedOtt: string[],
@@ -16,8 +14,8 @@ export const isDefaultFilter = (
   releaseTo: string
 ) => {
   return (
-    selectedOtt.length === ottList.length &&
-    selectedGenres.length === genreList.length &&
+    selectedOtt.length === ottListTotal.length &&
+    selectedGenres.length === genreListTotal.length &&
     ratingMin === RATING_MIN &&
     ratingMax === RATING_MAX &&
     releaseFrom === '' &&

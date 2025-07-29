@@ -41,7 +41,7 @@ function SearchResult() {
   };
 
   /* 필터 상태 초기화 */
-  const isFiltered = !isDefaultFilter(
+  const isNoFilter = isDefaultFilter(
     selectedOtt, 
     selectedGenres, 
     ratingRange[0], 
@@ -49,24 +49,14 @@ function SearchResult() {
     releaseRange[0], 
     releaseRange[1]
   );
-  
-  /* OTT 플랫폼 Toggle */
-  const handleToggleOtt = (ott:string) => {
-    setSelectedOtt(prev => 
-      prev.includes(ott)
-      ? prev.filter(o => o !== ott)
-      : [...prev, ott]
-    );
-  };
 
+  /* OTT 플랫폼 Toggle */
+  const handleToggleOtt = (ottList:string[]) => {
+    setSelectedOtt(ottList);
+  };
   /* Genre Toggle */
-  const handleToggleGenre = (e:React.ChangeEvent<HTMLInputElement>) => {
-    const genre = e.target.value;
-    setSelectedGenres(prev => 
-      prev.includes(genre) 
-      ? prev.filter(g => g !== genre)
-      : [...prev, genre]
-    )
+  const handleChangeGenres = (genreList: string[]) => {
+    setSelectedGenres(genreList);
   }
 
   /* clear filter */
@@ -95,7 +85,7 @@ function SearchResult() {
         onChange={setInputKeyword}
         onEnter={handleSearchKeyDown}
         onRightIconClick={()=>setIsFilterOpen(true)}
-        isFiltered={isFiltered}
+        isFiltered={!isNoFilter}
         />
       <h2>검색어 : {searchKeyword}</h2>
       <FilterPanel
@@ -104,7 +94,7 @@ function SearchResult() {
         selectedOtt={selectedOtt}
         onToggleOtt={handleToggleOtt}
         selectedGenres={selectedGenres}
-        onToggleGenre={handleToggleGenre}
+        onToggleGenre={handleChangeGenres}
         ratingMin={ratingRange[0]}
         ratingMax={ratingRange[1]}
         onRatingChage={(min, max) => setRatingRange([min, max])}

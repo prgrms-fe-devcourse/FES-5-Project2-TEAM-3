@@ -63,22 +63,12 @@ function RegisterDetail() {
   const isSkippable = ottList.length === 0 && genres.length === 0
 
   /* OTT 플랫폼 선택 */
-  const handleOttClick = (platform:string) => {
-    setOttList(prev => 
-      prev.includes(platform) 
-        ? prev.filter(p => p !== platform)
-        : [...prev, platform]
-    )
+  const handleOttClick = (ottList:string[]) => {
+    setOttList(ottList)
   }
-
   /* 관심 장르 선택 */
-  const handleGenreChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    const selectedGenre = e.target.value;
-    setGenres(prev => 
-      prev.includes(selectedGenre) 
-      ? prev.filter(g => g !== selectedGenre)
-      : [...prev, selectedGenre]
-    )
+  const handleGenreChange = (genreList:string[]) => {
+    setGenres(genreList);
   }
 
   /* Supabase Upsert 통신 */
