@@ -27,7 +27,7 @@ function MemberCard() {
 		console.log(data.nickname, ' cell clicked!');
 	}
 
-	function getUserLikeCount(user_id : number, type : "review" | 'quotes') : number{
+	function getUserLikeCount(user_id : string, type : "review" | 'quotes') : number{
 		let count = 0;
 
 		if (type === 'review'){
@@ -51,10 +51,10 @@ function MemberCard() {
 		{ 
 		profileData && profileData.map(data => (
 			<div key={data.user_id} className={S.cell} onClick={() => onClickCell(data)}>
-				<img src={data.profile_image_url as string} alt="profileImage" />
+				<img src={data.avatar_url as string} alt="profileImage" />
 				<div>
 					<h2>{data.nickname}</h2>
-					<p><strong>Joined :</strong> {formatDate(data.joined_time)}</p>
+					<p><strong>Joined :</strong> {formatDate(data.created_at)}</p>
 					<p><strong>Favorite Genre :</strong> {data.favorite_genre?.join(', ')}</p>
 					<p><strong>Total Reviews :</strong> {getUserLikeCount(data.user_id, "review")} | <strong>Total Quotes :</strong> {getUserLikeCount(data.user_id, "quotes")} </p>
 				</div>

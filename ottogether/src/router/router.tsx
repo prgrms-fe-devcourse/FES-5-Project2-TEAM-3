@@ -8,6 +8,7 @@ import RegisterProfile from '../pages/Register/RegisterProfile';
 import QuotesPage from '../pages/Quotes/QuotesPage';
 import Login from '../pages/Login/Login';
 import SearchResult from '../pages/SearchResult/SearchResult';
+import Review from '../pages/Review_/Review';
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: '/search',
         element: <SearchResult />
+      },
+      {
+        path: '/review',
+        element: <Review />
       },
     ]
   },
