@@ -144,7 +144,18 @@ function FindPassword({ onClose }: Props) {
               <div className={S["result-wrapper"]}>
                 <button
                   className={S["resend-button"]}
-                  onClick={handleSendEmail}
+                  onClick={async () => {
+                    const { error: resendError } = await supabase.auth.resetPasswordForEmail(email, {
+                      redirectTo: `${window.location.origin}/edit-password`,
+                    });
+
+                    if (resendError) {
+                      setError("이메일 재전송에 실패했습니다. 다시 시도해주세요.");
+                      return;
+                    }
+                    setError("");
+                    setResultStep("sent");
+                  }}
                 >
                   이메일 재전송
                 </button>
