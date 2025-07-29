@@ -3,26 +3,26 @@ import S from './FilterPanel.module.css';
 import OttSelector from './OttSelector';
 import GenreSelector from './GenreSelector';
 import closeBtn from '../../assets/icons/close.svg';
+import { genreListTotal, ottListTotal } from '../../lib/data';
 
 interface FilterPanelProps {
   isOpen: boolean;
   onClose: () => void;
 
   selectedOtt: string[];
-  onToggleOtt: (ott: string) => void;
+  onToggleOtt: (ottList: string[]) => void;
 
   selectedGenres: string[];
-  onToggleGenre: (e:React.ChangeEvent<HTMLInputElement>) => void;
+  onToggleGenre: (genreList: string[]) => void;
 
   ratingMin: number;
   ratingMax: number;
-  onRatingChage: (min:number, max:number) => void;
+  onRatingChange: (min:number, max:number) => void;
 
   releaseFrom: string;
   releaseTo: string;
   onReleaseChange: (from:string, to:string) => void;
 
-  onClear: () => void;
   onApply: () => void;
 }
 
@@ -38,15 +38,21 @@ function FilterPanel({
   onToggleGenre,
   ratingMin,
   ratingMax,
-  onRatingChage,
+  onRatingChange,
   releaseFrom,
   releaseTo,
   onReleaseChange,
-  onClear,
   onApply,
 }:FilterPanelProps) {
 
   const [ error, setError ] = useState<string | null>(null);
+
+  // Filter 변경 사항 임시 저장
+  const [ draftOtt, setDraftOtt ] = useState<string[]>([]);
+  const [ draftGenres, setDraftGenres ] = useState<string[]>([]);
+  const [ draftRatingRange, setDraftRatingRange ] = useState<[number, number]>([0,5]);
+  const [ draftReleaseRange, setDraftReleaseRange ] = useState<[string, string]>(['','']);
+  const [ isModified, setIsModified ] = useState<boolean>(false);
 
   // input 상태 string으로 관리
   const [ ratingMinInput, setRatingMinInput ] = useState<string>(String(''));
@@ -55,14 +61,43 @@ function FilterPanel({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
-  /* 초기 rating input값 */
+  /* 필터 임시저장값 초기화 */
   useEffect(() => {
-    setRatingMinInput(String(ratingMin));
-    setRatingMaxInput(String(ratingMax));
-  }, [ratingMin, ratingMax]);
+    if (isOpen) {
+      setRatingMinInput(String(ratingMin));
+      setRatingMaxInput(String(ratingMax));
+      setDraftOtt(selectedOtt);
+      setDraftGenres(selectedGenres);
+      setDraftRatingRange([ratingMin, ratingMax]);
+      setDraftReleaseRange([releaseFrom, releaseTo]);
+    }
+  }, [isOpen]);
 
+  /* 변경 여부 비교 */
+  useEffect(() => {
+    const [ minDraft, maxDraft ] = draftRatingRange;
+    const [ fromDraft, toDraft ] = draftReleaseRange;
+    const sortStr = (arr: string[]) => JSON.stringify([...arr].sort())
+    const isDiff = 
+      sortStr(draftOtt) !== sortStr(selectedOtt) ||
+      sortStr(draftGenres) !== sortStr(selectedGenres) ||
+      minDraft !== ratingMin ||
+      maxDraft !== ratingMax ||
+      fromDraft !== releaseFrom ||
+      toDraft !== releaseTo;
+
+    setIsModified(isDiff);
+  }, [draftOtt, draftGenres, draftRatingRange, draftReleaseRange,
+    selectedOtt, selectedGenres, ratingMin, ratingMax, releaseFrom, releaseTo])
+  
   /* 팝업창 제어 */
   const handleDialogClose = () => {
+    
+    if (isModified) {
+      const confirmClose = confirm('적용되지 않은 변경사항이 있습니다. 그래도 닫을까요?');
+      if ( !confirmClose ) return;
+    }
+
     dialogRef.current?.close();
     onClose();
   }
@@ -85,6 +120,15 @@ function FilterPanel({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  /* OTT Toggle */
+  const handleToggleDraftOtt = (ottList:string[]) => {
+    setDraftOtt(ottList);
+  };
+  /* Genre Toggle */
+  const handleToggleDraftGenre = (genreList:string[]) => {
+    setDraftGenres(genreList);
+  };
+
   /* 별점 입력값 핸들러 */
   const handleRatingMinInput = (e:React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
@@ -106,7 +150,7 @@ function FilterPanel({
       setError('별점의 최소값은 최대값보다 작아야 합니다.');
     } else {
       setError('');
-      onRatingChage(minInput, ratingMax);
+      setDraftRatingRange([minInput, draftRatingRange[1]]);
     }
   }
 
@@ -130,23 +174,46 @@ function FilterPanel({
       setError('별점의 최대값은 최소값보다 커야 합니다.');
     } else {
       setError('');
-      onRatingChage(ratingMin, maxInput);
+      setDraftRatingRange([draftRatingRange[0], maxInput]);
     }
+  }
+
+  /* Release Range Handler */
+  const handleReleaseFromInput = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    setDraftReleaseRange([input, draftReleaseRange[1]]);
+  }
+  const handleReleaseToInput = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    setDraftReleaseRange([draftReleaseRange[0], input]);
   }
 
   /* 필터 적용 */
   const handleApplyFilter = () => {
+    onToggleOtt(draftOtt);
+    onToggleGenre(draftGenres);
+    onReleaseChange(...draftReleaseRange);
+    
     // 별점 입력값이 비어있을 경우 최대/최소값 부여
     const min = parseFloat(ratingMinInput);
     const max = parseFloat(ratingMaxInput);
     const safeMin = isNaN(min) ? RATING_MIN : min;
     const safeMax = isNaN(max) ? RATING_MAX : max;
-    onRatingChage(safeMin, safeMax);
+    onRatingChange(safeMin, safeMax);
 
     onApply();
     dialogRef.current?.close();
     onClose();
   }
+
+  /* 초기화 */
+  const handleClearAll = () => {
+    setDraftOtt(ottListTotal);
+    setDraftGenres(genreListTotal);
+    setDraftRatingRange([RATING_MIN, RATING_MAX]);
+    setDraftReleaseRange(['','']);
+    setError('');
+  };
 
   return (
     <dialog 
@@ -163,8 +230,8 @@ function FilterPanel({
           <img src={closeBtn} alt="닫기" aria-hidden="true" />
         </button>
 
-        <OttSelector selected={selectedOtt} onToggle={onToggleOtt} label='OTT 플랫폼' className={S["compact-gap"]} />
-        <GenreSelector selected={selectedGenres} onToggle={onToggleGenre} label='장르' className={S["compact-list"]} />
+        <OttSelector selected={draftOtt} onToggle={handleToggleDraftOtt} label='OTT 플랫폼' className={S["compact-gap"]} />
+        <GenreSelector selected={draftGenres} onToggle={handleToggleDraftGenre} label='장르' className={S["compact-list"]} />
 
         <section className={S.section}>
           <h4>별점 범위</h4>
@@ -201,17 +268,17 @@ function FilterPanel({
             <input 
               type="date"
               aria-label="시작일"
-              value={releaseFrom}
-              max={releaseTo !== '' ? releaseTo : undefined}
-              onChange={(e) => onReleaseChange(e.target.value, releaseTo)}
+              value={draftReleaseRange[0]}
+              max={draftReleaseRange[1] !== '' ? draftReleaseRange[1] : undefined}
+              onChange={handleReleaseFromInput}
             />
             {' ~ '}
             <input 
               type="date"
               aria-label="종료일"
-              value={releaseTo}
-              min={releaseFrom !== '' ? releaseFrom : undefined}
-              onChange={(e) => onReleaseChange(releaseFrom, e.target.value)}
+              value={draftReleaseRange[1]}
+              min={draftReleaseRange[0] !== '' ? draftReleaseRange[0] : undefined}
+              onChange={handleReleaseToInput}
             />
           </div>
         </section>
@@ -221,7 +288,7 @@ function FilterPanel({
             className={S['apply-button']} 
             onClick={handleApplyFilter}
           >적용</button>
-          <button className={S['clear-button']} onClick={onClear}>초기화</button>
+          <button className={S['clear-button']} onClick={handleClearAll}>초기화</button>
         </section>
       </div>
     </dialog>
