@@ -1,13 +1,13 @@
 
 import { RouterProvider } from 'react-router-dom'
 import {router} from './router/router'
-import { UserProvider } from './contexts/userContexts'
+import { AuthProvider } from './contexts/AuthProvider'
 
 function App() {
   return (
-    <UserProvider>
+    <AuthProvider>
       <RouterProvider router={router}/>
-    </UserProvider>
+    </AuthProvider>
   )
 }
 export default App
