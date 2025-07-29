@@ -72,8 +72,8 @@ function FilterPanel({
         <button className={S["close-button"]}>
           <img src={closeBtn} alt="선택창 닫기" onClick={onClose} />
         </button>
-        <OttSelector selected={selectedOtt} onToggle={onToggleOtt} label='OTT 플랫폼' className="compact-gap" />
-        <GenreSelector selected={selectedGenres} onToggle={onToggleGenre} label='장르' className="compact-list" />
+        <OttSelector selected={selectedOtt} onToggle={onToggleOtt} label='OTT 플랫폼' className={S["compact-gap"]} />
+        <GenreSelector selected={selectedGenres} onToggle={onToggleGenre} label='장르' className={S["compact-list"]} />
 
         <section className={S.section}>
           <h4>평점 범위</h4>
@@ -119,7 +119,7 @@ function FilterPanel({
 
         <section className={S["button-group"]}>
           <button className={S['apply-button']} onClick={onApply}>적용</button>
-          <button className={S['cancel-button']} onClick={onClear}>초기화</button>
+          <button className={S['clear-button']} onClick={onClear}>초기화</button>
         </section>
       </div>
     </dialog>

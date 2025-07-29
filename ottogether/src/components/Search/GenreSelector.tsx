@@ -1,6 +1,5 @@
 import { genreListTotal } from '../../lib/data';
 import S from './GenreSelector.module.css';
-import parentS from '../Search/FilterPanel.module.css';
 
 
 interface GenreSelectorProps {
@@ -14,7 +13,7 @@ function GenreSelector( { selected, onToggle, label, className }:GenreSelectorPr
   return (
     <section>
       { label && <h4>{label}</h4>}
-      <div className={`${S["genre-list"]} ${className ? parentS[className] : ''}`.trim()}>
+      <div className={`${S["genre-list"]} ${className ?? ''}`.trim()}>
         {
           genreListTotal.map((genre, index) => (
             <div key={genre} className={S["genre-item"]}>
