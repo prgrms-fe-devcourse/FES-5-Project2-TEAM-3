@@ -1,3 +1,4 @@
+
 const BASE_URL = 'https://api.themoviedb.org/3';
 const TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
 
@@ -14,3 +15,4 @@ export async function fetchPopularMovies() {
   const data = await res.json();
   return data.results;
 }
+

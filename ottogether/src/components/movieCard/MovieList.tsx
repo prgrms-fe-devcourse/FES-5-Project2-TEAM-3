@@ -4,14 +4,16 @@
 import { useEffect, useState } from "react";
 import MovieCard from "./movieCard";
 import S from "./MovieList.module.css"
+import { getMovieProvider } from "../../tmdbApi/getMovieProvider";
+import type { MovieData } from "../../tmdbApi/movie.type";
 
 interface MovieListProps {
   title: string;
-  fetchFn: () => Promise<any[]>;
+  fetchFn: () => Promise<MovieData[]>;
 }
 
 export default function MovieList({ title, fetchFn }: MovieListProps) {
-  const [movies, setMovies] = useState<any[]>([]);
+  const [movies, setMovies] = useState<MovieData[]>([]);
   const [startIndex, setStartIndex] = useState(0);
 
     
@@ -21,8 +23,9 @@ export default function MovieList({ title, fetchFn }: MovieListProps) {
   useEffect(() => {
     async function loadMovies() {
       try {
-        const data = await fetchFn();
-        setMovies(data);
+        const rawData = await fetchFn();
+        const enrichedData = await getMovieProvider(rawData);
+      setMovies(enrichedData);
       } catch (err) {
         console.error(err);
       }
@@ -54,13 +57,7 @@ const handlePrev = () => {
          </button>
         <div className={S["movie-grid"]}>
            {movies.slice(startIndex, startIndex + itemsPerPage).map((movie) => (
-            <MovieCard
-             key={movie.id}
-             title={movie.title}
-             posterPath={movie.poster_path}
-             releaseDate={movie.release_date}
-             rating={movie.vote_average}
-             />
+           <MovieCard key={movie.id} movie={movie} />
           ))
           }
          </div>

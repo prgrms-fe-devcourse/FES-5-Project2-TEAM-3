@@ -36,3 +36,6 @@ export const genreListTotal:genreList = [
   '뉴스', 
   '정치'
 ];
+
+
+
