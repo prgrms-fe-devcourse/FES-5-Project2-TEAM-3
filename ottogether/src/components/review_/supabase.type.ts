@@ -21,7 +21,7 @@ export type Database = {
           review_id: number
           text_content: string
           updated_at: string
-          user_id: number
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -29,7 +29,7 @@ export type Database = {
           review_id?: number
           text_content?: string
           updated_at?: string
-          user_id?: number
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -37,37 +37,49 @@ export type Database = {
           review_id?: number
           text_content?: string
           updated_at?: string
-          user_id?: number
+          user_id?: string
         }
         Relationships: []
       }
       profile: {
         Row: {
+          avatar_url: string | null
           bio: string | null
+          created_at: string
+          email_address: string
           favorite_genre: string[] | null
-          joined_time: string
-          nickname: string
-          profile_image_url: string | null
+          header_url: string | null
+          nickname: string | null
+          preferred_ott: string[] | null
+          updated_at: string | null
           url: string | null
-          user_id: number
+          user_id: string
         }
         Insert: {
+          avatar_url?: string | null
           bio?: string | null
+          created_at?: string
+          email_address: string
           favorite_genre?: string[] | null
-          joined_time?: string
-          nickname?: string
-          profile_image_url?: string | null
+          header_url?: string | null
+          nickname?: string | null
+          preferred_ott?: string[] | null
+          updated_at?: string | null
           url?: string | null
-          user_id?: number
+          user_id?: string
         }
         Update: {
+          avatar_url?: string | null
           bio?: string | null
+          created_at?: string
+          email_address?: string
           favorite_genre?: string[] | null
-          joined_time?: string
-          nickname?: string
-          profile_image_url?: string | null
+          header_url?: string | null
+          nickname?: string | null
+          preferred_ott?: string[] | null
+          updated_at?: string | null
           url?: string | null
-          user_id?: number
+          user_id?: string
         }
         Relationships: []
       }
@@ -113,75 +125,84 @@ export type Database = {
       quotes_like: {
         Row: {
           created_at: string
-          review_id: number
-          user_id: number
+          id: number | null
+          quote_id: number | null
+          user_id: string | null
         }
         Insert: {
           created_at: string
-          review_id?: number
-          user_id?: number
+          id?: number | null
+          quote_id?: number | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string
-          review_id?: number
-          user_id?: number
+          id?: number | null
+          quote_id?: number | null
+          user_id?: string | null
         }
         Relationships: []
       }
       review: {
         Row: {
+          comment_count: number | null
           created_at: string
-          dislike_count: number
+          dislike_count: number | null
           id: number
-          like_count: number
-          movie_id: number
+          like_count: number | null
+          movie_id: number | null
           rating: number
-          text_content: string
-          updated_at: string
-          user_id: number
+          text_content: string | null
+          updated_at: string | null
+          user_id: string
         }
         Insert: {
+          comment_count?: number | null
           created_at?: string
-          dislike_count?: number
+          dislike_count?: number | null
           id?: number
-          like_count?: number
-          movie_id?: number
+          like_count?: number | null
+          movie_id?: number | null
           rating: number
-          text_content?: string
-          updated_at?: string
-          user_id?: number
+          text_content?: string | null
+          updated_at?: string | null
+          user_id: string
         }
         Update: {
+          comment_count?: number | null
           created_at?: string
-          dislike_count?: number
+          dislike_count?: number | null
           id?: number
-          like_count?: number
-          movie_id?: number
+          like_count?: number | null
+          movie_id?: number | null
           rating?: number
-          text_content?: string
-          updated_at?: string
-          user_id?: number
+          text_content?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
       review_like: {
         Row: {
           created_at: string
+          id: number
           reaction_type: Database["public"]["Enums"]["Like/Dislike"] | null
-          review_id: number
-          user_id: number
+          review_id: number | null
+          user_id: string
         }
         Insert: {
           created_at?: string
+          id?: number
           reaction_type?: Database["public"]["Enums"]["Like/Dislike"] | null
-          review_id?: number
-          user_id?: number
+          review_id?: number | null
+          user_id: string
         }
         Update: {
           created_at?: string
+          id?: number
           reaction_type?: Database["public"]["Enums"]["Like/Dislike"] | null
-          review_id?: number
-          user_id?: number
+          review_id?: number | null
+          user_id?: string
         }
         Relationships: []
       }

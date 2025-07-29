@@ -33,7 +33,9 @@ function EditPassword() {
     if (error) {
       console.error("비밀번호 변경 실패:", error.message);
 
-      if (error.message.includes("JWT expired") || error.message.includes("expired")) {
+      if (error.message.includes("New password should be different")) {
+        setError("기존 비밀번호와 동일한 비밀번호는 사용할 수 없습니다.");
+      } else if (error.message.includes("JWT expired") || error.message.includes("expired")) {
         setError("비밀번호 재설정 링크가 만료되었습니다. 다시 비밀번호 찾기를 진행해주세요.");
       } else {
         setError("비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
@@ -46,7 +48,6 @@ function EditPassword() {
     setPassword("");
     setConfirmPassword("");
 
-    // 2초 후 로그인 페이지로 이동
     setTimeout(() => navigate("/login"), 2000);
   };
 
@@ -98,8 +99,10 @@ function EditPassword() {
 
           <button type="submit" className={S["save-button"]}>Save</button>
 
-          {error && <p className={S["error"]}>{error}</p>}
-          {success && <p className={S["success"]}>{success}</p>}
+
+          <div className={`${S.message} ${error ? S.error : success ? S.success : ""}`}>
+            {error ? error : success ? success : <span>&nbsp;</span>}
+          </div>
         </form>
       </div>
     </div>

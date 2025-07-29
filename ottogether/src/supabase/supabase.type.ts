@@ -41,6 +41,27 @@ export type Database = {
         }
         Relationships: []
       }
+      favorite_movies: {
+        Row: {
+          created_at: string
+          id: string
+          movie_id: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          movie_id?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          movie_id?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profile: {
         Row: {
           avatar_url: string | null
@@ -145,61 +166,64 @@ export type Database = {
       }
       review: {
         Row: {
-          comment_count: number
+          comment_count: number | null
           created_at: string
-          dislike_count: number
+          dislike_count: number | null
           id: number
-          like_count: number
-          movie_id: number
+          like_count: number | null
+          movie_id: number | null
           rating: number
-          text_content: string
-          updated_at: string
-          user_id: string | null
+          text_content: string | null
+          updated_at: string | null
+          user_id: string
         }
         Insert: {
-          comment_count?: number
+          comment_count?: number | null
           created_at?: string
-          dislike_count?: number
+          dislike_count?: number | null
           id?: number
-          like_count?: number
-          movie_id?: number
+          like_count?: number | null
+          movie_id?: number | null
           rating: number
-          text_content?: string
-          updated_at?: string
-          user_id?: string | null
+          text_content?: string | null
+          updated_at?: string | null
+          user_id: string
         }
         Update: {
-          comment_count?: number
+          comment_count?: number | null
           created_at?: string
-          dislike_count?: number
+          dislike_count?: number | null
           id?: number
-          like_count?: number
-          movie_id?: number
+          like_count?: number | null
+          movie_id?: number | null
           rating?: number
-          text_content?: string
-          updated_at?: string
-          user_id?: string | null
+          text_content?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
       review_like: {
         Row: {
           created_at: string
+          id: number
           reaction_type: Database["public"]["Enums"]["Like/Dislike"] | null
-          review_id: number
-          user_id: string | null
+          review_id: number | null
+          user_id: string
         }
         Insert: {
           created_at?: string
+          id?: number
           reaction_type?: Database["public"]["Enums"]["Like/Dislike"] | null
-          review_id?: number
-          user_id?: string | null
+          review_id?: number | null
+          user_id: string
         }
         Update: {
           created_at?: string
+          id?: number
           reaction_type?: Database["public"]["Enums"]["Like/Dislike"] | null
-          review_id?: number
-          user_id?: string | null
+          review_id?: number | null
+          user_id?: string
         }
         Relationships: []
       }
