@@ -169,12 +169,14 @@ function RegisterProfile() {
   const handleHeaderImage = async () => {
     if(!userHeader) return getRandomHeader();
     
+    const extension = userHeader.name.split('.').pop()?.toLowerCase() || 'png';
+    const filtPath = `userHeader-${userId}.${extension}`;
     try {
       const result = await uploadImage( 
       { 
         bucketName: "headers",
         file: userHeader,
-        path: `userHeader-${userId}`
+        path: filtPath
       });
       if(result.success) {
         setFieldErrors(prev => ({...prev, header: undefined}));
@@ -195,13 +197,15 @@ function RegisterProfile() {
   /* 업로드한 파일이 있을 경우 Storage에 저장, 없으면 랜덤프로필 - Avatar */
   const handleAvatarImage = async () => {
     if(!userAvatar) return getRandomAvatar();
-      
+
+    const extension = userAvatar.name.split('.').pop()?.toLowerCase() || 'png';
+    const filtPath = `userAvatar-${userId}.${extension}`;
     try {
       const result = await uploadImage( 
       { 
         bucketName: "avatars",
         file: userAvatar,
-        path: `userAvatar-${userId}`
+        path: filtPath
       });
       if(result.success) {
         setFieldErrors(prev => ({...prev, avatar: undefined}));
