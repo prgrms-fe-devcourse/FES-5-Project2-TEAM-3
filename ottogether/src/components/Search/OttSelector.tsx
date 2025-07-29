@@ -1,18 +1,20 @@
 import S from './OttSelector.module.css';
+import parentS from '../Search/FilterPanel.module.css';
 import { ottListTotal } from "../../lib/data";
 
 interface OttSelectorProps {
   selected: string[];
   onToggle: (ott: string) => void;
-  label?: string
+  label?: string;
+  className?: string;
 }
 
-function OttSelector({ selected, onToggle, label }:OttSelectorProps) {
+function OttSelector({ selected, onToggle, label, className }:OttSelectorProps) {
 
   return (
     <section>
       { label && <h4>{label}</h4> }
-      <ul className={S["ott-selection"]}>
+      <ul className={`${S["ott-selection"]} ${className ? parentS[className] : ''}`.trim()}>
         { ottListTotal.map(ott => (
           <li key={ott}>
             <figure className={S["ott-item"]}>
