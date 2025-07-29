@@ -2,12 +2,19 @@ import S from './SearchResult.module.css'
 import { useState } from "react"
 import { useSearchParams } from "react-router-dom";
 import FilterPanel from "../../components/Search/FilterPanel"
+import SearchBar from '../../components/Search/SearchBar';
 
 function SearchResult() {
 
+  // 검색어 Params
   const [ searchParams ] = useSearchParams();
   const query = searchParams.get('query');
 
+  // 검색어 제어 state
+  const [ inputKeyword, setInputKeyword ] = useState<string>('');
+  const [ searchKeyword, setSearchKeyword ] = useState<string>(query ?? '');
+
+  // 필터 제어 state
   const [ isFilterOpen, setIsFilterOpen ] = useState<boolean>(false);
   const [ selectedOtt, setSelectedOtt ] = useState<string[]>([]);
   const [ selectedGenres, setSelectedGenres
@@ -49,13 +56,27 @@ function SearchResult() {
       genres: selectedGenres,
       rating: ratingRange,
       release: releaseRange,
-    })
+    });
   }
+
+  /* 검색창에서 엔터 키 입력 시 핸들링 */
+  const handleSearchKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
+    if ( e.key === 'Enter' ) {
+      setSearchKeyword(inputKeyword);
+      setInputKeyword('');
+    }
+  };
 
   return (
     <div className={S.container}>
-      <h2>검색어 : {query}</h2>
-      <button type="button" onClick={()=>setIsFilterOpen(true)}>필터</button>
+      <h2>검색어 : {searchKeyword}</h2>
+      
+      <SearchBar
+        keyword={inputKeyword}
+        onChange={setInputKeyword}
+        onEnter={handleSearchKeyDown}
+        onRightIconClick={()=>setIsFilterOpen(true)}
+      />
       <FilterPanel
         isOpen={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}
