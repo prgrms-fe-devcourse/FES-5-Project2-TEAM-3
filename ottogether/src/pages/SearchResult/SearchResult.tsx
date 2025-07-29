@@ -8,6 +8,7 @@ function SearchResult() {
   const [ searchParams ] = useSearchParams();
   const query = searchParams.get('query');
 
+  const [ isFilterOpen, setIsFilterOpen ] = useState<boolean>(false);
   const [ selectedOtt, setSelectedOtt ] = useState<string[]>([]);
   const [ selectedGenres, setSelectedGenres
    ] = useState<string[]>([]);
@@ -54,7 +55,10 @@ function SearchResult() {
   return (
     <div className={S.container}>
       <h2>검색어 : {query}</h2>
+      <button type="button" onClick={()=>setIsFilterOpen(true)}>필터</button>
       <FilterPanel
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
         selectedOtt={selectedOtt}
         onToggleOtt={handleToggleOtt}
         selectedGenres={selectedGenres}

@@ -1,18 +1,20 @@
 import { genreListTotal } from '../../lib/data';
 import S from './GenreSelector.module.css';
+import parentS from '../Search/FilterPanel.module.css';
 
 
 interface GenreSelectorProps {
   selected: string[];
   onToggle: (e:React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;
+  className?: string;
 }
 
-function GenreSelector( { selected, onToggle, label }:GenreSelectorProps ) {
+function GenreSelector( { selected, onToggle, label, className }:GenreSelectorProps ) {
   return (
     <section>
       { label && <h4>{label}</h4>}
-      <div className={S["genre-list"]}>
+      <div className={`${S["genre-list"]} ${className ? parentS[className] : ''}`.trim()}>
         {
           genreListTotal.map((genre, index) => (
             <div key={genre} className={S["genre-item"]}>
