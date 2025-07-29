@@ -22,3 +22,27 @@ export function formatDate(isoString: string): string {
     return "Date Formatting Error";
   }
 }
+
+export function formatDateNoYear(isoString: string): string {
+  try {
+    const date = new Date(isoString);
+
+    // Date 객체가 유효한지 확인 (잘못된 문자열인 경우 'Invalid Date' return)
+    if (isNaN(date.getTime())) {
+      console.error("formatDate: Invalid date string provided.", isoString);
+      return "Invalid Date";
+    }
+
+    // Intl.DateTimeFormat을 사용하여 포맷팅
+    // 'en-GB' 로케일로 "29 July" 형식으로 포맷 지정
+    const options: Intl.DateTimeFormatOptions = {
+      day: 'numeric',   // 일: 숫자 (ex: 29)
+      month: 'long',    // 월: 문자열 (ex: July)
+    };
+
+    return new Intl.DateTimeFormat('en-GB', options).format(date);
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return "Date Formatting Error";
+  }
+}

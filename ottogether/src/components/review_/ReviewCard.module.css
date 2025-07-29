@@ -1,0 +1,51 @@
+.user-avatar{
+	width: 32px;
+	height: 32px;
+	border-radius: 16px;
+}
+
+header{
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	padding-bottom: 16px;
+}
+
+.card-container{
+	padding: 16px;
+	width: 976px;
+	margin : 0 auto;
+	background-color: #525252;
+	border-radius: 8px;
+	margin-bottom: 21px;
+}
+
+.star-container{
+	margin-left: auto;
+}
+
+footer{
+	margin-top: 16px;
+	display: flex;
+}
+
+.read-more{
+	margin-left: auto;
+	color: #ffca45;
+
+	&:hover{
+		cursor: pointer;
+		user-select : none;
+	}
+}
+
+.reaction-item{
+	display: flex;
+	gap: 5px;
+	padding-right: 24px;
+	align-items: center;
+}
+
+p{
+	size: 14px;
+}
