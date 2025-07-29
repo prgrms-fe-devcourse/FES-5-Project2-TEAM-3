@@ -60,6 +60,9 @@ function Header() {
     }
     navigate(`/search?query=${encodeURIComponent(searchKeyword)}`);
     setShowSearch(false);
+    setTimeout(() => {
+      setSearchKeyword('');
+    },0);
   };
 
   const handleSearchKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
@@ -131,7 +134,7 @@ function Header() {
                 onEnter={handleSearchKeyDown}
                 onRightIconClick={handleSearch}
                 isPopup={true}
-                />
+              />
             )
           }
         </div>

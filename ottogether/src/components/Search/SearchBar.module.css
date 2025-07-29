@@ -1,4 +1,31 @@
 .search-bar {
+	max-width: 20rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5rem;
+	padding-bottom: 0.5rem;
+
+	border-bottom: 1px solid var(--color-grey-400);
+
+	input {
+		font-family: "Poppins", "Noto Sans KR";
+		border: none;
+		background-color: transparent;
+		min-width: 10rem;
+		height: 100%;
+		font-size: 1rem;
+		line-height: 1.25;
+		flex-grow: 1;
+		color: var(--foreground);
+
+		&:focus {
+			outline: none;
+		}
+		&:focus-visible {
+			outline: 1px solid var(--cloor-primary-300);
+		}
+	}
 }
 
 .search-popup {
@@ -34,6 +61,11 @@
 			outline: 1px solid var(--cloor-primary-300);
 		}
 	}
+}
+
+.left-icon {
+	width: 1.2rem;
+	height: 1.2rem;
 }
 
 .icon-button {
