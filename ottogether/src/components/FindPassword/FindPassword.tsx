@@ -37,14 +37,17 @@ function FindPassword({ onClose }: Props) {
       // profile 테이블에서 이메일 확인
       const { data: profileData, error: profileError } = await supabase
         .from("profile")
-        .select("uuid")
-        .eq("email", email)
-        .single();
+        .select("user_id")
+        .eq("email_address", email)
+        .maybeSingle();
 
       if (profileError || !profileData) {
         setError("입력하신 정보와 동일한 회원이 없습니다.");
         return;
       }
+
+      console.log("검색할 이메일:", email);
+      console.log("결과:", profileData, profileError);
 
       // 비밀번호 재설정 메일 전송
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
