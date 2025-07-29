@@ -77,7 +77,6 @@ function SearchResult() {
     });
   }
 
-
   return (
     <div className={S.container}>
       <SearchBar
@@ -97,11 +96,10 @@ function SearchResult() {
         onToggleGenre={handleChangeGenres}
         ratingMin={ratingRange[0]}
         ratingMax={ratingRange[1]}
-        onRatingChage={(min, max) => setRatingRange([min, max])}
+        onRatingChange={(min, max) => setRatingRange([min, max])}
         releaseFrom={releaseRange[0]}
         releaseTo={releaseRange[1]}
         onReleaseChange={(from, to) => setReleaseRange([from, to])}
-        onClear={clearFilter}
         onApply={applyFilter}
       />
     </div>
