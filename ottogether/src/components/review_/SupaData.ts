@@ -1,7 +1,8 @@
 import { createClient } from "@supabase/supabase-js"
 
+const supabase = createClient(import.meta.env.VITE_PROJECT_URL, import.meta.env.VITE_API_KEY);
+
 export async function getData(table : string){
-	const supabase = createClient(import.meta.env.VITE_PROJECT_URL, import.meta.env.VITE_API_KEY);
 	const {data, error} = await supabase
 		.from(table)
 		.select('*');
