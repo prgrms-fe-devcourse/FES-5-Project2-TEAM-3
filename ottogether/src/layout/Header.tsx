@@ -1,5 +1,5 @@
 import routes from '../router/routes';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import S from './Header.module.css';
 import searchIcon from '@/assets/icons/search-white.svg';
@@ -9,16 +9,17 @@ import SearchBar from '../components/Search/SearchBar';
 import { useAuth } from '../contexts/AuthProvider';
 import { supabase } from '../supabase/supabase';
 import { getRandomAvatar } from '../util/getRandomProfile';
+import DropdownMenu from './DropdownMenu';
 
 function Header() {
+  /* user Login 상태 & 알림 유무 */
+  const { user, isAuth, logout } = useAuth();
+  // 나중에 전역 상태 context로 변경 필요
+  const [ hasNewNoti, setHasNewNoti ] = useState(true);
 
   /* 반응형 햄버거 버튼 제어 */
-  const [ isMobile, setIsMobile ] = useState(false);
-
-  /* user Login 상태 & 알림 유무 */
-  // 나중에 전역 상태 context로 변경 필요
-  const { user, isAuth, logout } = useAuth();
-  const [ hasNewNoti, setHasNewNoti ] = useState(false);
+  const [ isMobile, setIsMobile ] = useState<boolean>(false);
+  const [ isMenuOpen, setIsMenuOpen ] = useState<boolean>(false);
 
   /* 프로필 사진 */
   const [ avatar, setAvatar ] = useState<string | null>(null);
@@ -108,51 +109,69 @@ function Header() {
     logout();
   }
 
+  /* route list */
+  const routeLIst = routes.filter(route => !route.hidden)
+                .map(route => (
+                  <li key={route.path}>
+                    <NavLink
+                    to={route.path}
+                    className={({isActive}) => (isActive ? S["active-route"] : '')}
+                    >{route.label}</NavLink>
+                  </li>
+                ));
+
+  /* 햄버거 버튼 제어 */
+  const toggleMenu = () => setIsMenuOpen(prev => !prev);
+  const handleMenuClose = useCallback(()=>setIsMenuOpen(false), []);
+
   /* 로그인 상태별 버튼 리스트 변경 */
   let buttonList = null;
-  if ( isAuth ) {
-    if ( !isMobile ) {
-      buttonList = (
-        <>
-          <button 
-            type='button' 
-            className={S["outline-button"]} 
-            onClick={handleLogOut}
-          >Log Out</button>
-          <button 
-            type='button' 
-            className={S["user-avatar"]}
-            onClick={()=> navigate('/my-page')}
-          >
-            <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
-          </button>
-          <div className={S['notification-wrapper']}>
-            <img src={bellIcon} alt="알림" className={S.icon} />
-            { hasNewNoti && <span className={S["red-dot"]} /> }
-          </div>
-        </>
-      )
-    } else {
-      buttonList = (
-        <>
-          <button 
-            type='button' 
-            className={S["user-avatar"]}
-            onClick={()=> navigate('/my-page')}
-          >
-            <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
-          </button>
-          <button 
-            type="button"
-            
-          >
-            
-          </button>
-        </>
-      )
-    }
-    
-  } else {
+  if ( isAuth && !isMobile ) {
+    // 로그인 중 + PC 화면
+    buttonList = (
+      <>
+        <button 
+          type='button' 
+          className={S["outline-button"]} 
+          onClick={handleLogOut}
+        >Log Out</button>
+        <button 
+          type='button' 
+          className={S["user-avatar"]}
+          onClick={()=> navigate('/my-page')}
+        >
+          <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
+        </button>
+        <div className={S['notification-wrapper']}>
+          <img src={bellIcon} alt="알림" className={S.icon} />
+          { hasNewNoti && <span className={S["red-dot"]} /> }
+        </div>
+      </>
+    );
+  } else if ( isAuth && isMobile ) {
+    // 로그인 중 + 모바일 화면
+    buttonList = (
+      <>
+        <button 
+          type='button' 
+          className={S["user-avatar"]}
+          onClick={()=> navigate('/my-page')}
+        >
+          <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
+          { hasNewNoti && <span className={S["red-dot"]} /> }
+        </button>
+        <button 
+          type="button"
+          className={S["icon-button"]}
+          onClick={toggleMenu}
+          aria-label={ isMenuOpen ? "메뉴 닫기" : "메뉴 열기" }
+        >
+          <img src={hamburgerIcon} alt="메뉴 리스트" className={S.icon} />
+        </button>
+      </>
+    );
+  } else if ( !isAuth && !isMobile ) {
+    // 로그아웃 상태 + PC 화면
     buttonList = (
       <>
         <button 
@@ -166,13 +185,82 @@ function Header() {
           onClick={()=> navigate('/login')}
         >Log In</button>
       </>
+    );
+  } else {
+    // 로그아웃 상태 + 모바일 화면
+    buttonList = (
+      <>
+        <button 
+          type='button' 
+          className={S["filled-button"]}
+          onClick={()=> navigate('/login')}
+        >Log In</button>
+        <button 
+          type="button"
+          className={S["icon-button"]}
+          onClick={toggleMenu}
+          aria-label={ isMenuOpen ? "메뉴 닫기" : "메뉴 열기" }
+        >
+          <img src={hamburgerIcon} alt="메뉴 리스트" className={S.icon} />
+        </button>
+      </>
+    );
+  }
+
+  /* 햄버거 메뉴 리스트 */
+  let menuList = null;
+  if ( isAuth ) {
+    menuList = (
+      <ul>
+        { routeLIst }
+        <li key="logout">
+          <button 
+          type='button' 
+          className={S["in-menu-button"]} 
+          onClick={handleLogOut}
+          >Log Out</button>
+        </li>
+        <li key="my-page">
+          <button 
+          type='button' 
+          className={S["in-menu-button"]} 
+          aria-label='마이 페이지로 이동합니다'
+          onClick={() => navigate('/my-page')}
+          >My Page</button>
+        </li>
+        <li key="notifications">
+          <button 
+          type='button' 
+          className={S["in-menu-button"]} 
+          aria-label='알림 목록으로 이동합니다'
+          onClick={() => navigate('/my-page/notifications')}
+          >Notifications</button>
+          { hasNewNoti && <span className={S["red-dot"]} /> }
+        </li>
+      </ul>
+    )
+  } else {
+    menuList = (
+      <ul>
+        { routeLIst }
+        <li key="sign-up">
+          <button 
+          type='button' 
+          className={S["in-menu-button"]} 
+          aria-label='회원가입 페이지로 이동합니다'
+          onClick={() => navigate('/register')}
+          >Sign Up</button>
+        </li>
+      </ul>
     )
   }
 
   /* resize 감지 */
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth <= 768);
+      }
     }
 
     handleResize();
@@ -206,22 +294,26 @@ function Header() {
             )
           }
         </div>
-        <ul>
-          {
-          routes.filter(route => !route.hidden)
-            .map(route => (
-              <li key={route.path}>
-                <NavLink
-                to={route.path}
-                className={({isActive}) => (isActive ? S.activeRoute : '')}
-                >{route.label}</NavLink>
-              </li>
-            ))
-          }
-        </ul>
+        { 
+          !isMobile && (
+            <ul> { routeLIst } </ul>
+          )
+        }
         <div className={S['button-group']}>
           {buttonList}
         </div>
+        {
+          isMenuOpen && (
+            <DropdownMenu 
+              onClose={handleMenuClose}
+              className={S.dropdown}
+              role="menu"
+              aria-label="메인 메뉴"
+            >
+              {menuList}
+            </DropdownMenu>
+          )
+        }
       </nav>
     </header>
   )

@@ -1,0 +1,16 @@
+.container {
+	position: absolute;
+	top: 4.5rem;
+	right: 1.5rem;
+	background-color: var(--background);
+	border: 1px solid var(--foreground);
+	border-radius: 12px;
+	z-index: 999;
+
+	li + li::before {
+		content: "";
+		display: block;
+		height: 1px;
+		background-color: var(--color-grey-200);
+	}
+}
