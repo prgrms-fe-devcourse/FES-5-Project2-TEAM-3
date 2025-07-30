@@ -1,7 +1,7 @@
 .search-tab-container {
 	width: 95%;
 	height: auto;
-	overflow-x: auto;
+	overflow-x: hidden;
 	flex-grow: 1;
 	position: relative;
 }
