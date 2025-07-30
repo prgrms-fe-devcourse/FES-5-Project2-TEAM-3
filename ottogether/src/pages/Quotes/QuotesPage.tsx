@@ -29,6 +29,7 @@ function QuotesPage() {
           content={quote.content}
           person={quote.person}
           likes={quote.likes ?? 0}
+          user_id={quote.user_id ?? ""}
         />
       ))}
     </div>
