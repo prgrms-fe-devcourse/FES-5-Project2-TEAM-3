@@ -1,7 +1,7 @@
 import S from "./MemberCard.module.css"
 
-import type { Tables } from '../review_/supabase.type';
 
+import type { Tables } from '../reviewCard/supabase.type';
 import { formatDate } from "../../util/formatDate";
 
 type Profile = Tables<'profile'>;
@@ -44,7 +44,7 @@ function MemberCard({profileData, reviewData, quotesData} : Props) {
 		{ 
 		profileData && profileData.map(data => (
 			<div key={data.user_id} className={S.cell} onClick={() => onClickCell(data)}>
-				<img className={S['profile-image']} src={data.avatar_url as string ?? "./beomTeacher.svg"} alt="profileImage" />
+				<img className={S['profile-image']} src={data.avatar_url as string ?? "./beomTeacher.svg"} onClick={() => console.log(data.user_id, ' user clicked!')} alt="profileImage" />
 				<div>
 					<h2>{data.nickname ?? 'Nickname'}</h2>
 					<p><strong>Joined :</strong> {formatDate(data.created_at)}</p>
