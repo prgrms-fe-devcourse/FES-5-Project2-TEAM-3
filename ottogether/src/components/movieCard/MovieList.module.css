@@ -9,6 +9,7 @@
   justify-content: center;
   position: relative;
   gap: 8px;
+  margin-bottom: 10px;
   
 }
 
@@ -16,8 +17,8 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 16px;
-  margin-bottom: 20px; 
+  margin-top: 30px;
+  margin-bottom: 40px; 
   margin-left: 40px; 
   padding: 0 16px;    
   font-size: 20px;     
