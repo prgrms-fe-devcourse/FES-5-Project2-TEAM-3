@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import S from "./MyPage.module.css";
-import Settings from "./Settings";
-import CreatedQuotes from "./CreatedQuotes";
-import CreatedReviews from "./CreatedReviews";
-import LikedReviews from "./LikedReviews";
-import LikedQuotes from "./LikedQuotes";
-import LikedVideoContents from "./LikedVideoContents";
 import { supabase } from "../../supabase/supabase";
+import CreatedReviews from "../../components/inMyPage/CreatedReviews";
+import CreatedQuotes from "../../components/inMyPage/CreatedQuotes";
+import LikedVideoContents from "../../components/inMyPage/LikedVideoContents";
+import LikedReviews from "../../components/inMyPage/LikedReviews";
+import LikedQuotes from "../../components/inMyPage/LikedQuotes";
+import Settings from "../../components/inMyPage/Settings";
+import { useAuth } from "../../contexts/AuthProvider";
 
 type ProfileType = {
   user_id: string;
@@ -38,21 +39,15 @@ function LikedContents() {
   )
 }
 
-
 function MyPage() {
-  const [profile, setProfile] = useState<ProfileType | null>(null);
   const [activeTab, setActiveTab] = useState("settings");
+  const { user } = useAuth();
+  const [profile, setProfile] = useState<ProfileType | null>(null);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      // 1. 현재 로그인한 유저 확인
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (userError || !user) {
-        console.error("로그인한 유저가 없습니다.", userError);
-        return;
-      }
+    if (!user) return;
 
-      // 2. profile 테이블에서 user.id와 같은 row 가져오기
+    const fetchProfile = async () => {
       const { data, error } = await supabase
         .from("profile")
         .select("user_id, nickname, bio, url, header_url, avatar_url, preferred_ott, favorite_genre")
@@ -67,9 +62,11 @@ function MyPage() {
     };
 
     fetchProfile();
-  }, []);
+  }, [user]);
 
-
+  if (!user) {
+    return <div>로그인이 필요합니다.</div>;
+  }
 
 
   const renderContent = () => {
@@ -101,7 +98,7 @@ function MyPage() {
       {/* 배너 영역 */}
       <div className={S.banner}>
         <img
-          src={profile?.header_url || "/beomTeacher.svg"}
+          src={profile?.header_url || ""}
           alt="banner"
           className={S.bannerImg}
         />
@@ -113,13 +110,13 @@ function MyPage() {
         <aside className={S.sidebar}>
           <div className={S.profileBox}>
             <img
-              src={profile?.avatar_url || "/beomTeacher.svg"}
+              src={profile?.avatar_url || ''}
               alt="profile"
               className={S.profileImg}
             />
             <h3>{profile?.nickname || "Guest"}</h3>
             <p>{profile?.bio || ""}</p>
-            <p className={S.url}>{profile?.url || ""}</p>
+            <a className={S.url} href={profile?.url || ""}></a>
           </div>
 
           <nav className={S.navMenu}>
