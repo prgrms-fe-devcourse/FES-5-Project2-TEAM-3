@@ -20,6 +20,7 @@ function Header() {
   /* 반응형 햄버거 버튼 제어 */
   const [ isMobile, setIsMobile ] = useState<boolean>(false);
   const [ isMenuOpen, setIsMenuOpen ] = useState<boolean>(false);
+  const [ closeTrigger, setCloseTrigger ] = useState<boolean>(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null) as React.RefObject<HTMLButtonElement>;
 
   /* 프로필 사진 */
@@ -122,7 +123,15 @@ function Header() {
                 ));
 
   /* 햄버거 버튼 제어 */
-  const toggleMenu = () => setIsMenuOpen(prev => !prev);
+  const handleMenuToggle = () => {
+    if(isMenuOpen) {
+      setCloseTrigger(true);
+    } else {
+      setIsMenuOpen(true);
+      setCloseTrigger(false);
+    }
+  };
+
   const handleMenuClose = useCallback(()=>setIsMenuOpen(false), []);
 
   /* 로그인 상태별 버튼 리스트 변경 */
@@ -165,7 +174,7 @@ function Header() {
           type="button"
           ref={menuButtonRef}
           className={S["icon-button"]}
-          onClick={toggleMenu}
+          onClick={handleMenuToggle}
           aria-label={ isMenuOpen ? "메뉴 닫기" : "메뉴 열기" }
         >
           <img src={hamburgerIcon} alt="메뉴 리스트" className={S.icon} />
@@ -201,7 +210,7 @@ function Header() {
           type="button"
           ref={menuButtonRef}
           className={S["icon-button"]}
-          onClick={toggleMenu}
+          onClick={handleMenuToggle}
           aria-label={ isMenuOpen ? "메뉴 닫기" : "메뉴 열기" }
         >
           <img src={hamburgerIcon} alt="메뉴 리스트" className={S.icon} />
@@ -302,6 +311,7 @@ function Header() {
               buttonRef={menuButtonRef}
               onClose={handleMenuClose}
               className={S.dropdown}
+              closeTrigger={closeTrigger}
               role="menu"
               aria-label="메인 메뉴"
             >

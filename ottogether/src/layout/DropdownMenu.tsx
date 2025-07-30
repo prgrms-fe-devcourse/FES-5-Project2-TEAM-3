@@ -1,18 +1,37 @@
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import S from './DropdownMenu.module.css';
 
 interface DropdownProps {
   buttonRef: RefObject<HTMLButtonElement>;
   onClose: () => void;
   children: React.ReactNode;
+  closeTrigger?: boolean;
   role?: string;
   className?: string;
   "aria-label"?: string;
 }
 
-function DropdownMenu({ buttonRef, onClose, children, className = '' }:DropdownProps) {
+function DropdownMenu({ buttonRef, onClose, children, className = '', closeTrigger = false }:DropdownProps) {
 
+  const [ isClosing, setIsClosing ] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  /* 드롭다운 메뉴 닫기 */
+  const triggerClose = () => {
+    if (isClosing) return;
+    
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 150);
+  };
+
+  // 부모로부터 close trigger를 받으면 닫기
+  useEffect(() => {
+    if(closeTrigger) {
+      triggerClose();
+    }
+  }, [closeTrigger])
 
   // 외부 클릭 시 닫기
   useEffect(() => {
@@ -23,7 +42,7 @@ function DropdownMenu({ buttonRef, onClose, children, className = '' }:DropdownP
       const isOutsideButton = buttonRef.current && !buttonRef.current.contains(clickTarget);
 
       if ( isOutsideContainer && isOutsideButton ) {
-        onClose();
+        triggerClose();
       }
     };
 
@@ -35,7 +54,7 @@ function DropdownMenu({ buttonRef, onClose, children, className = '' }:DropdownP
   useEffect(() => {
     const handleKeyDown = (e:KeyboardEvent) => {
       if (e.key !== 'Escape') return;
-      onClose();
+      triggerClose();
     }
 
     document.addEventListener('keydown', handleKeyDown);
@@ -43,7 +62,11 @@ function DropdownMenu({ buttonRef, onClose, children, className = '' }:DropdownP
   }, []);
 
   return (
-    <div className={`${S.container} ${ className ? className : ''}`.trim()} ref={containerRef}>
+    <div className={
+      `${S.container} 
+      ${ isClosing ? S["dropdown-menu-exit"] : S["dropdown-menu-enter"] }
+      ${ className ? className : ''}`
+      .trim()} ref={containerRef}>
       {children}
     </div>
   )
