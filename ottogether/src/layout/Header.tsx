@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import S from './Header.module.css';
 import searchIcon from '@/assets/icons/search-white.svg';
-import searchIconBlack from '@/assets/icons/search-black.svg';
 import bellIcon from '@/assets/icons/notification.svg';
 import routes from '../router/routes';
+import SearchBar from '../components/Search/SearchBar';
 
 function Header() {
 
@@ -60,6 +60,9 @@ function Header() {
     }
     navigate(`/search?query=${encodeURIComponent(searchKeyword)}`);
     setShowSearch(false);
+    setTimeout(() => {
+      setSearchKeyword('');
+    },0);
   };
 
   const handleSearchKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
@@ -125,19 +128,13 @@ function Header() {
           </button>
           {
             showSearch && (
-              <div className={S["search-popup"]}>
-                <input 
-                  type="text" 
-                  name="검색창" 
-                  placeholder='영화, 시리즈 또는 유저를 검색하세요' 
-                  autoFocus
-                  onChange={(e) => setSearchKeyword(e.target.value)}
-                  onKeyDown={handleSearchKeyDown}
-                />
-                <button type="button" onClick={handleSearch} className={S["icon-button"]}>
-                  <img className={S.icon} src={searchIconBlack} alt="검색" />
-                </button>
-              </div>
+              <SearchBar
+                keyword={searchKeyword}
+                onChange={setSearchKeyword}
+                onEnter={handleSearchKeyDown}
+                onRightIconClick={handleSearch}
+                isPopup={true}
+              />
             )
           }
         </div>
