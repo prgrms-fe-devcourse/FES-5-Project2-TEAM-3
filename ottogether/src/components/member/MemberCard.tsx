@@ -1,6 +1,6 @@
 import S from "./MemberCard.module.css"
-import { getData } from "../review_/SupaData"
-import type { Tables } from '../review_/supabase.type';
+import { getData } from "../reviewCard/SupaData"
+import type { Tables } from '../reviewCard/supabase.type';
 import { useEffect, useState } from "react";
 import { formatDate } from "../../util/formatDate";
 
@@ -51,7 +51,7 @@ function MemberCard() {
 		{ 
 		profileData && profileData.map(data => (
 			<div key={data.user_id} className={S.cell} onClick={() => onClickCell(data)}>
-				<img src={data.avatar_url as string} alt="profileImage" />
+				<img src={data.avatar_url as string} onClick={() => console.log(data.user_id, ' user clicked!')} alt="profileImage" />
 				<div>
 					<h2>{data.nickname}</h2>
 					<p><strong>Joined :</strong> {formatDate(data.created_at)}</p>
