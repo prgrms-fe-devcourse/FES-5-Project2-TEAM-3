@@ -1,15 +1,19 @@
+import routes from '../router/routes';
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import S from './Header.module.css';
 import searchIcon from '@/assets/icons/search-white.svg';
 import bellIcon from '@/assets/icons/notification.svg';
-import routes from '../router/routes';
+import hamburgerIcon from '@/assets/icons/menu.svg';
 import SearchBar from '../components/Search/SearchBar';
 import { useAuth } from '../contexts/AuthProvider';
 import { supabase } from '../supabase/supabase';
 import { getRandomAvatar } from '../util/getRandomProfile';
 
 function Header() {
+
+  /* 반응형 햄버거 버튼 제어 */
+  const [ isMobile, setIsMobile ] = useState(false);
 
   /* user Login 상태 & 알림 유무 */
   // 나중에 전역 상태 context로 변경 필요
@@ -107,26 +111,47 @@ function Header() {
   /* 로그인 상태별 버튼 리스트 변경 */
   let buttonList = null;
   if ( isAuth ) {
-    buttonList = (
-      <>
-        <button 
-          type='button' 
-          className={S["outline-button"]} 
-          onClick={handleLogOut}
-        >Log Out</button>
-        <button 
-          type='button' 
-          className={S["user-avatar"]}
-          onClick={()=> navigate('/my-page')}
-        >
-          <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
-        </button>
-        <div className={S['notification-wrapper']}>
-          <img src={bellIcon} alt="알림" className={S.icon} />
-          { hasNewNoti && <span className={S["red-dot"]} /> }
-        </div>
-      </>
-    )
+    if ( !isMobile ) {
+      buttonList = (
+        <>
+          <button 
+            type='button' 
+            className={S["outline-button"]} 
+            onClick={handleLogOut}
+          >Log Out</button>
+          <button 
+            type='button' 
+            className={S["user-avatar"]}
+            onClick={()=> navigate('/my-page')}
+          >
+            <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
+          </button>
+          <div className={S['notification-wrapper']}>
+            <img src={bellIcon} alt="알림" className={S.icon} />
+            { hasNewNoti && <span className={S["red-dot"]} /> }
+          </div>
+        </>
+      )
+    } else {
+      buttonList = (
+        <>
+          <button 
+            type='button' 
+            className={S["user-avatar"]}
+            onClick={()=> navigate('/my-page')}
+          >
+            <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
+          </button>
+          <button 
+            type="button"
+            
+          >
+            
+          </button>
+        </>
+      )
+    }
+    
   } else {
     buttonList = (
       <>
@@ -143,6 +168,17 @@ function Header() {
       </>
     )
   }
+
+  /* resize 감지 */
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    }
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <header className={S.header}>
