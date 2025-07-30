@@ -316,6 +316,67 @@ function RegisterProfile() {
     }
   }
 
+  const skipSubmitProfile = async () => {
+    // 비동기 처리 중 중복 제출 방지
+    if(isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      // 헤더 및 프로필 사진 주소 가져오기
+      const avatarUrl = await handleAvatarImage();
+      const headerUrl = await handleHeaderImage();
+      if (!avatarUrl || !headerUrl) {
+        setFieldErrors(prev => ({...prev, submit: ErrorCode.SubmitFail}));
+        setUploadFailCount(prev => prev + 1);
+        setIsSubmitting(false);
+        return;
+      } else {
+        setFieldErrors(prev => ({...prev, submit: undefined}));
+      }
+
+      // profile 테이블에 upsert
+      const { error } = await upsertTable({
+        method: 'upsert',
+        tableName: 'profile',
+        uploadData: {
+          user_id: userId,
+          avatar_url: avatarUrl,
+          header_url: headerUrl,
+          updated_at: new Date().toISOString(),
+        },
+        matchKey: 'user_id',
+      });
+
+      // 통신 에러 핸들링
+      if (error) {
+        setFieldErrors(prev => ({...prev, submit: ErrorCode.SubmitFail}));
+        setUploadFailCount(prev => prev + 1);
+        setIsSubmitting(false);
+
+        if(uploadFailCount > 3) {
+          alert('프로필 등록이 반복적으로 실패하여 마이페이지로 이동합니다.')
+          navigate('/my-page')
+        }
+        return;
+      }
+
+      // submit 후 마이페이지로 이동
+      navigate('/my-page');
+
+    } catch (err) {
+      console.error(err);
+      setUploadFailCount(prev => prev + 1);
+      setFieldErrors(prev => ({...prev, submit: ErrorCode.Unexpected}));
+
+      if(uploadFailCount > 3) {
+        alert('프로필 등록이 반복적으로 실패하여 마이페이지로 이동합니다.')
+        navigate('/my-page')
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <div className={S.container}>
       <h2>Welcome!</h2>
@@ -469,7 +530,7 @@ function RegisterProfile() {
           { fieldErrors.submit && <p className={S.error} aria-live='polite'>{ErrorMessages[fieldErrors.submit]}</p> }
           <button 
             type="button" 
-            onClick={() => navigate('/my-page')} 
+            onClick={skipSubmitProfile} 
             className={S["skip-button"]}
             aria-label="정보 입력을 건너뛰고 마이 페이지로 이동합니다"
             disabled={!isSkippable || isSubmitting}
