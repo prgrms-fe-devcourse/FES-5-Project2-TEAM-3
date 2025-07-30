@@ -20,6 +20,7 @@ function Header() {
   /* 반응형 햄버거 버튼 제어 */
   const [ isMobile, setIsMobile ] = useState<boolean>(false);
   const [ isMenuOpen, setIsMenuOpen ] = useState<boolean>(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null) as React.RefObject<HTMLButtonElement>;
 
   /* 프로필 사진 */
   const [ avatar, setAvatar ] = useState<string | null>(null);
@@ -162,6 +163,7 @@ function Header() {
         </button>
         <button 
           type="button"
+          ref={menuButtonRef}
           className={S["icon-button"]}
           onClick={toggleMenu}
           aria-label={ isMenuOpen ? "메뉴 닫기" : "메뉴 열기" }
@@ -197,6 +199,7 @@ function Header() {
         >Log In</button>
         <button 
           type="button"
+          ref={menuButtonRef}
           className={S["icon-button"]}
           onClick={toggleMenu}
           aria-label={ isMenuOpen ? "메뉴 닫기" : "메뉴 열기" }
@@ -296,6 +299,7 @@ function Header() {
         {
           isMenuOpen && (
             <DropdownMenu 
+              buttonRef={menuButtonRef}
               onClose={handleMenuClose}
               className={S.dropdown}
               role="menu"
