@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react"
-import type { Tables } from '../review_/supabase.type';
-import { getData } from "./SupaData";
+
+import type { Tables } from './supabase.type';
 import S from "./ReviewCard.module.css";
 import StarRating from "./StarRating";
 import { formatDateNoYear } from "../../util/formatDate";
@@ -9,22 +8,13 @@ type Review = Tables<'review'>;
 type Comment = Tables<'comment'>;
 type Profile = Tables<'profile'>;
 
-function ReviewCard() {
-	const [reviewData, setReviewData] = useState<Review[] | null>();
-	const [commentData, setCommentData] = useState<Comment[] | null>();
-	const [profileData, setProfileData] = useState<Profile[] | null>();
-	
-	useEffect(() => {
-		async function generateData(){
-			const data = await getData('review');
-			const profile = await getData('profile');
-			setReviewData(data);
-			setProfileData(profile);
-			console.log('profile : ', profile);
-		}
-		generateData();
-	}, []) //TODO : 리뷰가 생성되면 useEffect가 업데이트 되어야 할듯
+interface Prop{
+	reviewData : Review[],
+	profileData : Profile[],
+}
 
+function ReviewCard({reviewData, profileData} : Prop) {
+	
 	function findUserById(inputId : string) : Profile | undefined{
 		return profileData?.find(profile => profile.user_id !== null && profile.user_id === inputId);
 	}

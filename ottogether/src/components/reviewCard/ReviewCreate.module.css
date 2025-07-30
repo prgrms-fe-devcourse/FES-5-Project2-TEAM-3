@@ -1,0 +1,30 @@
+.input-container{
+	/* width: 1028px; */
+	width: 975px;
+	background-color: #525252;
+	border-radius: 16px;
+	border-width: 0px;
+	margin: 0 auto;
+	padding: 16px;
+	margin-bottom: 21px;
+}
+
+.button-list{
+	padding-top: 11px;
+}
+
+.write-btn{
+
+}
+
+.review-input{
+
+}
+
+.add{
+
+}
+
+.cancel{
+
+}
