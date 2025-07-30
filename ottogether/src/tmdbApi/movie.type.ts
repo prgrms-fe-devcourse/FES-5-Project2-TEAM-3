@@ -9,6 +9,8 @@ export type MovieData = {
   vote_average: number;
   genre_names?: string[];
   provider_logo_path?: string | null;
+  backdrop_path: string | null;
+  overview: string | null;
 };
 
 export type Genre = {

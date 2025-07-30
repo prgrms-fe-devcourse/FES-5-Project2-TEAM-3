@@ -3,16 +3,16 @@ import { fetchGenres, fetchMoviesByGenre, fetchPopularMovies } from "../../tmdbA
 import MovieList from "../../components/movieCard/MovieList";
 import SectionGroup, { useGenreSections } from "../../components/movieCard/SectionGroup";
 import { useEffect, useState } from "react";
-
-
-
+import Hero from "./Hero";
+import S from "./Home.module.css";
+import OttSelector from "../../components/Search/OttSelector";
 
 
 function Home() {
 
-  const { sectionGroups } = useGenreSections()
+  const { sectionGroups, quotes } = useGenreSections()
   const [visibleIndex, setVisibleIndex] = useState(1);
-  
+  const [selectedOtt, setSelectedOtt] = useState<string[]>([]);
 
   useEffect(() => {
   const observer = new IntersectionObserver((entries) => {
@@ -26,13 +26,25 @@ function Home() {
   return () => observer.disconnect();
 }, []);
 
+  const handleToggleOtt = (ott:string) => {
+    setSelectedOtt(prev => 
+      prev.includes(ott)
+      ? prev.filter(o => o !== ott)
+      : [...prev, ott]
+    );
+  };
+
   return (
     <>
-      <MovieList title="Featured Movie" fetchFn={fetchPopularMovies} />
+    <Hero />
+    <div className={S.ottSelectorWrapper}>
+    <OttSelector selected={selectedOtt} onToggle={handleToggleOtt} />
+    </div>
+    <MovieList title="최신킹기" fetchFn={fetchPopularMovies} />
       <div>
         {sectionGroups.slice(0, visibleIndex).map((group, idx) => (
           <div key={idx}>
-            <SectionGroup genres={group} />
+            <SectionGroup genres={group} quote={quotes[idx]} />
           </div>
         ))}
         <div id="scroll-sentinel" className="scrollSentinel" />

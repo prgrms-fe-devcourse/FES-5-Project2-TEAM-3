@@ -2,10 +2,10 @@
 
 
 import { useEffect, useState } from "react";
-import MovieCard from "./movieCard";
 import S from "./MovieList.module.css"
 import { getMovieProvider } from "../../tmdbApi/getMovieProvider";
 import type { MovieData } from "../../tmdbApi/movie.type";
+import MovieCard from "./MovieCard";
 
 interface MovieListProps {
   title: string;
@@ -49,7 +49,7 @@ const handlePrev = () => {
   return (
     <section className={S["movie-list"]}>
       <div className={S["section-header"]}>
-        <h2>{title}</h2>
+        <h2>{title.replace(/영화/g, "").trim()}</h2>
       </div>
       <div className={S["slider-container"]}>
         <button className={S["arrow-button"]} onClick={handlePrev}>
