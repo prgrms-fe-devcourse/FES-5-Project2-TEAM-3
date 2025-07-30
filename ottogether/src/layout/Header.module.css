@@ -61,6 +61,22 @@
 		background: var(--primary);
 		color: var(--foreground);
 	}
+
+	.user-avatar {
+		width: 2.5rem;
+		height: 2.5rem;
+		padding: 0;
+		border: 2px solid var(--color-primary-50);
+		border-radius: 50%;
+		background: transparent;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: fill;
+			border-radius: 50%;
+		}
+	}
 }
 
 .icon {

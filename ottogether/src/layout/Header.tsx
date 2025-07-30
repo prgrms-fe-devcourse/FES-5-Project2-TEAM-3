@@ -5,13 +5,40 @@ import searchIcon from '@/assets/icons/search-white.svg';
 import bellIcon from '@/assets/icons/notification.svg';
 import routes from '../router/routes';
 import SearchBar from '../components/Search/SearchBar';
+import { useAuth } from '../contexts/AuthProvider';
+import { supabase } from '../supabase/supabase';
+import { getRandomAvatar } from '../util/getRandomProfile';
 
 function Header() {
 
   /* user Login 상태 & 알림 유무 */
   // 나중에 전역 상태 context로 변경 필요
-  const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+  const { user, isAuth, logout } = useAuth();
   const [ hasNewNoti, setHasNewNoti ] = useState(false);
+
+  /* 프로필 사진 */
+  const [ avatar, setAvatar ] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchAvatarUrl = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('profile')
+          .select('avatar_url')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (error) console.error('사용자 avatar 불러오기에 실패했습니다.');
+
+        setAvatar( data && data.avatar_url ? data.avatar_url : null );
+      } catch (err) {
+      console.error('사용자 avatar 불러오기에 실패했습니다.', err);
+      setAvatar(null);
+    }};
+    fetchAvatarUrl();
+  }, [user]);
 
   /* 검색창 팝업 */
   const [ showSearch, setShowSearch ] = useState(false);
@@ -70,13 +97,16 @@ function Header() {
   };
 
   /* 로그아웃 */
-  const handleLogOut = async () => {
-    // AuthProvider 구현 필요
+  const handleLogOut = () => {
+    const confirmLogout = confirm('정말 로그아웃 하시겠습니까?');
+    if ( !confirmLogout ) return;
+
+    logout();
   }
 
   /* 로그인 상태별 버튼 리스트 변경 */
   let buttonList = null;
-  if (isLoggedIn) {
+  if ( isAuth ) {
     buttonList = (
       <>
         <button 
@@ -86,9 +116,11 @@ function Header() {
         >Log Out</button>
         <button 
           type='button' 
-          className={S["filled-button"]}
+          className={S["user-avatar"]}
           onClick={()=> navigate('/my-page')}
-        >My Page</button>
+        >
+          <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
+        </button>
         <div className={S['notification-wrapper']}>
           <img src={bellIcon} alt="알림" className={S.icon} />
           { hasNewNoti && <span className={S["red-dot"]} /> }
