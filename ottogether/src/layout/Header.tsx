@@ -228,15 +228,6 @@ function Header() {
           onClick={() => navigate('/my-page')}
           >My Page</button>
         </li>
-        <li key="notifications">
-          <button 
-          type='button' 
-          className={S["in-menu-button"]} 
-          aria-label='알림 목록으로 이동합니다'
-          onClick={() => navigate('/my-page/notifications')}
-          >Notifications</button>
-          { hasNewNoti && <span className={S["red-dot"]} /> }
-        </li>
       </ul>
     )
   } else {

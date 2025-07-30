@@ -79,3 +79,15 @@
 		height: 100%;
 	}
 }
+
+@media (max-width: 768px) {
+	.search-popup {
+		position: absolute;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		top: 150%;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+}
