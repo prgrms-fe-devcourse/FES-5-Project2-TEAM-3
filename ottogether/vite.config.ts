@@ -8,7 +8,14 @@ export default defineConfig({
     host: 'localhost',
     port: 3000,
     open: false,
+    proxy: {
+      '/api/tmdb': {
+        target: 'https://api.themoviedb.org/3',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/tmdb/, ''),
+      },
   },
+},
   plugins: [react()],
   resolve: {
     alias: {

@@ -12,6 +12,7 @@ function Home() {
 
   const { sectionGroups } = useGenreSections()
   const [visibleIndex, setVisibleIndex] = useState(1);
+  
 
   useEffect(() => {
   const observer = new IntersectionObserver((entries) => {

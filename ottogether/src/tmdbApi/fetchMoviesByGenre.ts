@@ -3,7 +3,8 @@ import type { MovieData } from "./movie.type";
 export async function fetchMoviesByGenre(genreId: number): Promise<MovieData[]> {
   try {
     const res = await fetch(
-      `https://api.themoviedb.org/3/discover/movie?with_genres=${genreId}&language=ko&sort_by=popularity.desc`,
+      // `https://api.themoviedb.org/3/discover/movie?with_genres=${genreId}&language=ko&sort_by=popularity.desc`,
+      `/api/tmdb/discover/movie?with_genres=${genreId}&language=ko&sort_by=popularity.desc`,
       {
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
