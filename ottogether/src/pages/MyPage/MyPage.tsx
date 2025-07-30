@@ -6,8 +6,9 @@ import CreatedQuotes from "../../components/inMyPage/CreatedQuotes";
 import LikedVideoContents from "../../components/inMyPage/LikedVideoContents";
 import LikedReviews from "../../components/inMyPage/LikedReviews";
 import LikedQuotes from "../../components/inMyPage/LikedQuotes";
-import Settings from "../../components/inMyPage/Settings";
 import { useAuth } from "../../contexts/AuthProvider";
+import notificationIcon from "../../assets/icons/notification.svg"
+import settingsIcon from "../../assets/icons/settings.svg"
 
 type ProfileType = {
   user_id: string;
@@ -85,8 +86,6 @@ function MyPage() {
         return <LikedReviews />;
       case "likedQuotes":
         return <LikedQuotes />;
-      case "settings":
-        return <Settings />;
       default:
         return <div>카테고리를 선택해주세요.</div>;
     }
@@ -109,6 +108,12 @@ function MyPage() {
         {/* 왼쪽 사이드바 */}
         <aside className={S.sidebar}>
           <div className={S.profileBox}>
+            <button className={S.notificationButton}>
+              <img src={notificationIcon} alt="notifications" />
+            </button>
+            <button className={S.settingButton}>
+              <img src={settingsIcon} alt="settings" />
+            </button>
             <img
               src={profile?.avatar_url || ''}
               alt="profile"
@@ -167,14 +172,8 @@ function MyPage() {
                 - Quotes
               </li>
             </ul>
-
-            <h4
-              className={activeTab === "settings" ? S.active : ""}
-              onClick={() => setActiveTab("settings")}
-            >
-              Account
-            </h4>
           </nav>
+
         </aside>
 
         {/* 오른쪽 메인 블록 */}
