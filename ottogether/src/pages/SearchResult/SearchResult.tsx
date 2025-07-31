@@ -95,7 +95,15 @@ function SearchResult() {
         onReleaseChange={(from, to) => setReleaseRange([from, to])}
         onApply={applyFilter}
       />
-      <SearchTab />
+      <SearchTab
+        keyword={searchKeyword}
+        filters={{
+          ottList: selectedOtt,
+          genreList: selectedGenres,
+          ratingRange,
+          releaseRange
+        }}
+      />
     </div>
   )
 }
