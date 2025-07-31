@@ -11,6 +11,7 @@ import EditPassword from '../pages/EditPassword/EditPassword';
 import SearchResult from '../pages/SearchResult/SearchResult';
 import Review from '../pages/Review_/Review';
 import Members from '../pages/Members/Members';
+import MyPage from '../pages/MyPage/MyPage';
 
 export const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
       {
          path: '/members',
          element: <Members />
+      },
+      {
+         path: '/my-page',
+         element: <MyPage />
       },
     ]
   },
