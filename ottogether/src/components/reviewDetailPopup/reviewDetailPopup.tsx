@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthProvider';
 import { formatDateNoYear } from '../../util/formatDate';
 import { findUserById } from '../reviewCard/ReviewCard';
 import StarRating from '../reviewCard/StarRating';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase/supabase';
 
 
@@ -35,32 +35,73 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 	const {isAuth, user} = useAuth();
 	const [commentInputOpen, setCommentInputOpen] = useState(false);
 	const [content, setContent] = useState('');
+	const [commentCount, setCommentCount] = useState(0);
 
 	const handleEdit = () => {
-
+		
 	}
-	const handleDelete = () => {
 
+	const handleDeleteComment = async (reviewId : number, commentId : number) => {
+		if (!user)
+		{
+			alert('로그인 후 사용할 수 있는 서비스입니다!');
+			return ;
+		}
+		if (!confirm('정말 삭제하시겠습니까?'))
+			return ;
+		const {error} = await supabase.from('comment').delete().eq('id', commentId);
+		if (error)
+		{
+			console.error('Error ! : ', error);
+			return ;
+		}
+		else{
+			await increaseOrDecraseCommentCount(reviewId, false);
+			reviewUpdate();
+		}
 	}
-	const increaseCommentCount = async (reviewId : number) => {
+
+	const handleDeleteReview = async (reviewId : number) => {
+		if (!user)
+		{
+			alert('로그인 후 사용할 수 있는 서비스입니다!');
+			return ;
+		}
+		if (!confirm('정말 삭제하시겠습니까?'))
+			return ;
+		const {error} = await supabase.from('review').delete().eq('id', reviewId);
+		if (error)
+		{
+			console.error('Error ! : ', error);
+			return ;
+		}
+		else{
+			closePopup();
+			reviewUpdate();
+		}
+	}
+
+	const increaseOrDecraseCommentCount = async (reviewId : number, isIncrease : boolean) => {
 		if (!user)
 			return ;
-		console.log('current comment count : ', reviewSingleData.comment_count);
-		console.log('targeted review id : ', reviewSingleData.id);
-		console.log('매개변수 review id : ', reviewId);
-		const {data, error} = await supabase.from('review').update({comment_count : (reviewSingleData.comment_count ?? 0) + 1}).eq('id', reviewId);
+		let temp = 0;
+		if (isIncrease)
+			temp = commentCount + 1;
+		else
+			temp = commentCount - 1;	
+		const {error} = await supabase.from('review').update({comment_count : temp}).eq('id', reviewId);
 		if (error){
 			console.error('Error :', error.message);
 		}
 		else{
-			console.log('comment count increased! : ', data);
+			setCommentCount(temp);
 		}
 	}
 	const handleSubmit = async (reviewId : number) => {
 		if (!content.trim()) return ;
 		if (!isAuth)
 		{
-			alert('로그인 후 이용하실 수 있는 서비스입니다.');
+			alert('로그인 후 사용할 수 있는 서비스입니다!');
 			handleCancel();
 			return ;
 		}
@@ -80,15 +121,20 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 			console.error('Error :', error.message);
 		}
 		else{
+			await increaseOrDecraseCommentCount(reviewId, true);
 			handleCancel();
 			reviewUpdate();
-			increaseCommentCount(reviewId);
 		}
 	}
 	const handleCancel = () => {
 		setContent('');
 		setCommentInputOpen(false);
 	}
+
+	useEffect(()=> {
+		if (reviewSingleData)
+			setCommentCount(reviewSingleData.comment_count!);
+	}, [])
 
 	return (
 		<div className={S["popup-overlay"]}>
@@ -98,7 +144,15 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 				<div className={S.topbar}>
 					<img className={S['user-avatar']} src={(findUserById(reviewSingleData.user_id, profileData)?.avatar_url ?? "./beomTeacher.svg")} alt="profile_image" />
 					<p>{findUserById(reviewSingleData.user_id, profileData)?.nickname ?? 'User'} · {formatDateNoYear(reviewSingleData.updated_at!)}</p>
-					{((isAuth && user) && (reviewSingleData.user_id == user.id)) && <img src="/YouBadge.svg" alt="isItMeCheck"></img>} 
+					{((isAuth && user) && (reviewSingleData.user_id == user.id)) && 
+						<>
+							<img className={S.you} src="/YouBadge.svg" alt="isItMeCheck"></img>
+							<div className={S["handler-btn-container"]}>
+								<img src="./edit.svg" alt="editCommentButton" onClick={handleEdit}/>
+								<img src="./trashcan.svg" alt="deleteCommentButton" onClick={() => handleDeleteReview(reviewSingleData.id)}/>
+							</div>
+						</>
+					} 
 					<div className={S['star-container']}>{StarRating(reviewSingleData.rating)}</div>
 				</div>
 			</header>
@@ -115,7 +169,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 					</div>
 					<div className={S['reaction-item']}>
 						<img src="/comment.svg" alt="commentIcon" />
-						<p>{reviewSingleData.comment_count}</p>
+						<p>{commentCount}</p>
 					</div>
 				</div>
 			</div>
@@ -152,9 +206,9 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 								</div>
 								{ comment.user_id === user?.id &&
 									<div className={S["handler-btn-container"]}>
-									<img src="./edit.svg" alt="editCommentButton" onClick={handleEdit}/>
-									<img src="./trashcan.svg" alt="deleteCommentButton" onClick={handleDelete}/>
-								</div>
+										<img src="./edit.svg" alt="editCommentButton" onClick={handleEdit}/>
+										<img src="./trashcan.svg" alt="deleteCommentButton" onClick={() => handleDeleteComment(reviewSingleData.id, comment.id)}/>
+									</div>
 								}
 							</div>
 							<p>{comment.text_content}</p>

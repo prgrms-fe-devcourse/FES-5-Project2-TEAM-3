@@ -31,6 +31,10 @@ function Review() {
 		setIsPopupOpen(false);
 	}
 
+	useEffect(() => {
+		setIsPopupOpen(false);
+	}, [])
+
 	const activatePopup = (id : number) => {
 		console.log('active Popup 실행');
 		console.log('profileData : ', profileData);
