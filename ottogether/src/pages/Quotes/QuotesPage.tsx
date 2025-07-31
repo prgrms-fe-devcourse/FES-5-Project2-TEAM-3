@@ -19,6 +19,14 @@ function QuotesPage() {
     fetchData();
   }, []);
 
+  const handleRemove = (id: number) => {
+  setQuotes((prevQuotes) => prevQuotes.filter((quote) => quote.id !== id));
+};
+
+
+
+  
+
   return (
     <div>
         <QuoteCreate onAdd={fetchData}/>
@@ -30,6 +38,7 @@ function QuotesPage() {
           person={quote.person}
           likes={quote.likes ?? 0}
           user_id={quote.user_id ?? ""}
+          onRemove={handleRemove}
         />
       ))}
     </div>
