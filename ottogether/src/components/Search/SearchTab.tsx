@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SearchMovie from './SearchMovie';
 import React from 'react';
+import SearchSeries from './SearchSeries';
 
 const TAB_TYPES = ['total', 'movie', 'series', 'quote', 'user'] as const;
 type TabType = typeof TAB_TYPES[number];
@@ -128,7 +129,12 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
           </div>
         </div>
         <div className={S["panel-item"]}>
-          <div className={S["series-list"]}>Series</div>
+          <div className={S["movie-list"]}>
+            <SearchSeries
+              keyword={keyword}
+              filters={filters}
+            />
+          </div>
         </div>
         <div className={S["panel-item"]}>
           <div className={S["quote-list"]}>Quotes</div>
