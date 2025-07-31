@@ -1,7 +1,6 @@
 import { useState } from "react"
 import S from './ReviewCreate.module.css'
 import { useAuth } from "../../contexts/AuthProvider";
-import type { User } from "@supabase/supabase-js";
 import { supabase } from "../../supabase/supabase";
 
 interface Props{

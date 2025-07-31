@@ -1,0 +1,123 @@
+.user-avatar{
+	width: 32px;
+	height: 32px;
+	border-radius: 16px;
+}
+
+.popup-container{
+	padding: 16px;
+	top: 25%;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 50%;
+	height: 50%;
+	max-width: 1000px;
+	max-height: 90vh;
+	position: fixed;
+  background-color: #525252;
+	border-radius: 8px;
+  z-index: 999;
+	box-shadow: 2px 6px 15px rgba(0, 0, 0, 0.15);
+	overflow-y: auto;
+
+	&::-webkit-scrollbar {
+    width: 0;  /* 세로 스크롤바 너비 */
+    height: 0; /* 가로 스크롤바 높이 (필요하다면) */
+    background: transparent; /* 스크롤바 배경을 투명하게 */
+  }
+}
+
+.close{
+	margin-left: auto;
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+}
+
+.topbar{
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	width: 100%;
+}
+
+.star-container{
+	display: flex;
+	gap: 4px;
+	margin-left: auto;
+}
+
+.text-content{
+	display: flex;
+	flex-direction: column;
+	padding-top: 16px;
+}
+
+.reaction-container{
+	padding-top: 16px;
+	margin-top: 16px;
+	display: flex;
+	margin-left: auto;
+}
+
+.reaction-item{
+	display: flex;
+	gap: 5px;
+	padding-right: 24px;
+	align-items: center;
+}
+
+.divider {
+	padding-left: 16px;
+	padding-right: 16px;
+	padding-top: 18px;
+  border-bottom: 3px solid white;
+	margin: 0 auto;
+}
+
+.comment-container{
+	padding-top: 18px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.comment-input-container{
+	padding-top: 16px;
+	display: flex;
+	gap: 15px;
+	align-content: center;
+	padding-bottom: 16px;
+}
+
+.comment-input{
+	padding: 16px 16px;
+	margin: 20px 0px ;
+	border-radius: 16px;
+	flex-grow: 1;
+}
+
+.add{
+	background-color: var(--color-primary-500);
+	width: 85px;
+	height: 40px;
+	border-radius: 12px;
+	color: white;
+	border-width: 0;
+	margin: auto 0;
+}
+
+.comment-cell{
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	background-color: #322F35;
+	border-radius: 16px;
+	padding: 16px;
+}
+
+.handler-btn-container{
+	
+}

@@ -15,3 +15,11 @@
 .footer{
 	padding-bottom: 40px;	
 }
+
+body{
+	&::-webkit-scrollbar {
+    width: 0;  /* 세로 스크롤바 너비 */
+    height: 0; /* 가로 스크롤바 높이 (필요하다면) */
+    background: transparent; /* 스크롤바 배경을 투명하게 */
+  }
+}
