@@ -54,7 +54,6 @@ function SearchMovie({ keyword, filters}:SearchProps) {
     fetchMovies();
   }, [keyword, filters]);
 
-  console.log(movieList);
   return (
     <section className={S["movie-result-container"]}>
       { isLoading && <p>로딩 중...</p> }

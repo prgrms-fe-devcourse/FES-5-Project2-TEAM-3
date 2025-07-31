@@ -15,10 +15,31 @@ interface MovieListProps {
 export default function MovieList({ title, fetchFn }: MovieListProps) {
   const [movies, setMovies] = useState<MovieData[]>([]);
   const [startIndex, setStartIndex] = useState(0);
+  const [ itemsPerPage, setItemsPerPage ] = useState(5);
 
-    
-  const itemsPerPage = 5;
+  /* 화면 너비에 따라 보여지는 item 수 조정 */
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      const width = window.innerWidth;
 
+      if (width >= 1280) {
+        // 데스크탑
+        setItemsPerPage(5);
+      } else if (width >= 768) {
+        // 태블릿
+        setItemsPerPage(3);
+      } else {
+        // 모바일
+        setItemsPerPage(2);
+      }
+    }
+    updateItemsPerPage();
+    window.addEventListener('resize', updateItemsPerPage);
+
+    return () => {
+      window.removeEventListener('resize', updateItemsPerPage);
+    }
+  }, []);
 
   useEffect(() => {
     async function loadMovies() {
