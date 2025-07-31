@@ -37,6 +37,11 @@ function SearchResult() {
   /* 검색창에서 엔터 키 입력 시 핸들링 */
   const handleSearchKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
     if ( e.key === 'Enter' ) {
+      if ( inputKeyword.trim() === '' ) {
+        alert('검색어를 입력해주세요.');
+        e.currentTarget.focus();
+        return;
+      }
       setSearchKeyword(inputKeyword);
       const newParams = new URLSearchParams(searchParams);
       newParams.set("query", inputKeyword);
