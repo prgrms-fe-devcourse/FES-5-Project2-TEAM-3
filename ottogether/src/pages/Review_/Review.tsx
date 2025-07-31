@@ -66,7 +66,7 @@ function Review() {
 			<div className={S["footer"]}></div>
 			{isPopupOpen
 			 && (profileData && reviewData && commentData && currentPopupReview)
-			  && <ReviewDetailPopup profileData={profileData} reviewSingleData={currentPopupReview} commentData={commentData} closePopup={closePopup}/>}
+			  && <ReviewDetailPopup profileData={profileData} reviewSingleData={currentPopupReview} commentData={commentData} closePopup={closePopup} reviewUpdate={generateData}/>}
 		</>
 	)
 }
