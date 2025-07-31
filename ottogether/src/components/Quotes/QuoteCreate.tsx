@@ -2,30 +2,34 @@ import { useState } from "react";
 import S from './QuoteCreate.module.css';
 import { supabase } from '../../supabase/supabase';
 import type { TablesInsert } from '../../supabase/supabase.type';
-
-
-
+import { getUserInfo } from '../../supabase/auth/getUserInfo';
 
 type Props = {
     onAdd: () => void;
 };
-
 
 function QuoteCreate({onAdd}:Props) {
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [content, setContent] = useState('');
     const [person, setPerson] = useState('');
-    
 
     const handleSubmit = async () => {
-    if (!content.trim()) return;
+  if (!content.trim()) return;
+
+    const userId = await getUserInfo('id');
+
+    if (!userId) {
+      console.error('로그인된 사용자를 찾을 수 없습니다.');
+      return;
+    }
 
     const newQuote: TablesInsert<'quotes'> = {
       content,
       person: person || '익명',
       likes: 0,
       is_visible: true,
+      user_id: userId, 
     };
 
     const { error } = await supabase.from('quotes').insert(newQuote);
@@ -53,6 +57,8 @@ if (!isExpanded) {
     </div>
   );
 }
+
+
 
   return (
     <div className={S.container}>

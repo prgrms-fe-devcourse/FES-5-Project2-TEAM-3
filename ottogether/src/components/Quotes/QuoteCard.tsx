@@ -14,6 +14,7 @@ type QuoteCardProps = {
   person: string | null;
   likes: number;
   user_id: string;
+  onRemove: (id: number) => void;
 };
 
 export default function QuoteCard({
@@ -21,6 +22,7 @@ export default function QuoteCard({
   content,
   person,
   likes,
+  onRemove,
 }: QuoteCardProps) {
  
   const [likeCount, setLikeCount] = useState(likes);
@@ -59,7 +61,7 @@ export default function QuoteCard({
       return;
     }
 
-    const { liked, error } = await toggleQuoteLike(id, user.id, likeCount);
+    const { liked, error } = await toggleQuoteLike(id, user.id);
 
     if (!error && typeof liked === 'boolean') {
       setIsLiked(liked);
@@ -104,12 +106,11 @@ export default function QuoteCard({
   if (!isConfirmed) return;  
 
   const { error } = await supabase.from('quotes').delete().eq('id', id);
-
   if (!error) {
-  alert('삭제되었습니다.');
+    alert('삭제되었습니다.');
+    onRemove(id);
   }
 };
-
 
   return (
     <div className={`${S.card} ${isEditing ? S.editing : ''}`}>

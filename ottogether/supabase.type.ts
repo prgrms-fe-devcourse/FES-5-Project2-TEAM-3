@@ -232,26 +232,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-  increment: {
-    Args: {
-      table_name: string
-      id_column: string
-      id_value: number
-      column_name: string
+      [_ in never]: never
     }
-    Returns: null
-  }
-  decrement: {
-    Args: {
-      table_name: string
-      id_column: string
-      id_value: number
-      column_name: string
-    }
-    Returns: null
-  }
-}
-
     Enums: {
       "Like/Dislike": "like" | "dislike"
     }
