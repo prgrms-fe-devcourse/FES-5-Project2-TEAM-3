@@ -24,3 +24,4 @@ export async function getMovieDetail(id: number): Promise<MovieData | null> {
     return null;
   }
 }
+

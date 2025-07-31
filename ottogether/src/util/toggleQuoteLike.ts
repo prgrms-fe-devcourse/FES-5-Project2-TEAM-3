@@ -1,54 +1,58 @@
-import { supabase } from '../supabase/supabase';
+import { supabase } from "../supabase/supabase";
 
 export async function toggleQuoteLike(
   quoteId: number,
   userId: string,
-  currentLikes: number 
-) {
-  const { data: existingLike, error: fetchError } = await supabase
-    .from('quotes_like')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('quote_id', quoteId)
-    .maybeSingle(); 
+  currentLikeCount: number
+): Promise<{ liked: boolean; error: any }> {
+  const { data: existingLike, error: selectError } = await supabase
+    .from("quotes_like")
+    .select("*")
+    .eq("quote_id", quoteId)
+    .eq("user_id", userId)
+    .single();
 
-  if (fetchError) {
-    console.error('좋아요 조회 오류:', fetchError.message);
-    return { error: fetchError };
+  if (selectError && selectError.code !== "PGRST116") {
+    console.error("좋아요 확인 중 에러:", selectError);
+    return { liked: false, error: selectError };
   }
 
-  if (existingLike?.id !== undefined && existingLike?.id !== null) {
+  if (existingLike) {
+
     const { error: deleteError } = await supabase
-      .from('quotes_like')
+      .from("quotes_like")
       .delete()
-      .eq('id', existingLike.id);
+      .eq("quote_id", quoteId)
+      .eq("user_id", userId);
 
     if (deleteError) {
-      console.error('좋아요 취소 오류:', deleteError.message);
-      return { error: deleteError };
+      console.error("좋아요 삭제 중 에러:", deleteError);
+      return { liked: true, error: deleteError };
     }
+    await supabase
+      .from("quotes")
+      .update({ likes: currentLikeCount - 1 })
+      .eq("id", quoteId);
 
-    const { error: updateError } = await supabase
-      .from('quotes')
-      .update({ likes: currentLikes - 1 })
-      .eq('id', quoteId);
-
-    return { liked: false, error: updateError };
+    return { liked: false, error: null };
   } else {
-    const { error: insertError } = await supabase
-      .from('quotes_like')
-      .insert({ user_id: userId, quote_id: quoteId, created_at: new Date().toISOString() });
+
+    const { error: insertError } = await supabase.from("quotes_like").insert([
+      {
+        quote_id: quoteId,
+        user_id: userId,
+      },
+    ]);
 
     if (insertError) {
-      console.error('좋아요 삽입 오류:', insertError.message);
-      return { error: insertError };
+      console.error("좋아요 추가 중 에러:", insertError);
+      return { liked: false, error: insertError };
     }
+    await supabase
+      .from("quotes")
+      .update({ likes: currentLikeCount + 1 })
+      .eq("id", quoteId);
 
-    const { error: updateError } = await supabase
-      .from('quotes')
-      .update({ likes: currentLikes + 1 })
-      .eq('id', quoteId);
-
-    return { liked: true, error: updateError };
+    return { liked: true, error: null };
   }
 }

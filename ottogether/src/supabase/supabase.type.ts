@@ -146,19 +146,19 @@ export type Database = {
       quotes_like: {
         Row: {
           created_at: string
-          id: number | null
+          id: number
           quote_id: number | null
           user_id: string | null
         }
         Insert: {
-          created_at: string
-          id?: number | null
+          created_at?: string
+          id?: number
           quote_id?: number | null
           user_id?: string | null
         }
         Update: {
           created_at?: string
-          id?: number | null
+          id?: number
           quote_id?: number | null
           user_id?: string | null
         }
