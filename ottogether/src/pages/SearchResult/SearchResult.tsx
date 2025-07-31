@@ -1,6 +1,6 @@
 import S from './SearchResult.module.css'
 import { useEffect, useMemo, useState } from "react"
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import FilterPanel from "../../components/Search/FilterPanel"
 import SearchBar from '../../components/Search/SearchBar';
 import { genreListTotal, ottListTotal } from '../../lib/data';
@@ -8,6 +8,7 @@ import { isDefaultFilter } from '../../util/isDefaultFilter';
 import SearchTab from '../../components/Search/SearchTab';
 
 function SearchResult() {
+  const navigate = useNavigate();
 
   // 검색어 Params
   const [ searchParams ] = useSearchParams();
@@ -37,6 +38,9 @@ function SearchResult() {
   const handleSearchKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
     if ( e.key === 'Enter' ) {
       setSearchKeyword(inputKeyword);
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("query", inputKeyword);
+      navigate(`/search?${newParams.toString()}`)
       setInputKeyword('');
     }
   };
