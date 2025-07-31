@@ -5,6 +5,7 @@ import FilterPanel from "../../components/Search/FilterPanel"
 import SearchBar from '../../components/Search/SearchBar';
 import { genreListTotal, ottListTotal } from '../../lib/data';
 import { isDefaultFilter } from '../../util/isDefaultFilter';
+import SearchTab from '../../components/Search/SearchTab';
 
 function SearchResult() {
 
@@ -59,14 +60,6 @@ function SearchResult() {
     setSelectedGenres(genreList);
   }
 
-  /* clear filter */
-  const clearFilter = () => {
-    setSelectedOtt(ottListTotal);
-    setSelectedGenres(genreListTotal);
-    setRatingRange([0, 5]);
-    setReleaseRange(['', '']);
-  }
-
   /* apply filter */
   const applyFilter = () => {
     console.log({
@@ -102,6 +95,7 @@ function SearchResult() {
         onReleaseChange={(from, to) => setReleaseRange([from, to])}
         onApply={applyFilter}
       />
+      <SearchTab />
     </div>
   )
 }

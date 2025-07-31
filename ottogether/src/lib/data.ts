@@ -6,6 +6,7 @@ export const ottListTotal:ottList = [
   'Tving', 
   'DisneyPlus', 
   'Wavve', 
+  'Watcha',
   'CoupangPlay', 
   'AppleTV', 
   'AmazonPrimeVideo'
