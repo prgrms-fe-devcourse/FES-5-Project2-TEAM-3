@@ -84,7 +84,12 @@ function SearchMovie({ keyword, filters }:SearchProps) {
 
   return (
     <section className={S["movie-result-container"]}>
-      { isLoading && <p>로딩 중...</p> }
+      { isLoading && 
+        <div className={S.loader}>
+          <div className={S["loading-spinner"]}></div>
+          <p className={S["loading-message"]}>검색 결과를 불러오고 있어요 🔍</p> 
+        </div>
+      }
       { !isLoading && movieList.length === 0 &&
         <SearchNotFound />
       }
@@ -97,7 +102,7 @@ function SearchMovie({ keyword, filters }:SearchProps) {
             ))
           }
         </div>
-      }
+      } 
     </section>
   )
 }
