@@ -34,10 +34,25 @@ interface Props{
 function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePopup, reviewUpdate} : Props) {
 	const {isAuth, user} = useAuth();
 	const [commentInputOpen, setCommentInputOpen] = useState(false);
-	const [content, setContent] = useState('');
+	const [commentTextContent, setCommentTextContent] = useState('');
+	const [reviewTextContent, setReviewTextContent] = useState('');
 	const [commentCount, setCommentCount] = useState(0);
+	const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
 
-	const handleEdit = () => {
+	const handleEditComment = async (commentId : number) => {
+		if (!user)
+			return ;
+		const {error} = await supabase.from('comment').update({text_content : commentTextContent}).eq('id', commentId);
+		if (error){
+			console.error('Error :', error.message);
+		}
+		else{
+			handleCancel();
+			reviewUpdate();
+		}
+	}
+
+	const handleEditReview = () => {
 		
 	}
 
@@ -98,7 +113,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		}
 	}
 	const handleSubmit = async (reviewId : number) => {
-		if (!content.trim()) return ;
+		if (!commentTextContent.trim()) return ;
 		if (!isAuth)
 		{
 			alert('로그인 후 사용할 수 있는 서비스입니다!');
@@ -112,7 +127,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 			return ;
 		}
 		const newComment = {
-			text_content : content,
+			text_content : commentTextContent,
 			user_id : user.id,
 			review_id: reviewId, 
 		}
@@ -127,8 +142,26 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		}
 	}
 	const handleCancel = () => {
-		setContent('');
+		setCommentTextContent('');
 		setCommentInputOpen(false);
+		setEditingCommentId(null);
+	}
+	const openNewCommentInput = () => {
+		if (editingCommentId)
+		{
+			setCommentTextContent('');
+			setEditingCommentId(null);
+		}
+		setCommentInputOpen(true);
+	}
+	const openEditComment = (commentId : number, prev_text : string) => {
+		if (commentInputOpen)
+		{
+			setCommentTextContent('');
+			setCommentInputOpen(false);
+		}
+		setEditingCommentId(commentId);
+		setCommentTextContent(prev_text);
 	}
 
 	useEffect(()=> {
@@ -148,15 +181,15 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 						<>
 							<img className={S.you} src="/YouBadge.svg" alt="isItMeCheck"></img>
 							<div className={S["handler-btn-container"]}>
-								<img src="./edit.svg" alt="editCommentButton" onClick={handleEdit}/>
-								<img src="./trashcan.svg" alt="deleteCommentButton" onClick={() => handleDeleteReview(reviewSingleData.id)}/>
+								<img src="./edit.svg" alt="editReviewButton" onClick={handleEditReview}/>
+								<img src="./trashcan.svg" alt="deleteReviewButton" onClick={() => handleDeleteReview(reviewSingleData.id)}/>
 							</div>
 						</>
 					} 
 					<div className={S['star-container']}>{StarRating(reviewSingleData.rating)}</div>
 				</div>
 			</header>
-			<div className={S['text-content']}>
+			<div className={S['text-commentTextContent']}>
 				<p>{reviewSingleData.text_content}</p>
 				<div className={S["reaction-container"]}>
 					<div className={S['reaction-item']}>
@@ -176,7 +209,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 			<div className={S.divider}></div>
 			<div className={S["comment-container"]}>
 				<p>Comments</p>
-				{ !commentInputOpen && <div className={S["comment-fake-container"]} onClick={() => setCommentInputOpen(true)}>
+				{ !commentInputOpen && <div className={S["comment-fake-container"]} onClick={() => openNewCommentInput()}>
 					<div className={S['comment-input']}>Add Comments...</div>
 						<button className={S.add}>Add</button>
 					</div>}
@@ -184,9 +217,9 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 				<div className={S["input-container"]}>
 					<textarea
 						className={S['review-input']}
-						onChange={(e) => setContent(e.target.value)}
+						onChange={(e) => setCommentTextContent(e.target.value)}
 						placeholder="Click to add text."
-						value={content}
+						value={commentTextContent}
 						rows={5}
 					></textarea>
 					<div className={S["button-container"]}>
@@ -204,14 +237,29 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 									<p>{findUserById(comment.user_id, profileData)?.nickname ?? 'User'} · {formatDateNoYear(comment.updated_at!)}</p>
 									{((isAuth && user) && (comment.user_id == user.id)) && <img src="/YouBadge.svg" alt="isItMeCheck"></img>}
 								</div>
-								{ comment.user_id === user?.id &&
+								{ comment.user_id === user?.id && editingCommentId !== comment.id &&
 									<div className={S["handler-btn-container"]}>
-										<img src="./edit.svg" alt="editCommentButton" onClick={handleEdit}/>
+										<img src="./edit.svg" alt="editCommentButton" onClick={() => openEditComment(comment.id, comment.text_content)}/>
 										<img src="./trashcan.svg" alt="deleteCommentButton" onClick={() => handleDeleteComment(reviewSingleData.id, comment.id)}/>
 									</div>
 								}
 							</div>
-							<p>{comment.text_content}</p>
+							{ editingCommentId !== comment.id && <p>{comment.text_content}</p>}
+							{ editingCommentId === comment.id &&
+							<>
+								<textarea
+									className={S['review-input']}
+									onChange={(e) => setCommentTextContent(e.target.value)}
+									value={commentTextContent}
+									rows={5}
+								>{commentTextContent}</textarea>
+								<div className={S["button-container-edit"]}>
+									<button className={S.add} onClick={() => handleEditComment(comment.id)}>Edit</button>
+									<button onClick={handleCancel} className={S.cancel}>Cancel</button>
+								</div>
+							</>
+							}
+
 					</div>
 					))
 				}

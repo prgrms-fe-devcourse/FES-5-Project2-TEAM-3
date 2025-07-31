@@ -14,7 +14,7 @@ function Members() {
 	const [quotesData, setQuotesData] = useState<QuotesLike[] | null>();
 
 	const [currentPageNum, setCurrentPage] = useState(1);
-	const [profileCountPerPage] = useState(2);
+	const [profileCountPerPage] = useState(4);
 
 	useEffect(()=>{
 		async function generateData(){
