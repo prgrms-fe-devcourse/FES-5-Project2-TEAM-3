@@ -1,0 +1,94 @@
+.profileBox {
+  background: #2a2a2a;
+  border-radius: 1rem;
+  padding: 1.5rem 1rem;
+  color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  position: relative;
+}
+
+.notificationButton,
+.settingButton {
+  position: absolute;
+  top: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+.notificationButton {
+  right: 3rem;
+}
+
+.settingButton {
+  right: 1rem;
+}
+
+.notificationButton img,
+.settingButton img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  transition: transform 0.2s ease;
+}
+
+.notificationButton:hover img,
+.settingButton:hover img {
+  transform: scale(1.1);
+}
+
+.profileImg {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #444;
+}
+
+.profileBox h3 {
+  font-size: 1.3rem;
+}
+
+.profileBox p {
+  font-size: 0.9rem;
+  color: #c0c0c0;
+}
+
+.url {
+  font-size: 0.8rem;
+  color: #aaa;
+  word-break: break-all;
+  text-decoration: underline;
+}
+
+/* 구분선 */
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: #444;
+  margin: 1rem 0;
+}
+
+/* 통계 */
+.statsBox {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.statsBox div p {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.statsBox div span {
+  font-size: 0.9rem;
+  color: #ccc;
+}

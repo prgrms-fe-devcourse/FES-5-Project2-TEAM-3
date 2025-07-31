@@ -1,0 +1,140 @@
+.settingsPage {
+  background: #2a2a2a;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  color: #f0f0f0;
+  margin: 0 auto;
+  position: relative;
+}
+
+.banner {
+  height: 200px;
+  border-radius: 1rem;
+}
+
+.bannerImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+    overflow: hidden;
+}
+
+.avatarWrapper {
+  position: absolute;
+  bottom: 350px;
+  left: 2rem;
+  z-index: 5;
+}
+
+.avatarWrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  z-index: 6;
+}
+
+.avatarImg {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #444;
+  display: block;
+}
+
+.avatarUploadBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* 아이콘만 보이게 */
+.avatarUploadBtn img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+input[type="text"] {
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: #444;
+  color: #fff;
+}
+
+.counter {
+  align-self: flex-end;
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.section h4 {
+  font-size: 1rem;
+  color: #ddd;
+}
+
+.linkBtn {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-align: left;
+  padding: 0;
+}
+
+.linkBtn:hover {
+  color: #fff;
+}
+
+.submitBtn {
+  background: #3a86ff;
+  border: none;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submitBtn:hover {
+  background: #2563eb;
+} 

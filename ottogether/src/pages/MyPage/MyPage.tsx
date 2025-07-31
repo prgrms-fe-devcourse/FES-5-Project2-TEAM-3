@@ -7,8 +7,9 @@ import LikedVideoContents from "../../components/inMyPage/LikedVideoContents";
 import LikedReviews from "../../components/inMyPage/LikedReviews";
 import LikedQuotes from "../../components/inMyPage/LikedQuotes";
 import { useAuth } from "../../contexts/AuthProvider";
-import notificationIcon from "../../assets/icons/notification.svg"
-import settingsIcon from "../../assets/icons/settings.svg"
+import Settings from "../../components/inMyPage/Settings";
+import Notifications from "../../components/inMyPage/Notifications";
+import ProfileBox from "../../components/inMyPage/ProfileBox"; // 👈 추가
 
 type ProfileType = {
   user_id: string;
@@ -21,23 +22,22 @@ type ProfileType = {
   favorite_genre: string[] | null;
 };
 
-
 function CreatedContents() {
   return (
     <>
-    <CreatedReviews/>
-    <CreatedQuotes/>
+      <CreatedReviews />
+      <CreatedQuotes />
     </>
-  )
+  );
 }
 function LikedContents() {
   return (
     <>
-    <LikedVideoContents/>
-    <LikedReviews/>
-    <LikedQuotes/>
+      <LikedVideoContents />
+      <LikedReviews />
+      <LikedQuotes />
     </>
-  )
+  );
 }
 
 function MyPage() {
@@ -69,7 +69,6 @@ function MyPage() {
     return <div>로그인이 필요합니다.</div>;
   }
 
-
   const renderContent = () => {
     switch (activeTab) {
       case "createdContents":
@@ -86,13 +85,16 @@ function MyPage() {
         return <LikedReviews />;
       case "likedQuotes":
         return <LikedQuotes />;
+      case "notifications":
+        return <Notifications />;
+      case "settings":
+        return <Settings user={user} profile={profile}/>;
       default:
         return <div>카테고리를 선택해주세요.</div>;
     }
   };
 
   return (
-
     <div className={S.page}>
       {/* 배너 영역 */}
       <div className={S.banner}>
@@ -107,22 +109,12 @@ function MyPage() {
       <div className={S.container}>
         {/* 왼쪽 사이드바 */}
         <aside className={S.sidebar}>
-          <div className={S.profileBox}>
-            <button className={S.notificationButton}>
-              <img src={notificationIcon} alt="notifications" />
-            </button>
-            <button className={S.settingButton}>
-              <img src={settingsIcon} alt="settings" />
-            </button>
-            <img
-              src={profile?.avatar_url || ''}
-              alt="profile"
-              className={S.profileImg}
-            />
-            <h3>{profile?.nickname || "Guest"}</h3>
-            <p>{profile?.bio || ""}</p>
-            <a className={S.url} href={profile?.url || ""}></a>
-          </div>
+          {/* 기존 profileBox 전체 삭제 후 ProfileBox 컴포넌트 사용 */}
+          <ProfileBox 
+            user={user} 
+            profile={profile} 
+            setActiveTab={setActiveTab} 
+          />
 
           <nav className={S.navMenu}>
             <h4
@@ -173,7 +165,6 @@ function MyPage() {
               </li>
             </ul>
           </nav>
-
         </aside>
 
         {/* 오른쪽 메인 블록 */}
