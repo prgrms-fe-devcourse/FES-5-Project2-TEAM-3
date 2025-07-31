@@ -1,5 +1,5 @@
 import S from './SearchResult.module.css'
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom";
 import FilterPanel from "../../components/Search/FilterPanel"
 import SearchBar from '../../components/Search/SearchBar';
@@ -70,6 +70,14 @@ function SearchResult() {
     });
   }
 
+  /* filters memoization */
+  const filters = useMemo(() => ({
+    ottList: selectedOtt,
+    genreList: selectedGenres,
+    ratingRange,
+    releaseRange,
+  }), [selectedOtt, selectedGenres, ratingRange, releaseRange]);
+
   return (
     <div className={S.container}>
       <SearchBar
@@ -97,12 +105,7 @@ function SearchResult() {
       />
       <SearchTab
         keyword={searchKeyword}
-        filters={{
-          ottList: selectedOtt,
-          genreList: selectedGenres,
-          ratingRange,
-          releaseRange
-        }}
+        filters={filters}
       />
     </div>
   )

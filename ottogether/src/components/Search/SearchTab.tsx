@@ -3,6 +3,7 @@ import S from './SearchTab.module.css';
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SearchMovie from './SearchMovie';
+import React from 'react';
 
 const TAB_TYPES = ['total', 'movie', 'series', 'quote', 'user'] as const;
 type TabType = typeof TAB_TYPES[number];
@@ -25,7 +26,7 @@ interface SearchTabProbs {
   }
 }
 
-function SearchTab( { keyword, filters }:SearchTabProbs) {
+const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabProbs) {
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,9 +37,9 @@ function SearchTab( { keyword, filters }:SearchTabProbs) {
   const indicatorRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
 
-  const { ottList, genreList, ratingRange, releaseRange } = filters;
-  const [ ratingMin, ratingMax ] = ratingRange;
-  const [ releaseFrom, releaseTo ] = releaseRange;
+  // const { ottList, genreList, ratingRange, releaseRange } = filters;
+  // const [ ratingMin, ratingMax ] = ratingRange;
+  // const [ releaseFrom, releaseTo ] = releaseRange;
 
   /* URL 쿼리에서 초기 상태 설정 */
   useEffect(() => {
@@ -160,5 +161,6 @@ function SearchTab( { keyword, filters }:SearchTabProbs) {
       </div>
     </div>
   )
-}
+});
+
 export default SearchTab
