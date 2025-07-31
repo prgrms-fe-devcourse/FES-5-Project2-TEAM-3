@@ -1,7 +1,7 @@
 .search-tab-container {
 	width: 95%;
 	height: auto;
-	overflow-x: hidden;
+	overflow: hidden;
 	flex-grow: 1;
 	position: relative;
 }
@@ -53,6 +53,8 @@
 	.panel-item {
 		width: 100%;
 		flex-shrink: 0;
+		display: flex;
+		justify-content: center;
 
 		> div {
 			width: 100%;
@@ -61,9 +63,6 @@
 	}
 	.total-list {
 		background-color: var(--color-error-700);
-	}
-	.movie-list {
-		background-color: var(--color-error-400);
 	}
 	.series-list {
 		background-color: var(--color-warning-500);
