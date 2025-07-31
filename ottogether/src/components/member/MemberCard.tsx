@@ -17,7 +17,7 @@ interface Props{
 function MemberCard({profileData, reviewData, quotesData} : Props) {
 
 	function onClickCell(data : Profile){
-		console.log(data.nickname, ' cell clicked!');
+		console.log(data.user_id, ' cell clicked!');
 	}
 
 	function getUserLikeCount(user_id : string, type : "review" | 'quotes') : number{
@@ -44,7 +44,7 @@ function MemberCard({profileData, reviewData, quotesData} : Props) {
 		{ 
 		profileData && profileData.map(data => (
 			<div key={data.user_id} className={S.cell} onClick={() => onClickCell(data)}>
-				<img className={S['profile-image']} src={data.avatar_url as string ?? "./beomTeacher.svg"} onClick={() => console.log(data.user_id, ' user clicked!')} alt="profileImage" />
+				<img className={S['profile-image']} src={data.avatar_url as string ?? "./beomTeacher.svg"} alt="profileImage" />
 				<div>
 					<h2>{data.nickname ?? 'Nickname'}</h2>
 					<p><strong>Joined :</strong> {formatDate(data.created_at)}</p>

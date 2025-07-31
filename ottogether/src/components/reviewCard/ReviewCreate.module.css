@@ -1,5 +1,7 @@
 .input-container{
 	/* width: 1028px; */
+	display: flex;
+	flex-direction: column;
 	width: 975px;
 	background-color: #525252;
 	border-radius: 16px;
@@ -11,20 +13,54 @@
 
 .button-list{
 	padding-top: 11px;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .write-btn{
-
+	margin-left: auto;
+	color: #FFCA45;
+	font-size: 16px;
+}
+.star-container{
+	display: flex;
+	gap: 10px;
 }
 
 .review-input{
-
+	padding: 20px 30px;
+	margin: 20px 0px ;
+	border-radius: 16px;
 }
 
 .add{
-
+	background-color: var(--color-primary-500);
 }
 
 .cancel{
+	background-color: #CCC2DC;
+}
 
+.button-container{
+	display: flex;
+	gap: 15px;
+	margin-left: auto;
+	
+	button{
+		width: 85px;
+		height: 40px;
+		border-radius: 12px;
+		color: white;
+		border-width: 0;
+	}
+}
+
+.button-list.input-mode{
+	padding-top: 20px;
+}
+
+.button-list.input-mode .star-container {
+  margin: 0 auto;
 }
