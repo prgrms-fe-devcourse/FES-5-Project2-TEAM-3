@@ -19,11 +19,10 @@ function Review() {
 		const profile = await getData('profile');
 		setReviewData(data);
 		setProfileData(profile);
-		console.log('profile : ', profile);
 	}
 	useEffect(() => {
 		generateData();
-	}, []) //TODO : 리뷰가 생성되면 useEffect가 업데이트 되어야 할듯
+	}, [])
 
 	return (
 		<>

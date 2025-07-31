@@ -14,7 +14,7 @@ interface Prop{
 }
 
 function ReviewCard({reviewData, profileData} : Prop) {
-	
+
 	function findUserById(inputId : string) : Profile | undefined{
 		return profileData?.find(profile => profile.user_id !== null && profile.user_id === inputId);
 	}
@@ -24,7 +24,7 @@ function ReviewCard({reviewData, profileData} : Prop) {
 		<>
 		{
 			reviewData && reviewData.map(element => (
-				<div className={S["card-container"]}>
+				<div key={element.id} className={S["card-container"]}>
 				<header>
 					<img className={S['user-avatar']} src={findUserById(element.user_id)?.avatar_url ?? "./beomTeacher.svg"} alt="profile_image" />
 					<p>{findUserById(element.user_id)?.nickname} · {formatDateNoYear(element.updated_at!)}</p>

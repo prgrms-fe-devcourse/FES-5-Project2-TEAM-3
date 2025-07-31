@@ -9,9 +9,9 @@ interface Props{
 }
 
 function ReviewCreate({reviewAdded} : Props) {
-	const [inputClicked, setInputClicked] = useState(true);
+	const [inputClicked, setInputClicked] = useState(false);
 	const [content, setContent] = useState('');
-	const [rating, setRating] = useState(2);
+	const [rating, setRating] = useState(5);
 	const {isAuth, user} = useAuth();
 
 /*
@@ -62,15 +62,20 @@ function ReviewCreate({reviewAdded} : Props) {
 	const handleCancel = () => {
 		setInputClicked(false);
 		setContent('');
+		setRating(5);
 	}
 
-	const handleRating = () => {
+	const handleRating = (score : number) => {
+		setRating(score);
+	}
+
+	const renderRating = () => {
 		return<div className={S["star-container"]}>
-			<img src="./star/emptyStar.svg" alt="starRating" />
-			<img src="./star/emptyStar.svg" alt="starRating" />
-			<img src="./star/emptyStar.svg" alt="starRating" />
-			<img src="./star/emptyStar.svg" alt="starRating" />
-			<img src="./star/emptyStar.svg" alt="starRating" />
+			{
+				[1,2,3,4,5].map(num => (
+					<img key={num} src={num <= rating ? "./star/fullStar.svg" : "./star/emptyStar.svg"} alt="starRating" onClick={() => handleRating(num)}/>
+				))
+			}
 		</div>
 	}
 
@@ -78,7 +83,7 @@ function ReviewCreate({reviewAdded} : Props) {
 		<div className={S["input-container"]}>
 			<p>Rate this Backer and tell others what you think</p>	
 			<div className={`${S['button-list']} ${inputClicked? S['input-mode'] : ''}`}>
-				{handleRating()}
+				{renderRating()}
 				{!inputClicked && <p onClick={() => setInputClicked(true)} className={S["write-btn"]}>Write A Review →</p>}
 			</div>
 		{inputClicked &&
