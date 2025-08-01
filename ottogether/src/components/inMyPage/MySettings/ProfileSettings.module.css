@@ -1,14 +1,13 @@
-.settings-page {
+.profile-settings {
   border-radius: 1rem;
-  padding: 1.5rem;
   color: #f0f0f0;
   margin: 0 auto;
   position: relative;
+}
 
-  > h1 {
-    font-size: 1.4rem;
-    font-weight: 400;
-  }
+.profile-settings > h2 {
+  font-size: 1.4rem;
+  font-weight: 400;
 }
 
 .img-settings {

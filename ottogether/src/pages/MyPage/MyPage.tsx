@@ -7,7 +7,7 @@ import LikedVideoContents from "../../components/inMyPage/LikedVideoContents";
 import LikedReviews from "../../components/inMyPage/LikedReviews";
 import LikedQuotes from "../../components/inMyPage/LikedQuotes";
 import { useAuth } from "../../contexts/AuthProvider";
-import Settings from "../../components/inMyPage/Settings";
+import Settings from "../../components/inMyPage/MySettings/Settings";
 import Notifications from "../../components/inMyPage/Notifications";
 import ProfileBox from "../../components/inMyPage/ProfileBox";
 import ShowDefault from "../../components/inMyPage/ShowDefault";
