@@ -3,9 +3,10 @@
 
 import { useEffect, useState } from "react";
 import S from "./MovieList.module.css"
-import { getMovieProvider } from "../../tmdbApi/getMovieProvider";
+// import { getMovieProvider } from "../../tmdbApi/getMovieProvider";
 import type { MovieData } from "../../tmdbApi/movie.type";
 import MovieCard from "./MovieCard";
+import getMovieProvider from "../../tmdbApi/getMovieProvider";
 
 interface MovieListProps {
   title: string;

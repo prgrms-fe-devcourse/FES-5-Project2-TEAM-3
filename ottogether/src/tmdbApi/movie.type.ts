@@ -9,6 +9,7 @@ export type MovieData = {
   provider_logo_path?: string | null;
   backdrop_path: string | null;
   overview: string | null;
+  media_type: 'movie' | 'tv';
 };
 
 export type Genre = {

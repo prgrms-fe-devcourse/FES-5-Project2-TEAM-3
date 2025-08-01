@@ -7,6 +7,7 @@ import Hero from "./Hero";
 import S from "./Home.module.css";
 import OttSelector from "../../components/Search/OttSelector";
 import { ottListTotal } from "../../lib/data";
+// import { fetchContentsByGenre } from "../../tmdbApi/fetchContentByGenre";
 
 
 function Home() {
@@ -16,9 +17,19 @@ function Home() {
   const [selectedOtt, setSelectedOtt] = useState<string[]>(ottListTotal);
 
   useEffect(() => {
+  // const observer = new IntersectionObserver((entries) => {
+  //   if (entries[0].isIntersecting) {
+  //     setVisibleIndex((prev) => prev + 1);
+  //   }
+  let ticking = false;
+
   const observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      setVisibleIndex((prev) => prev + 1);
+    if (entries[0].isIntersecting && !ticking) {
+      ticking = true;
+      setTimeout(() => {
+        setVisibleIndex((prev) => prev + 1);
+        ticking = false;
+      }, 300); 
     }
   });
 
