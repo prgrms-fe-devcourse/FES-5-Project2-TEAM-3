@@ -4,8 +4,7 @@ import type { Tables } from '../../components/reviewCard/supabase.type';
 import { getData } from "../../components/reviewCard/SupaData";
 import { useEffect, useState } from "react"
 import ReviewCreate from "../../components/reviewCard/ReviewCreate";
-import reviewDetailPopup from "../../components/ReviewDetailPopup/ReviewDetailPopup";
-import ReviewDetailPopup from "../../components/ReviewDetailPopup/ReviewDetailPopup";
+import ReviewDetailPopup from "../../components/ReviewDetailPopup/reviewDetailPopup";
 
 type Review = Tables<'review'>;
 type Comment = Tables<'comment'>;
