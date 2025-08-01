@@ -3,6 +3,7 @@ import type { Database } from "../../supabase/supabase.type";
 import { getQuotes } from "../../util/getQuote";
 import QuoteCard from "../../components/Quotes/QuoteCard";
 import QuoteCreate from "../../components/Quotes/QuoteCreate";
+import SortBtn from "../../components/Quotes/SortBtn";
 
 type Quote = Database["public"]["Tables"]["quotes"]["Row"];
 
@@ -23,12 +24,19 @@ function QuotesPage() {
   setQuotes((prevQuotes) => prevQuotes.filter((quote) => quote.id !== id));
 };
 
+const handleSortChange = async (option: { sortBy: "created_at" | "likes"; order: "asc" | "desc" }) => {
+  const data = await getQuotes(option);
+  if (data) setQuotes(data);
+};
+
+
 
 
   
 
   return (
     <div>
+      <SortBtn onChange={handleSortChange} />
         <QuoteCreate onAdd={fetchData}/>
         {quotes.map((quote) => (
         <QuoteCard
