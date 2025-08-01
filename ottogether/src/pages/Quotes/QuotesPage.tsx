@@ -4,6 +4,7 @@ import { getQuotes } from "../../util/getQuote";
 import QuoteCard from "../../components/Quotes/QuoteCard";
 import QuoteCreate from "../../components/Quotes/QuoteCreate";
 import SortBtn from "../../components/Quotes/SortBtn";
+import S from "./QuotesPage.module.css";
 
 type Quote = Database["public"]["Tables"]["quotes"]["Row"];
 
@@ -30,13 +31,18 @@ const handleSortChange = async (option: { sortBy: "created_at" | "likes"; order:
 };
 
 
-
-
-  
-
   return (
     <div>
-      <SortBtn onChange={handleSortChange} />
+      <div className={S.headerWrapper}>
+        <div className={S.header}>
+          <h2 className={S.title}>Favorite Quotes</h2>
+          <div className={S.sortBtnWrapper}>
+            <SortBtn onChange={handleSortChange} />
+          </div>
+        </div>
+        <div className={S.divider} />
+      </div>
+      <div>
         <QuoteCreate onAdd={fetchData}/>
         {quotes.map((quote) => (
         <QuoteCard
@@ -49,6 +55,9 @@ const handleSortChange = async (option: { sortBy: "created_at" | "likes"; order:
           onRemove={handleRemove}
         />
       ))}
+
+      </div>
+        
     </div>
   )
 }

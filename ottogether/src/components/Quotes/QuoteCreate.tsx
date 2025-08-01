@@ -3,6 +3,7 @@ import S from './QuoteCreate.module.css';
 import { supabase } from '../../supabase/supabase';
 import type { TablesInsert } from '../../supabase/supabase.type';
 import { getUserInfo } from '../../supabase/auth/getUserInfo';
+import addIcon from '@/assets/icons/add.svg';
 
 type Props = {
     onAdd: () => void;
@@ -53,7 +54,8 @@ const handleCancel = () => {
 if (!isExpanded) {
   return (
     <div className={S.collapsed} onClick={() => setIsExpanded(true)}>
-      당신이 생각하는 영화의 명대사를 적어주세요.
+      <span className={S.text}>당신이 생각하는 영화의 명대사를 적어주세요.</span>
+      <img className={S.icon} src={addIcon} alt="추가 아이콘" />
     </div>
   );
 }

@@ -15,10 +15,10 @@ const SortBtn = ({ onChange }: SortBtnProps) => {
   const [open, setOpen] = useState(false);
 
   const sortOptions: { label: string; option: SortOption }[] = [
-    { label: "최신 순으로", option: { sortBy: "created_at", order: "desc" } },
-    { label: "오래된 순으로", option: { sortBy: "created_at", order: "asc" } },
-    { label: "좋아요 높은 순으로", option: { sortBy: "likes", order: "desc" } },
-    { label: "좋아요 낮은 순으로", option: { sortBy: "likes", order: "asc" } },
+    { label: "최신 순", option: { sortBy: "created_at", order: "desc" } },
+    { label: "오래된 순", option: { sortBy: "created_at", order: "asc" } },
+    { label: "좋아요 높은 순", option: { sortBy: "likes", order: "desc" } },
+    { label: "좋아요 낮은 순", option: { sortBy: "likes", order: "asc" } },
   ];
 
   const handleSelect = (option: SortOption) => {
