@@ -61,29 +61,41 @@ function ProfileBox({ user, profile, setActiveTab }: Props) {
   }, [user]);
 
   return (
-    <div className={S.profileBox}>
+    <div className={S["profile-box"]}>
       {/* 상단 아이콘 */}
-      <button className={S.notificationButton} onClick={() => setActiveTab("notifications")}>
+      <button
+        className={S["notification-button"]}
+        onClick={() => setActiveTab("notifications")}
+      >
         <img src={notificationIcon} alt="notifications" />
       </button>
-      <button 
-      className={S.settingButton} 
-      onClick={() => setActiveTab("settings")}
+      <button
+        className={S["setting-button"]}
+        onClick={() => setActiveTab("settings")}
       >
         <img src={settingsIcon} alt="settings" />
       </button>
 
       {/* 프로필 정보 */}
-      <img src={profile?.avatar_url || ""} alt="profile" className={S.profileImg} />
+      <img
+        src={profile?.avatar_url || ""}
+        alt="profile"
+        className={S["profile-img"]}
+      />
       <h3>{profile?.nickname || "Guest"}</h3>
       <p>{profile?.bio || ""}</p>
-      <a className={S.url} href={profile?.url || ""}>{profile?.url}</a>
+      <a
+        className={S.url}
+        href={profile?.url || ""}
+      >
+        {profile?.url}
+      </a>
 
       {/* 구분선 */}
       <hr className={S.divider} />
 
       {/* 통계 */}
-      <div className={S.statsBox}>
+      <div className={S["stats-box"]}>
         <div>
           <p>{reviewCount}</p>
           <span>Reviews</span>
