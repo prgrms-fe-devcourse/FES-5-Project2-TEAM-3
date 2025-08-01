@@ -5,26 +5,24 @@ import likeIcon from '@/assets/icons/like-icon.svg';
 import quoteLeft from '@/assets/icons/quotes-left.svg';
 import quoteRight from '@/assets/icons/quotes-right.svg';
 import { toggleQuoteLike } from '../../util/toggleQuoteLike';
+import type { Database } from '../reviewCard/supabase.type';
 
-
+type Quote = Database['public']['Tables']['quotes']['Row'];
 
 type QuoteCardProps = {
-  id: number;
-  content: string;
-  person: string | null;
-  likes: number;
-  user_id: string;
+  quote: Quote;
   onRemove: (id: number) => void;
+  className?: string;
 };
 
 export default function QuoteCard({
-  id,
-  content,
-  person,
-  likes,
+  quote,
   onRemove,
+  className = ''
 }: QuoteCardProps) {
  
+  const { id, content, person, likes } = quote;
+
   const [likeCount, setLikeCount] = useState(likes);
   const [isLiked, setIsLiked] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -44,7 +42,7 @@ export default function QuoteCard({
         .select('*')
         .eq('user_id', user.id)
         .eq('quote_id', id)
-        .single();
+        .maybeSingle();
 
       if (data) {
         setIsLiked(true);
@@ -65,7 +63,10 @@ export default function QuoteCard({
 
     if (!error && typeof liked === 'boolean') {
       setIsLiked(liked);
-      setLikeCount((prev) => liked ? prev + 1 : prev - 1);
+      setLikeCount((prev) => { 
+        if (!prev) prev = 0;
+        return liked ? prev + 1 : prev - 1 
+      });
     }
   };
 
@@ -113,7 +114,7 @@ export default function QuoteCard({
 };
 
   return (
-    <div className={`${S.card} ${isEditing ? S.editing : ''}`}>
+    <div className={`${S.card} ${isEditing ? S.editing : ''} ${className ? className : ''}`.trim()}>
       <div className={S.body}>
         <div className={S.top}>
           <img src={quoteLeft} alt="left quote" className={S.quoteIconLeft} />

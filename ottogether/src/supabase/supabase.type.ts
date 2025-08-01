@@ -72,6 +72,8 @@ export type Database = {
           header_url: string | null
           nickname: string | null
           preferred_ott: string[] | null
+          quotesCount: number | null
+          reviewsCount: number | null
           updated_at: string | null
           url: string | null
           user_id: string
@@ -85,6 +87,8 @@ export type Database = {
           header_url?: string | null
           nickname?: string | null
           preferred_ott?: string[] | null
+          quotesCount?: number | null
+          reviewsCount?: number | null
           updated_at?: string | null
           url?: string | null
           user_id?: string
@@ -98,6 +102,8 @@ export type Database = {
           header_url?: string | null
           nickname?: string | null
           preferred_ott?: string[] | null
+          quotesCount?: number | null
+          reviewsCount?: number | null
           updated_at?: string | null
           url?: string | null
           user_id?: string
@@ -111,7 +117,7 @@ export type Database = {
           created_at: string | null
           id: number
           is_visible: boolean | null
-          likes: number | null
+          likes: number
           movie_id: string | null
           person: string | null
           updated_at: string | null
@@ -123,7 +129,7 @@ export type Database = {
           created_at?: string | null
           id?: number
           is_visible?: boolean | null
-          likes?: number | null
+          likes?: number
           movie_id?: string | null
           person?: string | null
           updated_at?: string | null
@@ -135,7 +141,7 @@ export type Database = {
           created_at?: string | null
           id?: number
           is_visible?: boolean | null
-          likes?: number | null
+          likes?: number
           movie_id?: string | null
           person?: string | null
           updated_at?: string | null
@@ -147,20 +153,20 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          quote_id: number | null
-          user_id: string | null
+          quote_id: number
+          user_id: string
         }
         Insert: {
           created_at?: string
           id?: number
-          quote_id?: number | null
-          user_id?: string | null
+          quote_id: number
+          user_id: string
         }
         Update: {
           created_at?: string
           id?: number
-          quote_id?: number | null
-          user_id?: string | null
+          quote_id?: number
+          user_id?: string
         }
         Relationships: []
       }
@@ -232,26 +238,25 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-  increment: {
-    Args: {
-      table_name: string
-      id_column: string
-      id_value: number
-      column_name: string
+      decrement: {
+        Args: {
+          table_name: string
+          id_column: string
+          id_value: number
+          column_name: string
+        }
+        Returns: undefined
+      }
+      increment: {
+        Args: {
+          table_name: string
+          id_column: string
+          id_value: number
+          column_name: string
+        }
+        Returns: undefined
+      }
     }
-    Returns: null
-  }
-  decrement: {
-    Args: {
-      table_name: string
-      id_column: string
-      id_value: number
-      column_name: string
-    }
-    Returns: null
-  }
-}
-
     Enums: {
       "Like/Dislike": "like" | "dislike"
     }
