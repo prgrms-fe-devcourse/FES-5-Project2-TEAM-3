@@ -9,7 +9,8 @@ import LikedQuotes from "../../components/inMyPage/LikedQuotes";
 import { useAuth } from "../../contexts/AuthProvider";
 import Settings from "../../components/inMyPage/Settings";
 import Notifications from "../../components/inMyPage/Notifications";
-import ProfileBox from "../../components/inMyPage/ProfileBox"; // 👈 추가
+import ProfileBox from "../../components/inMyPage/ProfileBox";
+import ShowDefault from "../../components/inMyPage/ShowDefault";
 
 type ProfileType = {
   user_id: string;
@@ -39,9 +40,17 @@ function LikedContents() {
     </>
   );
 }
+function AllContents() {
+  return (
+    <>
+      <CreatedContents></CreatedContents>
+      <LikedContents></LikedContents>
+    </>
+  );
+}
 
 function MyPage() {
-  const [activeTab, setActiveTab] = useState("settings");
+  const [activeTab, setActiveTab] = useState("");
   const { user } = useAuth();
   const [profile, setProfile] = useState<ProfileType | null>(null);
 
@@ -88,35 +97,35 @@ function MyPage() {
       case "notifications":
         return <Notifications />;
       case "settings":
-        return <Settings user={user} profile={profile}/>;
+        return <Settings user={user} profile={profile} />;
       default:
-        return <div>카테고리를 선택해주세요.</div>;
+        return <AllContents />;
     }
   };
 
   return (
     <div className={S.page}>
-      {/* 배너 영역 */}
-      <div className={S.banner}>
+      <div 
+        className={S.banner}
+        onClick={() => setActiveTab("")} 
+        style={{ cursor: "pointer" }}
+      >
         <img
-          src={profile?.header_url || ""}
+          src={profile?.header_url ?? "/default-header3.png"}
           alt="banner"
-          className={S.bannerImg}
+          className={S["banner-img"]}
         />
       </div>
 
-      {/* 컨텐츠 영역 */}
       <div className={S.container}>
-        {/* 왼쪽 사이드바 */}
         <aside className={S.sidebar}>
-          {/* 기존 profileBox 전체 삭제 후 ProfileBox 컴포넌트 사용 */}
           <ProfileBox 
             user={user} 
             profile={profile} 
             setActiveTab={setActiveTab} 
           />
 
-          <nav className={S.navMenu}>
+          <nav className={S["nav-menu"]}>
             <h4
               className={activeTab === "createdContents" ? S.active : ""}
               onClick={() => setActiveTab("createdContents")}
@@ -167,8 +176,7 @@ function MyPage() {
           </nav>
         </aside>
 
-        {/* 오른쪽 메인 블록 */}
-        <main className={S.mainContent}>{renderContent()}</main>
+        <main className={S["main-content"]}>{renderContent()}</main>
       </div>
     </div>
   );

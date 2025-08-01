@@ -1,22 +1,28 @@
-.settingsPage {
-	background: #2a2a2a;
-	border-radius: 1rem;
-	padding: 1.5rem;
-	color: #f0f0f0;
-	margin: 0 auto;
-	position: relative;
-  
+.settings-page {
+  border-radius: 1rem;
+  padding: 1.5rem;
+  color: #f0f0f0;
+  margin: 0 auto;
+  position: relative;
+
   > h1 {
     font-size: 1.4rem;
     font-weight: 400;
   }
 }
 
+.img-settings {
+  margin-bottom: 5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
 .banner {
-  position: relative; /* 카메라 아이콘 위치 기준 */
-  height: 200px;
+  position: relative;
+  height: 250px;
   border-radius: 1rem;
-  overflow: hidden; /* 자식이 튀어나가지 않도록 */
+  overflow: hidden;
 }
 
 .banner::after {
@@ -26,12 +32,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* 어둡게 오버레이 */
+  background: rgba(0, 0, 0, 0.4);
   border-radius: 1rem;
   z-index: 2;
 }
 
-.bannerImg {
+.banner-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -39,7 +45,7 @@
   display: block;
 }
 
-.banner .cameraIcon {
+.banner .camera-icon {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -55,33 +61,33 @@
   z-index: 3;
 }
 
-.banner .cameraIcon img {
+.banner .camera-icon img {
   width: 36px;
   height: 36px;
   display: block;
 }
 
-.avatarWrapper {
-  position: relative;
-  top: -40px;
+.avatar-wrapper {
+  position: absolute;
+  top: 200px;
   left: 10px;
   width: 100px;
   height: 100px;
   z-index: 5;
 }
 
-.avatarWrapper::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.4);
-	border-radius: 50%;
-	z-index: 6;
+.avatar-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  z-index: 6;
 }
 
-.avatarImg {
+.avatar-img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -90,7 +96,7 @@
   display: block;
 }
 
-.avatarWrapper .cameraIcon {
+.avatar-wrapper .camera-icon {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -106,76 +112,75 @@
   z-index: 10;
 }
 
-.avatarWrapper .cameraIcon img {
+.avatar-wrapper .camera-icon img {
   width: 24px;
   height: 24px;
   display: block;
 }
 
 .form {
-	display: flex;
-	flex-direction: column;
-	gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
 
-	label {
-		display: flex;
-		flex-direction: column;
-		gap: 0.4rem;
-		font-size: 0.9rem;
-	}
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
 
-	input[type="text"] {
-		padding: 0.8rem;
-		border-radius: 0.5rem;
-		border: none;
-		background: #444;
-		color: #fff;
-    
-	}
+.form input[type="text"] {
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: var(--color-white-40);
+  color: #fff;
 }
 
 .counter {
-	align-self: flex-end;
-	font-size: 0.75rem;
-	color: #aaa;
+  align-self: flex-end;
+  font-size: 0.75rem;
+  color: #aaa;
 }
 
 .section {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .section h4 {
-	font-size: 1rem;
-	color: #ddd;
+  font-size: 1rem;
+  color: #ddd;
 }
 
-.linkBtn {
-	background: none;
-	border: none;
-	color: #ccc;
-	cursor: pointer;
-	font-size: 0.9rem;
-	text-align: left;
-	padding: 0;
+.link-btn {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-align: left;
+  padding: 0;
 }
 
-.linkBtn:hover {
-	color: #fff;
+.link-btn:hover {
+  color: #fff;
 }
 
-.submitBtn {
-	background: var(--color-primary-500);
-	border: none;
-	padding: 0.8rem;
-	border-radius: 0.5rem;
-	color: #fff;
-	font-size: 1rem;
-	font-weight: bold;
-	cursor: pointer;
+.submit-btn {
+  background: var(--color-primary-500);
+  border: none;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.submitBtn:hover {
-	background: var(--color-primary-600);
+.submit-btn:hover {
+  background: var(--color-primary-600);
 }

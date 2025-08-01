@@ -39,7 +39,7 @@ function Settings({ user, profile }: SettingsProps) {
 
   // 배너
   const [headerFile, setHeaderFile] = useState<File | null>(null);
-  const [headerPreview, setHeaderPreview] = useState<string>("/default-header3.png");
+  const [headerPreview, setHeaderPreview] = useState<string>(defaultHeader);
   const headerInputRef = useRef<HTMLInputElement>(null);
 
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: ErrorCode | undefined }>({});
@@ -50,15 +50,13 @@ function Settings({ user, profile }: SettingsProps) {
       setNickname(profile.nickname || "");
       setBio(profile.bio || "");
       setUrl(profile.url || "");
-      setAvatarPreview(profile.avatar_url || defaultAvatar);
-      setHeaderPreview(profile.header_url || defaultHeader);
+      setAvatarPreview(profile.avatar_url ?? defaultAvatar);
+      setHeaderPreview(profile.header_url ?? defaultHeader);
     }
   }, [profile]);
 
-  // 파일 최대 용량
   const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
-  /** 유효성 검사 */
   const validateNickname = (value: string): ErrorCode | undefined => {
     if (value.length > 20) return ErrorCode.NicknameTooLong;
     return undefined;
@@ -76,7 +74,6 @@ function Settings({ user, profile }: SettingsProps) {
     return ErrorCode.InvalidUrl;
   };
 
-  /** 아바타 업로드 */
   const handleAvatarClick = () => avatarInputRef.current?.click();
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -96,7 +93,6 @@ function Settings({ user, profile }: SettingsProps) {
     setFieldErrors((prev) => ({ ...prev, avatar: undefined }));
   };
 
-  /** 배너 업로드 */
   const handleHeaderClick = () => headerInputRef.current?.click();
   const handleHeaderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -116,7 +112,6 @@ function Settings({ user, profile }: SettingsProps) {
     setFieldErrors((prev) => ({ ...prev, header: undefined }));
   };
 
-  /** Submit */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
@@ -125,7 +120,6 @@ function Settings({ user, profile }: SettingsProps) {
     setIsSubmitting(true);
 
     try {
-      // 유효성 검사
       const nickErr = validateNickname(nickname);
       const bioErr = validateBio(bio);
       const urlErr = validateUrl(url);
@@ -136,7 +130,6 @@ function Settings({ user, profile }: SettingsProps) {
         return;
       }
 
-      // 닉네임 중복 체크
       if (nickname && nickname !== profile?.nickname) {
         const exists = await checkNicknameExists(nickname);
         if (exists) {
@@ -146,8 +139,7 @@ function Settings({ user, profile }: SettingsProps) {
         }
       }
 
-      // 아바타 업로드
-      let avatarUrl = profile?.avatar_url || null;
+      let avatarUrl: string | null = profile?.avatar_url ?? null;
       if (avatarFile) {
         if (profile?.avatar_url) {
           try {
@@ -160,7 +152,7 @@ function Settings({ user, profile }: SettingsProps) {
           }
         }
         const extension = avatarFile.name.split(".").pop()?.toLowerCase() || "png";
-        const filePath = `userAvatar-${user.id}-${Date.now()}.${extension}`;
+        const filePath = `user-avatar-${user.id}-${Date.now()}.${extension}`;
         const result = await uploadImage({
           bucketName: "avatars",
           file: avatarFile,
@@ -175,7 +167,6 @@ function Settings({ user, profile }: SettingsProps) {
         }
       }
 
-      // 헤더 업로드
       let headerUrl = profile?.header_url || null;
       if (headerFile) {
         if (profile?.header_url) {
@@ -189,7 +180,7 @@ function Settings({ user, profile }: SettingsProps) {
           }
         }
         const extension = headerFile.name.split(".").pop()?.toLowerCase() || "png";
-        const filePath = `userHeader-${user.id}-${Date.now()}.${extension}`;
+        const filePath = `user-header-${user.id}-${Date.now()}.${extension}`;
         const result = await uploadImage({
           bucketName: "headers",
           file: headerFile,
@@ -204,7 +195,6 @@ function Settings({ user, profile }: SettingsProps) {
         }
       }
 
-      // DB 업서트
       const { error } = await upsertTable({
         method: "upsert",
         tableName: "profile",
@@ -237,18 +227,18 @@ function Settings({ user, profile }: SettingsProps) {
   };
 
   return (
-    <div className={S.settingsPage}>
+    <div className={S["settings-page"]}>
       <h1>Settings</h1>
       <hr />
-      <div className={S.imgSettings}>
+      <div className={S["img-settings"]}>
         {/* 배너 */}
         <div className={S.banner}>
           <img
             src={headerPreview}
             alt="banner"
-            className={S.bannerImg}
+            className={S["banner-img"]}
           />
-          <button type="button" className={S.cameraIcon} onClick={handleHeaderClick}>
+          <button type="button" className={S["camera-icon"]} onClick={handleHeaderClick}>
             <img src={cameraIcon} alt="마이페이지 배너 수정하기 버튼" />
           </button>
           <input
@@ -264,13 +254,13 @@ function Settings({ user, profile }: SettingsProps) {
         </div>
 
         {/* 아바타 */}
-        <div className={S.avatarWrapper}>
+        <div className={S["avatar-wrapper"]}>
           <img
             src={avatarPreview}
             alt="avatar"
-            className={S.avatarImg}
+            className={S["avatar-img"]}
           />
-          <button type="button" className={S.cameraIcon} onClick={handleAvatarClick}>
+          <button type="button" className={S["camera-icon"]} onClick={handleAvatarClick}>
             <img src={cameraIcon} alt="프로필 수정하기 버튼" />
           </button>
           <input
@@ -326,7 +316,7 @@ function Settings({ user, profile }: SettingsProps) {
           )}
         </label>
 
-        <button type="submit" className={S.submitBtn} disabled={isSubmitting}>
+        <button type="submit" className={S["submit-btn"]} disabled={isSubmitting}>
           {isSubmitting ? "저장 중..." : "저장"}
         </button>
         {fieldErrors.submit && (

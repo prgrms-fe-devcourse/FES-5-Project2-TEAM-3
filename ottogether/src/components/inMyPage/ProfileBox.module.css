@@ -1,5 +1,5 @@
-.profileBox {
-  background: #2a2a2a;
+.profile-box {
+  border: 1px solid var(--color-white-40);
   border-radius: 1rem;
   padding: 1.5rem 1rem;
   color: #f0f0f0;
@@ -9,8 +9,8 @@
   position: relative;
 }
 
-.notificationButton,
-.settingButton {
+.notification-button,
+.setting-button {
   position: absolute;
   top: 1rem;
   background: transparent;
@@ -21,16 +21,16 @@
   padding: 0;
 }
 
-.notificationButton {
+.notification-button {
   right: 3rem;
 }
 
-.settingButton {
+.setting-button {
   right: 1rem;
 }
 
-.notificationButton img,
-.settingButton img {
+.notification-button img,
+.setting-button img {
   width: 80%;
   height: 80%;
   object-fit: contain;
@@ -38,12 +38,12 @@
   transition: transform 0.2s ease;
 }
 
-.notificationButton:hover img,
-.settingButton:hover img {
+.notification-button:hover img,
+.setting-button:hover img {
   transform: scale(1.1);
 }
 
-.profileImg {
+.profile-img {
   width: 100px;
   height: 100px;
   object-fit: cover;
@@ -51,11 +51,11 @@
   border: 2px solid #444;
 }
 
-.profileBox h3 {
+.profile-box h3 {
   font-size: 1.3rem;
 }
 
-.profileBox p {
+.profile-box p {
   font-size: 0.9rem;
   color: #c0c0c0;
 }
@@ -75,20 +75,20 @@
   margin: 1rem 0;
 }
 
-/* 통계 */
-.statsBox {
+
+.stats-box {
   display: flex;
   justify-content: space-around;
   text-align: center;
 }
 
-.statsBox div p {
+.stats-box div p {
   font-size: 2rem;
   font-weight: 600;
   margin: 0;
 }
 
-.statsBox div span {
+.stats-box div span {
   font-size: 0.9rem;
   color: #ccc;
 }
