@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import SearchMovie from './SearchMovie';
 import React from 'react';
 import SearchSeries from './SearchSeries';
+import SearchQuote from './SearchQuote';
 
 const TAB_TYPES = ['total', 'movie', 'series', 'quote', 'user'] as const;
 type TabType = typeof TAB_TYPES[number];
@@ -121,7 +122,7 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
           </div>
         </div>
         <div className={S["panel-item"]}>
-          <div className={S["movie-list"]}>
+          <div className={S["search-list"]}>
             <SearchMovie
               keyword={keyword}
               filters={filters}
@@ -129,7 +130,7 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
           </div>
         </div>
         <div className={S["panel-item"]}>
-          <div className={S["movie-list"]}>
+          <div className={S["search-list"]}>
             <SearchSeries
               keyword={keyword}
               filters={filters}
@@ -137,7 +138,11 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
           </div>
         </div>
         <div className={S["panel-item"]}>
-          <div className={S["quote-list"]}>Quotes</div>
+          <div className={S["search-list"]}>
+            <SearchQuote
+              keyword={keyword}
+            />
+          </div>
         </div>
         <div className={S["panel-item"]}>
           <div className={S["user-list"]}>Users</div>

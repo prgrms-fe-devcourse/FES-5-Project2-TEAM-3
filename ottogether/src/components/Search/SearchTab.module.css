@@ -64,12 +64,7 @@
 	.total-list {
 		background-color: var(--color-error-700);
 	}
-	.series-list {
-		background-color: var(--color-warning-500);
-	}
-	.quote-list {
-		background-color: var(--color-success-500);
-	}
+
 	.user-list {
 		background-color: var(--color-primary-300);
 	}
