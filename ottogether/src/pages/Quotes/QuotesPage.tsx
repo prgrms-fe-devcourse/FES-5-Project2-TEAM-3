@@ -29,11 +29,6 @@ const handleSortChange = async (option: { sortBy: "created_at" | "likes"; order:
   if (data) setQuotes(data);
 };
 
-
-
-
-  
-
   return (
     <div>
       <SortBtn onChange={handleSortChange} />
