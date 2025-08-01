@@ -176,6 +176,20 @@
 	}
 }
 
+.button-container-edit{
+	display: flex;
+	gap: 15px;
+	margin-left: auto;
+	
+	button{
+		width: 85px;
+		height: 40px;
+		border-radius: 12px;
+		color: white;
+		border-width: 0;
+	}
+}
+
 .cancel{
 	background-color: #CCC2DC;
 }
