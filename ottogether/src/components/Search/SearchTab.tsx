@@ -6,6 +6,7 @@ import SearchMovie from './SearchMovie';
 import React from 'react';
 import SearchSeries from './SearchSeries';
 import SearchQuote from './SearchQuote';
+import SearchUser from './SearchUser';
 
 const TAB_TYPES = ['total', 'movie', 'series', 'quote', 'user'] as const;
 type TabType = typeof TAB_TYPES[number];
@@ -38,10 +39,6 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const indicatorRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
-
-  // const { ottList, genreList, ratingRange, releaseRange } = filters;
-  // const [ ratingMin, ratingMax ] = ratingRange;
-  // const [ releaseFrom, releaseTo ] = releaseRange;
 
   /* URL 쿼리에서 초기 상태 설정 */
   useEffect(() => {
@@ -145,7 +142,11 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
           </div>
         </div>
         <div className={S["panel-item"]}>
-          <div className={S["user-list"]}>Users</div>
+          <div className={S["search-list"]}>
+            <SearchUser
+              keyword={keyword}
+            />
+          </div>
         </div>
       </>
   );
