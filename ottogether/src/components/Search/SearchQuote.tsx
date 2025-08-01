@@ -46,11 +46,9 @@ function SearchQuote( { keyword }:SearchQuoteProps ) {
     const suffix = trimEnd < content.length ? ' ...' : '';
 
     return (
-      <>
-        <span key="before">{prefix}{highlightBefore}</span>
-        <strong key="keyword">{highlight}</strong>
-        <span key="after">{highlightAfter}{suffix}</span>
-      </>
+        <span>{prefix}{highlightBefore}
+          <strong key="keyword">{highlight}</strong>
+        {highlightAfter}{suffix}</span>
     )
   }
   
@@ -89,7 +87,7 @@ function SearchQuote( { keyword }:SearchQuoteProps ) {
                 quote={quote}
                 onRemove={handleRemove}
                 isSearch={true}
-                highlight={highlightKeyword(quote.content, keyword)}
+                highlight={highlightKeyword(quote.content, keyword, 12)}
                />
             ))
           }
