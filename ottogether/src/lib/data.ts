@@ -9,7 +9,7 @@ export const ottListTotal:ottList = [
   'Watcha',
   'CoupangPlay', 
   'AppleTV', 
-  'AmazonPrimeVideo'
+  'PrimeVideo'
 ] as const;
 
 export const genreListTotal:genreList = [

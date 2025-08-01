@@ -10,5 +10,5 @@ export const ottNameMap: Record<OttName, string> = {
   "Watcha": "Watcha",
   "CoupangPlay": "쿠팡플레이",
   "AppleTV": "Apple TV+",
-  "AmazonPrimeVideo": "Amazon Prime Video",
+  "PrimeVideo": "Amazon Prime Video",
 };
