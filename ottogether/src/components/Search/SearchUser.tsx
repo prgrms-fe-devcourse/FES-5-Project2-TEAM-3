@@ -47,7 +47,8 @@ function SearchUser( { keyword, previewCount, onResult }:SearchUserProps ) {
     }
 
     fetchData();
-  }, [keyword]);
+  }, [keyword, previewCount]);
+
   return (
     <section className={S["user-result-container"]}>
       { isLoading &&

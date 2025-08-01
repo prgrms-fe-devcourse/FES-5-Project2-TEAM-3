@@ -97,7 +97,7 @@ function SearchSeries({ keyword, filters, previewCount, onResult }:SearchProps) 
     }
 
     fetchSeries();
-  }, [keyword, filters]);
+  }, [keyword, filters, previewCount]);
 
   return (
     <section className={S["movie-result-container"]}>

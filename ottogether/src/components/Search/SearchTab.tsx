@@ -102,8 +102,29 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
   }, [activeTab]);
 
   /* 탭별로 표시될 화면 */
-  const moviePreviewCount = ( window.innerWidth >= 1320 ) ? 4 : ( window.innerWidth >= 980 ) ? 3 : 2;
-  const cardPreviewCount = ( window.innerWidth >= 1320 ) ? 3 : 2;
+  const getPreviewCount = (width: number, type:'movie'|'card'):number => {
+    if ( width >= 1320 ) {
+      return ( type === 'movie' ) ? 4 : 3;
+    } else if ( width >= 980 ) {
+      return ( type === 'movie' ) ? 3 : 2;
+    } else {
+      return ( type === 'movie' ) ? 2 : 1;
+    }
+  }
+  
+  const [ moviePreviewCount, setMoviePreviewCount ] = useState(() => getPreviewCount(window.innerWidth, 'movie'));
+  const [ cardPreviewCount, setCardPreviewCount ] = useState(() => getPreviewCount(window.innerWidth, 'card'));
+
+  useEffect(() => {
+    const handleResize = () => {
+      setMoviePreviewCount(getPreviewCount(window.innerWidth, 'movie'));
+      setCardPreviewCount(getPreviewCount(window.innerWidth, 'card'));
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const resultPanel = (
       <>

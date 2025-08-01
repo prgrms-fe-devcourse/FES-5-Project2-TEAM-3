@@ -76,7 +76,7 @@ function SearchQuote( { keyword, previewCount, onResult }:SearchQuoteProps ) {
     };
 
     fetchQuotes();
-  }, [keyword]);
+  }, [keyword, previewCount]);
 
   const handleRemove = (id: number) => {
     setQuotes((prevQuotes) => prevQuotes.filter((quote) => quote.id !== id));
