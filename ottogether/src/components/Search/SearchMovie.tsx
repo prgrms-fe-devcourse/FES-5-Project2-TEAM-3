@@ -14,6 +14,8 @@ interface SearchProps {
     ratingRange: [number, number];
     releaseRange: [string, string];
   }
+  previewCount?: number;
+  onResult?: (hasData:boolean) => void;
 }
 
 const TMDB_HEADER_INFO = {
@@ -21,7 +23,7 @@ const TMDB_HEADER_INFO = {
               accept: "application/json",
             }
 
-function SearchMovie({ keyword, filters }:SearchProps) {
+function SearchMovie({ keyword, filters, previewCount, onResult }:SearchProps) {
   const [ movieList, setMovieList ] = useState<MovieData[]>([]);
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
@@ -72,7 +74,16 @@ function SearchMovie({ keyword, filters }:SearchProps) {
             }
           })
         );
-        setMovieList(filteredWithProvider);
+
+        if (!previewCount) {
+          setMovieList(filteredWithProvider);
+        } else {
+          setMovieList(filteredWithProvider.slice(0,previewCount));
+        }
+
+        if (onResult) {
+          onResult(filteredWithProvider.length > 0);
+        }
       } catch (err) {
         console.error('영화 검색 결과 불러오기 실패:', err);
       } finally {
@@ -85,10 +96,10 @@ function SearchMovie({ keyword, filters }:SearchProps) {
 
   return (
     <section className={S["movie-result-container"]}>
-      { isLoading && 
+      { isLoading &&
         <SearchLoading />
       }
-      { !isLoading && movieList.length === 0 &&
+      { !isLoading && movieList.length === 0 && !previewCount &&
         <SearchNotFound keyword={keyword} tab='영화' />
       }
       {

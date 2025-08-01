@@ -35,6 +35,12 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
   const navigate = useNavigate();
 
   const [ activeTab, setActiveTab ] = useState<TabType>('total');
+  const [ hasResult, setHasResults ] = useState({
+    movie: true,
+    series: true,
+    quote: true,
+    user: true,
+  })
 
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const indicatorRef = useRef<HTMLDivElement | null>(null);
@@ -96,25 +102,74 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
   }, [activeTab]);
 
   /* 탭별로 표시될 화면 */
+  const moviePreviewCount = ( window.innerWidth >= 1320 ) ? 4 : ( window.innerWidth >= 980 ) ? 3 : 2;
+  const cardPreviewCount = ( window.innerWidth >= 1320 ) ? 3 : 2;
+
   const resultPanel = (
       <>
         <div className={S["panel-item"]}>
           <div className={S["total-list"]}>
-            <section>
-              <h3>Movies</h3>
-              {/* 영화 리스트 */}
+            <section className={ !hasResult.movie ? S.hidden : '' }>
+              <div className={S["section-title"]}>
+                <h3>Movies</h3>
+                <button
+                  type='button'
+                  aria-label='영화 탭으로 이동하여 전체 검색 결과 보기'
+                  onClick={() => handleTabClick('movie')}
+                >+ 더 보기</button>
+              </div>
+              <SearchMovie
+                keyword={keyword}
+                filters={filters}
+                previewCount={moviePreviewCount}
+                onResult={(hasData: boolean) => setHasResults(prev => ({...prev, movie: hasData}))}
+              />
             </section>
-            <section>
-              <h3>TV Shows</h3>
-              {/* 시리즈 리스트 */}
+            <section className={ !hasResult.series ? S.hidden : '' }>
+              <div className={S["section-title"]}>
+                <h3>TV Shows</h3>
+                <button
+                  type='button'
+                  aria-label='시리즈 탭으로 이동하여 전체 검색 결과 보기'
+                  onClick={() => handleTabClick('series')}
+                >+ 더 보기</button>
+              </div>
+              <SearchSeries
+                keyword={keyword}
+                filters={filters}
+                previewCount={moviePreviewCount}
+                onResult={(hasData: boolean) => setHasResults(prev => ({...prev, series: hasData}))}
+              />
             </section>
-            <section>
-              <h3>Quotes</h3>
-              {/* 명대사 리스트 */}
+            <section className={ !hasResult.quote ? S.hidden : '' }>
+              <div className={S["section-title"]}>
+                <h3>Quotes</h3>
+                <button
+                  type='button'
+                  aria-label='명대사 탭으로 이동하여 전체 검색 결과 보기'
+                  onClick={() => handleTabClick('quote')}
+                >+ 더 보기</button>
+              </div>
+              <SearchQuote
+                keyword={keyword}
+                previewCount={cardPreviewCount}
+                onResult={(hasData: boolean) => setHasResults(prev => ({...prev, quote: hasData}))}
+              />
             </section>
-            <section>
-              <h3>Users</h3>
-              {/* 유저 리스트 */}
+            <section className={ !hasResult.user ? S.hidden : '' }>
+              <div className={S["section-title"]}>
+                <h3>Users</h3>
+                <button
+                  type='button'
+                  aria-label='회원 탭으로 이동하여 전체 검색 결과 보기'
+                  onClick={() => handleTabClick('user')}
+                >+ 더 보기</button>
+              </div>
+              <SearchUser
+                keyword={keyword}
+                previewCount={cardPreviewCount}
+                onResult={(hasData: boolean) => setHasResults(prev => ({...prev, user: hasData}))}
+              />
             </section>
           </div>
         </div>

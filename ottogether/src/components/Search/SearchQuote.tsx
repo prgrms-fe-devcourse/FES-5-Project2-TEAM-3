@@ -9,11 +9,13 @@ import SearchLoading from './SearchLoading';
 
 interface SearchQuoteProps {
   keyword: string
+  previewCount?: number;
+  onResult?: (hasData:boolean) => void;
 }
 
 type Quote = Database['public']['Tables']['quotes']['Row'];
 
-function SearchQuote( { keyword }:SearchQuoteProps ) {
+function SearchQuote( { keyword, previewCount, onResult }:SearchQuoteProps ) {
 
   const [ quotes, setQuotes ] = useState<Quote[]>([]);
   const [ isLoading, setIsLoading ] = useState(false);
@@ -59,7 +61,17 @@ function SearchQuote( { keyword }:SearchQuoteProps ) {
     const fetchQuotes = async () => {
       setIsLoading(true);
       const data = await searchQuotes(keyword);
-      setQuotes(data);
+
+      if (!previewCount) {
+        setQuotes(data);
+      } else {
+        setQuotes(data.slice(0, previewCount));
+      }
+
+      if (onResult) {
+        onResult(data.length > 0);
+      }
+
       setIsLoading(false);
     };
 
@@ -72,10 +84,10 @@ function SearchQuote( { keyword }:SearchQuoteProps ) {
 
   return (
     <section className={S["quote-result-container"]}>
-      { isLoading && 
+      { isLoading &&
         <SearchLoading />
       }
-      { !isLoading && quotes.length === 0 &&
+      { !isLoading && quotes.length === 0 && !previewCount &&
         <SearchNotFound keyword={keyword} tab='명대사' />
       }
       {

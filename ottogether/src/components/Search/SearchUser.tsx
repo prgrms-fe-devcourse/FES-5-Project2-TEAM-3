@@ -8,14 +8,16 @@ import MemberCard from '../member/MemberCard';
 
 
 interface SearchUserProps {
-  keyword: string
+  keyword: string;
+  previewCount?: number;
+  onResult?: (hasData:boolean) => void;
 }
 
 type Profile = Database['public']['Tables']['profile']['Row'];
 type ReviewLike = Database['public']['Tables']['review_like']['Row'];
 type QuotesLike = Database['public']['Tables']['quotes_like']['Row'];
 
-function SearchUser( {keyword}:SearchUserProps ) {
+function SearchUser( { keyword, previewCount, onResult }:SearchUserProps ) {
 
   const [ profileList, setProfileList ] = useState<Profile[]>([]);
   const [ reviewList, setReviewList ] = useState<ReviewLike[]>([]);
@@ -28,9 +30,19 @@ function SearchUser( {keyword}:SearchUserProps ) {
     const fetchData = async () => {
       setIsLoading(true);
       const { profiles, reviewLikes, quotesLikes } = await searchUserProfile(keyword);
-      setProfileList(profiles);
-      setReviewList(reviewLikes);
+
+      if (!previewCount) {
+        setProfileList(profiles);
+      } else {
+        setProfileList(profiles.slice(0, previewCount));  
+      }
       setQuotesList(quotesLikes);
+      setReviewList(reviewLikes);
+
+      if (onResult) {
+        onResult(profiles.length > 0);
+      }
+
       setIsLoading(false);
     }
 
@@ -38,14 +50,14 @@ function SearchUser( {keyword}:SearchUserProps ) {
   }, [keyword]);
   return (
     <section className={S["user-result-container"]}>
-      { isLoading && 
+      { isLoading &&
         <SearchLoading />
       }
-      { !isLoading && profileList.length === 0 &&
+      { !isLoading && profileList.length === 0 && !previewCount &&
         <SearchNotFound keyword={keyword} tab='회원' />
       }
       {
-        !isLoading &&
+        !isLoading && profileList.length > 0 && 
         <div className={S["user-list"]}>
           {
             <MemberCard
