@@ -42,7 +42,7 @@ function SearchUser( {keyword}:SearchUserProps ) {
         <SearchLoading />
       }
       { !isLoading && profileList.length === 0 &&
-        <SearchNotFound />
+        <SearchNotFound keyword={keyword} tab='회원' />
       }
       {
         !isLoading &&

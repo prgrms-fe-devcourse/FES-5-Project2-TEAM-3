@@ -45,18 +45,22 @@
 	background-color: var(--background);
 }
 
+.search-container {
+	flex-direction: row;
+	align-items: flex-start;
+	padding-top: 0;
+	gap: 1rem;
+	width: 100%;
+	flex-wrap: wrap;
+}
+
 .search-user {
-	width: 20rem;
+	width: 23rem;
 	height: 11rem;
 	border: 1px solid var(--foreground);
 	border-radius: 0.8rem;
 	padding: 1rem;
-
-	.cell {
-		width: 100%;
-		height: 100%;
-		gap: 1rem;
-	}
+	gap: 1.2rem;
 
 	.profile-image {
 		width: 8rem;
@@ -67,6 +71,8 @@
 	h2 {
 		width: 100%;
 		font-size: 1.5rem;
+		line-height: 1.5;
+		height: 1.7rem;
 		color: var(--color-primary-300);
 		overflow: hidden;
 		text-overflow: ellipsis;

@@ -76,10 +76,10 @@ function SearchQuote( { keyword }:SearchQuoteProps ) {
         <SearchLoading />
       }
       { !isLoading && quotes.length === 0 &&
-        <SearchNotFound />
+        <SearchNotFound keyword={keyword} tab='명대사' />
       }
       {
-        !isLoading &&
+        !isLoading && quotes.length > 0 &&
         <div className={S["quotes-list"]}>
           {
             quotes.map((quote) => (

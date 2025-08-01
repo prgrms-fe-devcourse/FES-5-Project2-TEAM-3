@@ -93,10 +93,10 @@ function SearchSeries({ keyword, filters }:SearchProps) {
         <SearchLoading />
       }
       { !isLoading && seriesList.length === 0 &&
-        <SearchNotFound />
+        <SearchNotFound keyword={keyword} tab='시리즈' />
       }
       {
-        !isLoading &&
+        !isLoading && seriesList.length > 0 &&
         <div className={S["movie-list"]}>
           {
             seriesList.map((series) => (

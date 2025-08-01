@@ -41,10 +41,10 @@ function MemberCard({profileData, reviewData, quotesData, isSearch = false} : Pr
 	}
 
 	return (
-		<div className={`${S.container} ${isSearch ? S["search-user"] : ''}`} >
+		<div className={`${S.container} ${S.cell} ${isSearch ? S["search-container"] : ''}`}>
 		{ 
 		profileData && profileData.map(data => (
-			<div key={data.user_id} className={S.cell} onClick={() => onClickCell(data)}>
+			<div key={data.user_id} className={`${S.cell} ${isSearch ? S["search-user"] : ''}`} onClick={() => onClickCell(data)}>
 				<img className={S['profile-image']} src={data.avatar_url as string ?? "./beomTeacher.svg"} alt="profileImage" />
 				<div>
 					<h2>{data.nickname ?? 'Nickname'}</h2>

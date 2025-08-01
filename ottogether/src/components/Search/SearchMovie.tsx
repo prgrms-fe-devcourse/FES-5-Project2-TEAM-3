@@ -89,10 +89,10 @@ function SearchMovie({ keyword, filters }:SearchProps) {
         <SearchLoading />
       }
       { !isLoading && movieList.length === 0 &&
-        <SearchNotFound />
+        <SearchNotFound keyword={keyword} tab='영화' />
       }
       {
-        !isLoading &&
+        !isLoading && movieList.length > 0 &&
         <div className={S["movie-list"]}>
           {
             movieList.map((movie) => (
