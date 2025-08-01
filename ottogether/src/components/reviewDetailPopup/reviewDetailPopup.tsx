@@ -44,6 +44,11 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 	const handleEditComment = async (commentId : number) => {
 		if (!user)
 			return ;
+		if (!commentTextContent.trim())
+		{
+			alert('내용을 입력해주세요!')
+			return ;
+		}
 		const {error} = await supabase.from('comment').update({text_content : commentTextContent}).eq('id', commentId);
 		if (error){
 			console.error('Error :', error.message);
@@ -54,10 +59,14 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		}
 	}
 
-	const handleEditReview = async (reviewId : number, prevText : string) => {
+	const handleEditReview = async (reviewId : number) => {
 		if (!user)
 			return ;
-		setReviewTextContent(prevText);
+		if (!reviewTextContent.trim())
+		{
+			alert('내용을 입력해주세요!')
+			return ;
+		}
 		const {error} = await supabase.from('review').update({text_content : reviewTextContent, rating}).eq('id', reviewId);
 		if (error){
 			console.error('Error :', error.message);
@@ -179,6 +188,11 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		setCommentTextContent(prev_text);
 	}
 
+	const openEditReview = (prevText : string) => {
+		setReviewEditOpen(true)
+		setReviewTextContent(prevText);
+	}
+
 	const handleRating = (score : number) => {
 		setRating(score);
 	}
@@ -217,7 +231,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 							{!reviewEditOpen &&
 							<>
 								<div className={S["handler-btn-container"]}>
-								<img src="./edit.svg" alt="editReviewButton" onClick={() => setReviewEditOpen(true)}/>
+								<img src="./edit.svg" alt="editReviewButton" onClick={() => openEditReview(reviewSingleData.text_content!)}/>
 								<img src="./trashcan.svg" alt="deleteReviewButton" onClick={() => handleDeleteReview(reviewSingleData.id)}/>
 							</div>
 							<div className={S['star-container']}>{StarRating(reviewSingleData.rating)}</div>
@@ -236,9 +250,9 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 					className={S['review-input']}
 					onChange={(e) => setReviewTextContent(e.target.value)}
 					rows={4}
-					>{reviewSingleData.text_content}</textarea>
+					>{reviewTextContent}</textarea>
 					<div className={S["button-container-edit-review"]}>
-						<button className={S.add} onClick={() => handleEditReview(reviewSingleData.id, reviewSingleData.text_content!)}>Edit</button>
+						<button className={S.add} onClick={() => handleEditReview(reviewSingleData.id)}>Edit</button>
 						<button onClick={handleCancel} className={S.cancel}>Cancel</button>
 					</div>
 				</div>
