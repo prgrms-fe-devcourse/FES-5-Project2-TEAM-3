@@ -10,6 +10,7 @@
   flex-direction: column;
   gap: 8px;
 }
+
 .collapsed {
   width: 987px;
   margin: 20px auto;
@@ -33,6 +34,10 @@
   height: 25px;
 }
 
+.contentArea {
+  position: relative;
+}
+
 
 .contentArea textarea {
   width: 100%;
@@ -48,13 +53,32 @@
   outline: none;
 }
 
+.charCount {
+  position: absolute;
+  bottom: 10px;
+  right: 16px;
+  font-size: 10px;
+  color: #fff;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+
+
 .bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+.bottomLeft {
+  position: relative; 
+  width: 700px;
+}
+
+
 .bottomLeft input {
+  box-sizing: border-box;
   background-color: var(--color-grey-800);
   border: none;
   border-radius: 10px;
@@ -63,6 +87,17 @@
   color: #fff;
   width: 700px;
   outline: none;
+  
+}
+
+.charCountPerson {
+  position: absolute;
+  bottom: 8px;
+  right: 13px;
+  font-size: 10px;
+  color: white;
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 .bottomRight {

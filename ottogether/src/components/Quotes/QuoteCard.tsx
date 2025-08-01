@@ -30,6 +30,7 @@ export default function QuoteCard({
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
   const [editPerson, setEditPerson] = useState(person ?? '');
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   // const user = supabase.auth.getUser;
 
@@ -51,8 +52,20 @@ export default function QuoteCard({
       }
     };
 
+  
     checkLike();
   }, [id]);
+
+  useEffect(() => {
+  const fetchUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) setCurrentUserId(user.id);
+  };
+
+  fetchUser();
+}, []);  
+    
+
 
   const handleLike = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -147,21 +160,24 @@ export default function QuoteCard({
           ) : (
             <span className={S.person}> - {editPerson}</span>
           )}
-          <div className={S.right}>
-            {isEditing ? (
-              <>
+          {quote.user_id === currentUserId && (
+            <div className={S.right}>
+              {isEditing ? (
+                <>
                 <button className={S.editBtn} onClick={handleUpdate}>Save</button>
                 <div>/</div>
                 <button className={S.removeBtn} onClick={handleCancelEdit}>Cancel</button>
-              </>
-            ) : (
-              <>
+                </>
+                ) : (
+                <>
                 <button className={S.editBtn} onClick={handleEdit}>Edit</button>
                 <div>/</div>
                 <button className={S.removeBtn} onClick={handleRemove}>Remove</button>
-              </>
-            )}
-          </div>
+      </>
+    )}
+      
+  </div>
+)}
         </div>
       </div>
     </div>
