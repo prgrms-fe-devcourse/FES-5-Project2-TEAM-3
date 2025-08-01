@@ -26,83 +26,19 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 0 0 0;
 }
 
 .sidebar {
-  flex: 0 0 220px;
+  flex: 0 1 300px;
+  max-width: 300px;
+  min-width: 220px;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.profileBox {
-  background: #2a2a2a;
-  border-radius: 1rem;
-  padding: 1.5rem 1rem;
-  color: #f0f0f0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  position: relative;
-}
-
-.notificationButton,
-.settingButton {
-  position: absolute;
-  top: 1rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-}
-
-.notificationButton {
-  right: 3rem;
-}
-
-.settingButton {
-  right: 1rem;
-}
-
-.notificationButton img,
-.settingButton img {
-  width: 80%;
-  height: 80%;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
-  transition: transform 0.2s ease;
-}
-
-.notificationButton:hover img,
-.settingButton:hover img {
-  transform: scale(1.1);
-}
-
-.profileImg {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid #444;
-}
-
-.profileBox h3 {
-  font-size: 1.3rem;
-}
-
-.profileBox p {
-  font-size: 0.9rem;
-  color: #c0c0c0;
-}
-
-.url {
-  font-size: 0.8rem;
-  color: #aaa;
-}
-
+/* ===== 네비게이션 메뉴 ===== */
 .navMenu {
   background: #2a2a2a;
   border-radius: 1rem;
@@ -111,7 +47,6 @@
   display: flex;
   flex-direction: column;
 }
-
 
 .navMenu h4 {
   font-size: 1rem;
@@ -132,7 +67,6 @@
   color: #fff;
   font-weight: 600;
 }
-
 
 .navMenu ul {
   list-style: none;
@@ -177,5 +111,15 @@
   .sidebar {
     flex: none;
     width: 100%;
+  }
+}
+
+
+@media (max-width: 900px) {
+  .sidebar {
+    flex: none;        /* flex-basis 영향 제거 */
+    width: 100%;       /* 부모 기준 꽉 차게 */
+    max-width: none;   /* max-width 제한 해제 */
+    min-width: 0;      /* 최소폭도 해제해서 자연스럽게 */
   }
 }
