@@ -52,6 +52,7 @@ function SearchQuote( { keyword }:SearchQuoteProps ) {
     )
   }
   
+  /* quotes fetch */
   useEffect(() => {
     if(!keyword.trim()) return;
 
