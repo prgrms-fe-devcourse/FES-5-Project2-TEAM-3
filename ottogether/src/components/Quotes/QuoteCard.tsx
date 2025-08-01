@@ -12,17 +12,19 @@ type Quote = Database['public']['Tables']['quotes']['Row'];
 type QuoteCardProps = {
   quote: Quote;
   onRemove: (id: number) => void;
-  className?: string;
+  isSearch?: boolean;
+  highlight?: React.ReactNode;
 };
 
 export default function QuoteCard({
   quote,
   onRemove,
-  className = ''
+  isSearch = false,
+  highlight
 }: QuoteCardProps) {
   
   if (!quote) return null;
-  
+
   const { id, content, person, likes } = quote;
 
   const [likeCount, setLikeCount] = useState(likes);
@@ -129,7 +131,7 @@ export default function QuoteCard({
 };
 
   return (
-    <div className={`${S.card} ${isEditing ? S.editing : ''} ${className ? className : ''}`.trim()}>
+    <div className={`${S.card} ${isEditing ? S.editing : ''} ${isSearch ? S["search-quotes"] : ''}`.trim()}>
       <div className={S.body}>
         <div className={S.top}>
           <img src={quoteLeft} alt="left quote" className={S.quoteIconLeft} />
@@ -140,7 +142,7 @@ export default function QuoteCard({
               placeholder="명대사를 입력하세요"
             />
           ) : (
-            <p className={S.content}>{editContent}</p>
+            <p className={S.content}>{highlight ?? editContent}</p>
           )}
           <img src={quoteRight} alt="right quote" className={S.quoteIconRight} />
         </div>

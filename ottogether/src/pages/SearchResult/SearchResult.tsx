@@ -69,16 +69,6 @@ function SearchResult() {
     setSelectedGenres(genreList);
   }
 
-  /* apply filter */
-  const applyFilter = () => {
-    console.log({
-      ott: selectedOtt,
-      genres: selectedGenres,
-      rating: ratingRange,
-      release: releaseRange,
-    });
-  }
-
   /* filters memoization */
   const filters = useMemo(() => ({
     ottList: selectedOtt,
@@ -110,7 +100,6 @@ function SearchResult() {
         releaseFrom={releaseRange[0]}
         releaseTo={releaseRange[1]}
         onReleaseChange={(from, to) => setReleaseRange([from, to])}
-        onApply={applyFilter}
       />
       <SearchTab
         keyword={searchKeyword}
