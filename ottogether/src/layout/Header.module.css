@@ -1,10 +1,10 @@
 .header {
-	width: 90vw;
+	width: 95vw;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 
-	padding: 1rem 2rem;
+	padding: 1rem 5rem;
 	border-bottom: 1px solid var(--color-grey-300);
 	position: relative;
 
