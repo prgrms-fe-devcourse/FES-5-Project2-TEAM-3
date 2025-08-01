@@ -5,32 +5,75 @@
 	color: #f0f0f0;
 	margin: 0 auto;
 	position: relative;
+  
+  > h1 {
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
 }
 
 .banner {
-	height: 200px;
-	border-radius: 1rem;
+  position: relative; /* 카메라 아이콘 위치 기준 */
+  height: 200px;
+  border-radius: 1rem;
+  overflow: hidden; /* 자식이 튀어나가지 않도록 */
+}
+
+.banner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* 어둡게 오버레이 */
+  border-radius: 1rem;
+  z-index: 2;
 }
 
 .bannerImg {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	overflow: hidden;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1rem;
+  display: block;
+}
+
+.banner .cameraIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0);
+  border-radius: 50%;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.banner .cameraIcon img {
+  width: 36px;
+  height: 36px;
+  display: block;
 }
 
 .avatarWrapper {
-	position: absolute;
-	bottom: 350px;
-	left: 2rem;
-	z-index: 5;
+  position: relative;
+  top: -40px;
+  left: 10px;
+  width: 100px;
+  height: 100px;
+  z-index: 5;
 }
 
 .avatarWrapper::after {
 	content: "";
 	position: absolute;
 	top: 0;
-	left: 0;
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.4);
@@ -39,43 +82,40 @@
 }
 
 .avatarImg {
-	width: 100px;
-	height: 100px;
-	border-radius: 50%;
-	object-fit: cover;
-	background-color: #444;
-	display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #444;
+  display: block;
 }
 
-.avatarUploadBtn {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background: transparent;
-	border: none;
-	padding: 0;
-	width: auto;
-	height: auto;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 10;
+.avatarWrapper .cameraIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0);
+  border-radius: 50%;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
 }
 
-/* 아이콘만 보이게 */
-.avatarUploadBtn img {
-	width: 24px;
-	height: 24px;
-	display: block;
+.avatarWrapper .cameraIcon img {
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
 .form {
 	display: flex;
 	flex-direction: column;
 	gap: 1.5rem;
-	margin-top: 3rem;
 
 	label {
 		display: flex;
@@ -90,6 +130,7 @@
 		border: none;
 		background: #444;
 		color: #fff;
+    
 	}
 }
 
@@ -125,9 +166,9 @@
 }
 
 .submitBtn {
-	background: #3a86ff;
+	background: var(--color-primary-500);
 	border: none;
-	padding: 1rem;
+	padding: 0.8rem;
 	border-radius: 0.5rem;
 	color: #fff;
 	font-size: 1rem;
@@ -136,5 +177,5 @@
 }
 
 .submitBtn:hover {
-	background: #2563eb;
+	background: var(--color-primary-600);
 }
