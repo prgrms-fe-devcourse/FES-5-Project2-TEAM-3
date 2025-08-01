@@ -1,5 +1,8 @@
-
-import S from "./SystemSettings.module.css"
+import DeleteAccountSection from "./DeleteAccountSection";
+import NotificationSection from "./NotificationSection";
+import PasswordSection from "./PasswordSection";
+import S from "./SystemSettings.module.css";
+import VisibilitySection from "./VisibilitySection";
 
 interface UserType {
   id: string;
@@ -19,10 +22,16 @@ interface Props {
   profile: ProfileType | null;
 }
 
-
 function SystemSettings({ user, profile }: Props) {
   return (
-    <div>SystemSettings 준비중..</div>
-  )
+    <div className={S["settings-container"]}>
+      
+      <VisibilitySection user={user} profile={profile} />
+      <NotificationSection user={user} profile={profile} />
+      <PasswordSection user={user} profile={profile} onOpenModal={() => console.log("비밀번호 변경 모달 열기")} />
+      <DeleteAccountSection user={user} profile={profile} onOpenModal={() => console.log("탈퇴 모달 열기")} />
+    </div>
+  );
 }
-export default SystemSettings
+
+export default SystemSettings;

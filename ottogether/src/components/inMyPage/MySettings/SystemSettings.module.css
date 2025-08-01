@@ -1,0 +1,75 @@
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+  color: var(--color-grey-100);
+}
+
+.settings-section {
+  padding: 1rem 0;
+  border-radius: 0.8rem;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.switch {
+  width: 50px;
+  height: 28px;
+  border-radius: 14px;
+  border: none;
+  background: var(--color-grey-600);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.switch-on {
+  background: var(--color-primary-500);
+}
+
+.knob {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  transition: left 0.3s;
+}
+
+.switch-on .knob {
+  left: 24px;
+}
+
+.action-button {
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--color-primary-500);
+  color: white;
+  transition: background 0.3s;
+}
+
+.action-button:hover {
+  background: var(--color-primary-600);
+}
+
+.danger {
+  background: var(--color-error-500);
+}
+
+.danger:hover {
+  background: var(--color-error-600);
+}
