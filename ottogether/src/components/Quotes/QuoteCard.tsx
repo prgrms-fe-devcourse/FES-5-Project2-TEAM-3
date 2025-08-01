@@ -20,7 +20,9 @@ export default function QuoteCard({
   onRemove,
   className = ''
 }: QuoteCardProps) {
- 
+  
+  if (!quote) return null;
+  
   const { id, content, person, likes } = quote;
 
   const [likeCount, setLikeCount] = useState(likes);
