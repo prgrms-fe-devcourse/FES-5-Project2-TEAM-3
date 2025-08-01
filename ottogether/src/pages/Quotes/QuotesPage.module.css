@@ -1,0 +1,27 @@
+.headerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.header {
+  width: 1100px; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  margin-bottom: 15px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.divider {
+  width: 1000px;
+  height: 1px;
+  background-color: white;
+}
