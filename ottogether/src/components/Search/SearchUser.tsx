@@ -11,13 +11,14 @@ interface SearchUserProps {
   keyword: string;
   previewCount?: number;
   onResult?: (hasData:boolean) => void;
+  shouldFetch: boolean;
 }
 
 type Profile = Database['public']['Tables']['profile']['Row'];
 type ReviewLike = Database['public']['Tables']['review_like']['Row'];
 type QuotesLike = Database['public']['Tables']['quotes_like']['Row'];
 
-function SearchUser( { keyword, previewCount, onResult }:SearchUserProps ) {
+function SearchUser( { keyword, previewCount, onResult, shouldFetch }:SearchUserProps ) {
 
   const [ profileList, setProfileList ] = useState<Profile[]>([]);
   const [ reviewList, setReviewList ] = useState<ReviewLike[]>([]);
@@ -26,6 +27,7 @@ function SearchUser( { keyword, previewCount, onResult }:SearchUserProps ) {
 
   useEffect(() => {
     if (!keyword.trim()) return;
+    if (!shouldFetch) return;
 
     const fetchData = async () => {
       setIsLoading(true);

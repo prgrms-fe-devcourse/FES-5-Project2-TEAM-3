@@ -17,6 +17,7 @@ interface SearchProps {
   }
   previewCount?: number;
   onResult?: (hasData:boolean) => void;
+  shouldFetch: boolean;
 }
 
 const TMDB_HEADER_INFO = {
@@ -24,13 +25,14 @@ const TMDB_HEADER_INFO = {
               accept: "application/json",
             }
 
-function SearchSeries({ keyword, filters, previewCount, onResult }:SearchProps) {
+function SearchSeries({ keyword, filters, previewCount, onResult, shouldFetch }:SearchProps) {
   const [ seriesList, setSeriesList ] = useState<MovieData[]>([]);
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchSeries = async () => {
       if (!keyword.trim()) return;
+      if (!shouldFetch) return;
 
       try {
         setIsLoading(true);

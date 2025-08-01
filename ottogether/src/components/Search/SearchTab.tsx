@@ -1,12 +1,13 @@
-import gsap from 'gsap';
 import S from './SearchTab.module.css';
+import gsap from 'gsap';
+import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SearchMovie from './SearchMovie';
-import React from 'react';
 import SearchSeries from './SearchSeries';
 import SearchQuote from './SearchQuote';
 import SearchUser from './SearchUser';
+import warningIcon from '../../assets/icons/warning.svg';
 
 const TAB_TYPES = ['total', 'movie', 'series', 'quote', 'user'] as const;
 type TabType = typeof TAB_TYPES[number];
@@ -41,7 +42,14 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
     quote: true,
     user: true,
   })
+  
+  // 검색 fetch 요청 제한 관련 변수
+  const SEARCH_COOLDOWN_MS = 1000; // 1초간 동일 키워드 검색 제한
+  const searchHistory = useRef<Map<string, number>>(new Map());
+  const lastSearchTime = useRef<number>(0);
+  const [ shouldFetch, setShouldFetch ] = useState<boolean>(true);
 
+  // JSX references
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const indicatorRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -57,6 +65,39 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
       setActiveTab('total');
     }
   }, [location.search]);
+
+  /* 중복 fetch 요청 방지 */
+  useEffect(() => {
+    const normalizedKeyword = keyword.trim().toLowerCase();
+    const now = Date.now();
+    const lastSearchedAt = searchHistory.current.get(normalizedKeyword);
+
+    // 전체 요청 속도 제한
+    if (now - lastSearchTime.current < SEARCH_COOLDOWN_MS) {
+      console.error('검색 제한: 요청 속도 너무 빠름');
+      setShouldFetch(false);
+      return;
+    }
+
+    // 만약 동일 단어를 검색한 적이 있고, 그 시간이 쿨다운 시간보다 짧은 시간 전이면 제한
+    if (lastSearchedAt && now - lastSearchedAt < SEARCH_COOLDOWN_MS) {
+      console.error(`검색 제한: (${keyword}) - ${now - lastSearchedAt}ms`);
+      setShouldFetch(false);
+      return;
+    }
+
+    // 통과
+    lastSearchTime.current = now;
+    searchHistory.current.set(normalizedKeyword, now);
+    setShouldFetch(true);
+  }, [keyword]);
+
+  useEffect(() => {
+    if (!shouldFetch) {
+      const t = setTimeout(() => setShouldFetch(true), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [shouldFetch]);
 
   /* 탭 클릭 시 URL 쿼리 변경 */
   const handleTabClick = (tab: TabType) => {
@@ -139,12 +180,15 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
                   onClick={() => handleTabClick('movie')}
                 >+ 더 보기</button>
               </div>
+              { shouldFetch && 
               <SearchMovie
                 keyword={keyword}
                 filters={filters}
                 previewCount={moviePreviewCount}
                 onResult={(hasData: boolean) => setHasResults(prev => ({...prev, movie: hasData}))}
+                shouldFetch={shouldFetch}
               />
+              }
             </section>
             <section className={ !hasResult.series ? S.hidden : '' }>
               <div className={S["section-title"]}>
@@ -155,12 +199,15 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
                   onClick={() => handleTabClick('series')}
                 >+ 더 보기</button>
               </div>
+              { shouldFetch && 
               <SearchSeries
                 keyword={keyword}
                 filters={filters}
                 previewCount={moviePreviewCount}
                 onResult={(hasData: boolean) => setHasResults(prev => ({...prev, series: hasData}))}
+                shouldFetch={shouldFetch}
               />
+              }
             </section>
             <section className={ !hasResult.quote ? S.hidden : '' }>
               <div className={S["section-title"]}>
@@ -171,11 +218,14 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
                   onClick={() => handleTabClick('quote')}
                 >+ 더 보기</button>
               </div>
+              { shouldFetch && 
               <SearchQuote
                 keyword={keyword}
                 previewCount={cardPreviewCount}
                 onResult={(hasData: boolean) => setHasResults(prev => ({...prev, quote: hasData}))}
+                shouldFetch={shouldFetch}
               />
+              }
             </section>
             <section className={ !hasResult.user ? S.hidden : '' }>
               <div className={S["section-title"]}>
@@ -186,42 +236,57 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
                   onClick={() => handleTabClick('user')}
                 >+ 더 보기</button>
               </div>
+              { shouldFetch && 
               <SearchUser
                 keyword={keyword}
                 previewCount={cardPreviewCount}
                 onResult={(hasData: boolean) => setHasResults(prev => ({...prev, user: hasData}))}
+                shouldFetch={shouldFetch}
               />
+              }
             </section>
           </div>
         </div>
         <div className={S["panel-item"]}>
           <div className={S["search-list"]}>
+            { shouldFetch && 
             <SearchMovie
               keyword={keyword}
               filters={filters}
+              shouldFetch={shouldFetch}
             />
+            }
           </div>
         </div>
         <div className={S["panel-item"]}>
           <div className={S["search-list"]}>
+            { shouldFetch && 
             <SearchSeries
               keyword={keyword}
               filters={filters}
+              shouldFetch={shouldFetch}
             />
+            }
           </div>
         </div>
         <div className={S["panel-item"]}>
           <div className={S["search-list"]}>
+            { shouldFetch && 
             <SearchQuote
               keyword={keyword}
+              shouldFetch={shouldFetch}
             />
+            }
           </div>
         </div>
         <div className={S["panel-item"]}>
           <div className={S["search-list"]}>
+            { shouldFetch && 
             <SearchUser
               keyword={keyword}
+              shouldFetch={shouldFetch}
             />
+            }
           </div>
         </div>
       </>
@@ -244,9 +309,18 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
         ))}
         <div ref={indicatorRef} className={S.indicator}></div>
       </div>
-      <div className={S["search-tab-panel"]} role='tabpanel' ref={panelRef}>
-        { resultPanel }
-      </div>
+      { !shouldFetch &&
+        <div className={S.warning}>
+          <img src={warningIcon} alt="경고" />
+          <p>요청이 너무 빠르게 반복되고 있어요.</p> 
+          <p>잠시만 기다려주세요.</p>
+        </div>
+      }
+      { 
+        <div className={S["search-tab-panel"]} role='tabpanel' ref={panelRef}>
+          { resultPanel }
+        </div>
+      }
     </div>
   )
 });

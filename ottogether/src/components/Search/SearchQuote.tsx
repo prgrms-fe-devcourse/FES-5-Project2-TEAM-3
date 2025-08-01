@@ -11,11 +11,12 @@ interface SearchQuoteProps {
   keyword: string
   previewCount?: number;
   onResult?: (hasData:boolean) => void;
+  shouldFetch: boolean;
 }
 
 type Quote = Database['public']['Tables']['quotes']['Row'];
 
-function SearchQuote( { keyword, previewCount, onResult }:SearchQuoteProps ) {
+function SearchQuote( { keyword, previewCount, onResult, shouldFetch }:SearchQuoteProps ) {
 
   const [ quotes, setQuotes ] = useState<Quote[]>([]);
   const [ isLoading, setIsLoading ] = useState(false);
@@ -57,6 +58,7 @@ function SearchQuote( { keyword, previewCount, onResult }:SearchQuoteProps ) {
   /* quotes fetch */
   useEffect(() => {
     if(!keyword.trim()) return;
+    if(!shouldFetch) return;
 
     const fetchQuotes = async () => {
       setIsLoading(true);
