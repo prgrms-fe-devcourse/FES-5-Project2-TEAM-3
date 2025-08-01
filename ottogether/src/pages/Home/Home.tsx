@@ -26,12 +26,8 @@ function Home() {
   return () => observer.disconnect();
 }, []);
 
-  const handleToggleOtt = (ott:string) => {
-    setSelectedOtt(prev => 
-      prev.includes(ott)
-      ? prev.filter(o => o !== ott)
-      : [...prev, ott]
-    );
+  const handleToggleOtt = (ottList:string[]) => {
+    setSelectedOtt(ottList);
   };
 
   return (
