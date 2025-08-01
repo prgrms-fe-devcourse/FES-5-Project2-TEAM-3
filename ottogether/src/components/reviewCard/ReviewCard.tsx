@@ -32,7 +32,7 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 		{
 			reviewData && reviewData.map(element => (
 				<div key={element.id} className={S["card-container"]}>
-				<header>
+				<header className={S.header}>
 					<img className={S['user-avatar']} src={findUserById(element.user_id, profileData)?.avatar_url ?? "./beomTeacher.svg"} alt="profile_image" />
 					<p>{findUserById(element.user_id, profileData)?.nickname ?? 'User'} · {formatDateNoYear(element.updated_at!)}</p>
 					{((isAuth && user) && element.user_id == user.id) && <img src="/YouBadge.svg" alt="isItMeCheck"></img>} 
@@ -41,7 +41,7 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 				<main>
 					<p>{element.text_content}</p>
 				</main>
-				<footer>
+				<footer className={S.footer}>
 					<div className={S['reaction-item']}>
 						<img src="/thumbsUp.svg" alt="ThumbsUpIcon" />
 						<p>{element.like_count}</p>
