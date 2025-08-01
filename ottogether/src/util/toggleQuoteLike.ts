@@ -19,7 +19,6 @@ export async function toggleQuoteLike(
     return { liked: false, error: selectError };
   }
 
-
   if (existingLike) {
     const { error: deleteError } = await supabase
       .from("quotes_like")
@@ -27,7 +26,6 @@ export async function toggleQuoteLike(
       .eq("quote_id", quoteId)
       .eq("user_id", userId);
       
-
   if (deleteError) {
       console.error("좋아요 취소 중 오류:", deleteError);
       return { liked: true, error: deleteError };
@@ -39,10 +37,8 @@ export async function toggleQuoteLike(
       column_name: 'likes',
     });
 
-
     return { liked: false, error: null };
   }
-
 
   const { error: insertError } = await supabase.from("quotes_like").insert({
     quote_id: quoteId,
@@ -53,7 +49,6 @@ export async function toggleQuoteLike(
     console.error("좋아요 추가 중 오류:", insertError);
     return { liked: false, error: insertError };
   }
-
 
     await supabase.rpc('increment', {
       table_name: 'quotes',
