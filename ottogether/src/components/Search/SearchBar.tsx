@@ -32,7 +32,7 @@ function SearchBar({
   };
   
   const filterIcon = isFiltered ? filterOnIcon : filterOffIcon;
-
+  
   return (
     <div className={`${ isPopup ? S["search-popup"] : S["search-bar"]}${className}`.trim()}>
       { !isPopup && (

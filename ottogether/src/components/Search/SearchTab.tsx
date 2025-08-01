@@ -2,6 +2,9 @@ import gsap from 'gsap';
 import S from './SearchTab.module.css';
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import SearchMovie from './SearchMovie';
+import React from 'react';
+import SearchSeries from './SearchSeries';
 
 const TAB_TYPES = ['total', 'movie', 'series', 'quote', 'user'] as const;
 type TabType = typeof TAB_TYPES[number];
@@ -14,14 +17,30 @@ const TAB_LABELS: Record<TabType, string> = {
   user: "Users"
 };
 
-function SearchTab() {
+interface SearchTabProbs {
+  keyword: string;
+  filters: {
+    ottList: string[];
+    genreList: string[];
+    ratingRange: [number, number];
+    releaseRange: [string, string];
+  }
+}
+
+const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabProbs) {
   
   const location = useLocation();
   const navigate = useNavigate();
+
   const [ activeTab, setActiveTab ] = useState<TabType>('total');
+
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const indicatorRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
+
+  // const { ottList, genreList, ratingRange, releaseRange } = filters;
+  // const [ ratingMin, ratingMax ] = ratingRange;
+  // const [ releaseFrom, releaseTo ] = releaseRange;
 
   /* URL 쿼리에서 초기 상태 설정 */
   useEffect(() => {
@@ -58,7 +77,6 @@ function SearchTab() {
       const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = currentTab;
       const tabListOffsetTop = (currentTab.offsetParent as HTMLDivElement | null)?.offsetTop ?? 0;
 
-      console.log(offsetTop, offsetHeight, tabListOffsetTop);
       gsap.to(indicator, {
         left: offsetLeft,
         width: offsetWidth,
@@ -103,10 +121,20 @@ function SearchTab() {
           </div>
         </div>
         <div className={S["panel-item"]}>
-          <div className={S["movie-list"]}>Movies</div>
+          <div className={S["movie-list"]}>
+            <SearchMovie
+              keyword={keyword}
+              filters={filters}
+            />
+          </div>
         </div>
         <div className={S["panel-item"]}>
-          <div className={S["series-list"]}>Series</div>
+          <div className={S["movie-list"]}>
+            <SearchSeries
+              keyword={keyword}
+              filters={filters}
+            />
+          </div>
         </div>
         <div className={S["panel-item"]}>
           <div className={S["quote-list"]}>Quotes</div>
@@ -139,12 +167,6 @@ function SearchTab() {
       </div>
     </div>
   )
-}
+});
+
 export default SearchTab
-
-
-
-// <div className={S["not-found-list"]}>
-//   <h3>해당하는 검색 결과를 찾을 수 없어요 🥺</h3>
-//   <span>적용된 필터를 제외하거나 검색어를 변경하여 다시 검색해보세요!</span>
-// </div>

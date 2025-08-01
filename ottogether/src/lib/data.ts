@@ -1,5 +1,5 @@
-type ottList = string[];
-type genreList = string[];
+export type ottList = string[];
+export type genreList = string[];
 
 export const ottListTotal:ottList = [
   'Netflix', 
@@ -10,7 +10,7 @@ export const ottListTotal:ottList = [
   'CoupangPlay', 
   'AppleTV', 
   'AmazonPrimeVideo'
-];
+] as const;
 
 export const genreListTotal:genreList = [
   '액션', 

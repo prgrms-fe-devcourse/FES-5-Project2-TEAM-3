@@ -10,14 +10,12 @@ type MovieCardProps = {
 
 function MovieCard({ movie }: MovieCardProps) {
 
-  
   const {
     id,
     title,
     poster_path,
     release_date,
     vote_average,
-    genre_names,
     provider_logo_path,
   } = movie;
 
@@ -61,6 +59,9 @@ function MovieCard({ movie }: MovieCardProps) {
       <img
         src={poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : "/default-poster.png"}
         alt={title}
+        onError={(e) => {
+          e.currentTarget.src = "/default-poster.png";
+        }}
       />
       </div>
       
@@ -71,9 +72,9 @@ function MovieCard({ movie }: MovieCardProps) {
           <span>⭐</span>
           <span>{vote_average} / 10</span>
         </div>
-        {genre_names && (
+        {/* {genre_names && (
           <p className={S["genre"]}>{genre_names.join(", ")}</p>
-        )}
+        )} */}
       </div>
       {provider_logo_path && (
         <div className={S["provider-logo"]}>

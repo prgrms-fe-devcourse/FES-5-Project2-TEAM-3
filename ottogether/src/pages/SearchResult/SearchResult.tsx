@@ -1,6 +1,6 @@
 import S from './SearchResult.module.css'
-import { useEffect, useState } from "react"
-import { useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom";
 import FilterPanel from "../../components/Search/FilterPanel"
 import SearchBar from '../../components/Search/SearchBar';
 import { genreListTotal, ottListTotal } from '../../lib/data';
@@ -8,6 +8,7 @@ import { isDefaultFilter } from '../../util/isDefaultFilter';
 import SearchTab from '../../components/Search/SearchTab';
 
 function SearchResult() {
+  const navigate = useNavigate();
 
   // 검색어 Params
   const [ searchParams ] = useSearchParams();
@@ -36,7 +37,15 @@ function SearchResult() {
   /* 검색창에서 엔터 키 입력 시 핸들링 */
   const handleSearchKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
     if ( e.key === 'Enter' ) {
+      if ( inputKeyword.trim() === '' ) {
+        alert('검색어를 입력해주세요.');
+        e.currentTarget.focus();
+        return;
+      }
       setSearchKeyword(inputKeyword);
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("query", inputKeyword);
+      navigate(`/search?${newParams.toString()}`)
       setInputKeyword('');
     }
   };
@@ -70,6 +79,14 @@ function SearchResult() {
     });
   }
 
+  /* filters memoization */
+  const filters = useMemo(() => ({
+    ottList: selectedOtt,
+    genreList: selectedGenres,
+    ratingRange,
+    releaseRange,
+  }), [selectedOtt, selectedGenres, ratingRange, releaseRange]);
+
   return (
     <div className={S.container}>
       <SearchBar
@@ -95,7 +112,10 @@ function SearchResult() {
         onReleaseChange={(from, to) => setReleaseRange([from, to])}
         onApply={applyFilter}
       />
-      <SearchTab />
+      <SearchTab
+        keyword={searchKeyword}
+        filters={filters}
+      />
     </div>
   )
 }
