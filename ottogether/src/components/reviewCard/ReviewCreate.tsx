@@ -58,6 +58,10 @@ function ReviewCreate({reviewAdded} : Props) {
 
 	}
 
+	const handleEdit = async () => {
+
+	}
+
 	const handleCancel = () => {
 		setInputClicked(false);
 		setContent('');
@@ -91,8 +95,8 @@ function ReviewCreate({reviewAdded} : Props) {
 					className={S['review-input']}
 					onChange={(e) => setContent(e.target.value)}
 					placeholder="Click to add text."
-					value={content} // content 상태 변수를 여기에 연결해야 합니다.
-					rows={4} // (선택 사항) 초기 보이는 줄 수 설정. 필요에 따라 조절하세요.
+					value={content}
+					rows={4}
 				></textarea>
 				<div className={S["button-container"]}>
 					<button className={S.add} onClick={handleSubmit}>Add</button>

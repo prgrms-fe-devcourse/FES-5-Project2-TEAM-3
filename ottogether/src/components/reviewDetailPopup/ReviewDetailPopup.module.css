@@ -19,6 +19,9 @@
   z-index: 999;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
 
 	&::-webkit-scrollbar {
     width: 0;  /* 세로 스크롤바 너비 */
@@ -49,6 +52,7 @@
 	margin-left: auto;
 }
 
+
 .text-content{
 	display: flex;
 	flex-direction: column;
@@ -56,10 +60,9 @@
 }
 
 .reaction-container{
-	padding-top: 16px;
-	margin-top: 16px;
 	display: flex;
-	margin-left: auto;
+	justify-content: flex-end;
+	/* margin-left: auto; */
 }
 
 .reaction-item{
@@ -72,13 +75,13 @@
 .divider {
 	padding-left: 16px;
 	padding-right: 16px;
-	padding-top: 18px;
   border-bottom: 3px solid white;
 	margin: 0 auto;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .comment-container{
-	padding-top: 18px;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -189,6 +192,19 @@
 		border-width: 0;
 	}
 }
+.button-container-edit-review{
+	display: flex;
+	gap: 15px;
+	margin-left: auto;
+	
+	button{
+		width: 85px;
+		height: 40px;
+		border-radius: 12px;
+		color: white;
+		border-width: 0;
+	}
+}
 
 .cancel{
 	background-color: #CCC2DC;
@@ -197,4 +213,25 @@
 .input-container{
 	display: flex;
 	gap: 15px;
+}
+
+.edit-container{
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.star-container-input{
+	display: flex;
+	gap: 4px;
+	margin: 0 auto;
+};
+
+.text-comment-text-content{
+	display: flex;
+	flex-direction: column;
+}
+
+.text-content-container{
+	margin-top: 5px;
 }

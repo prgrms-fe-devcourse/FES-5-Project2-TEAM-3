@@ -38,6 +38,8 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 	const [reviewTextContent, setReviewTextContent] = useState('');
 	const [commentCount, setCommentCount] = useState(0);
 	const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+	const [reviewEditOpen, setReviewEditOpen] = useState(false);
+	const [rating, setRating] = useState(5);
 
 	const handleEditComment = async (commentId : number) => {
 		if (!user)
@@ -52,8 +54,19 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		}
 	}
 
-	const handleEditReview = () => {
-		
+	const handleEditReview = async (reviewId : number, prevText : string) => {
+		if (!user)
+			return ;
+		setReviewTextContent(prevText);
+		const {error} = await supabase.from('review').update({text_content : reviewTextContent, rating}).eq('id', reviewId);
+		if (error){
+			console.error('Error :', error.message);
+		}
+		else{
+			handleCancel();
+			closePopup();
+			reviewUpdate();
+		}
 	}
 
 	const handleDeleteComment = async (reviewId : number, commentId : number) => {
@@ -145,7 +158,9 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		setCommentTextContent('');
 		setCommentInputOpen(false);
 		setEditingCommentId(null);
+		setReviewEditOpen(false);
 	}
+
 	const openNewCommentInput = () => {
 		if (editingCommentId)
 		{
@@ -164,9 +179,28 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		setCommentTextContent(prev_text);
 	}
 
+	const handleRating = (score : number) => {
+		setRating(score);
+	}
+
+	const renderRating = () => {
+		return<div className={S["star-container-edit"]}>
+			{
+				[1,2,3,4,5].map(num => (
+					<img key={num} src={num <= rating ? "./star/fullStar.svg" : "./star/emptyStar.svg"} alt="starRating" onClick={() => handleRating(num)}/>
+				))
+			}
+		</div>
+	}
+
+
 	useEffect(()=> {
 		if (reviewSingleData)
+		{
 			setCommentCount(reviewSingleData.comment_count!);
+			setRating(reviewSingleData.rating);
+		}
+
 	}, [])
 
 	return (
@@ -180,18 +214,36 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 					{((isAuth && user) && (reviewSingleData.user_id == user.id)) && 
 						<>
 							<img className={S.you} src="/YouBadge.svg" alt="isItMeCheck"></img>
-							<div className={S["handler-btn-container"]}>
-								<img src="./edit.svg" alt="editReviewButton" onClick={handleEditReview}/>
+							{!reviewEditOpen &&
+							<>
+								<div className={S["handler-btn-container"]}>
+								<img src="./edit.svg" alt="editReviewButton" onClick={() => setReviewEditOpen(true)}/>
 								<img src="./trashcan.svg" alt="deleteReviewButton" onClick={() => handleDeleteReview(reviewSingleData.id)}/>
 							</div>
+							<div className={S['star-container']}>{StarRating(reviewSingleData.rating)}</div>
+							</>
+							}
 						</>
 					} 
-					<div className={S['star-container']}>{StarRating(reviewSingleData.rating)}</div>
 				</div>
 			</header>
-			<div className={S['text-commentTextContent']}>
-				<p>{reviewSingleData.text_content}</p>
-				<div className={S["reaction-container"]}>
+			<div className={S['text-comment-text-container']}>
+				{!reviewEditOpen && <div className={S["text-content-container"]}><p>{reviewSingleData.text_content}</p></div>}
+				{reviewEditOpen &&
+				<div className={S["edit-container"]}>
+					{renderRating()}
+					<textarea
+					className={S['review-input']}
+					onChange={(e) => setReviewTextContent(e.target.value)}
+					rows={4}
+					>{reviewSingleData.text_content}</textarea>
+					<div className={S["button-container-edit-review"]}>
+						<button className={S.add} onClick={() => handleEditReview(reviewSingleData.id, reviewSingleData.text_content!)}>Edit</button>
+						<button onClick={handleCancel} className={S.cancel}>Cancel</button>
+					</div>
+				</div>
+				}
+				{!reviewEditOpen && <div className={S["reaction-container"]}>
 					<div className={S['reaction-item']}>
 						<img src="/thumbsUp.svg" alt="ThumbsUpIcon" />
 						<p>{reviewSingleData.like_count}</p>
@@ -204,7 +256,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 						<img src="/comment.svg" alt="commentIcon" />
 						<p>{commentCount}</p>
 					</div>
-				</div>
+				</div>}
 			</div>
 			<div className={S.divider}></div>
 			<div className={S["comment-container"]}>
