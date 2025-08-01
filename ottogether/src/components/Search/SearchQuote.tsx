@@ -4,6 +4,7 @@ import type { Database } from "../../supabase/supabase.type";
 import { searchQuotes } from "../../supabase/quotes/searchQuotes";
 import SearchNotFound from './SearchNotFound';
 import QuoteCard from '../Quotes/QuoteCard';
+import SearchLoading from './SearchLoading';
 
 
 interface SearchQuoteProps {
@@ -17,6 +18,42 @@ function SearchQuote( { keyword }:SearchQuoteProps ) {
   const [ quotes, setQuotes ] = useState<Quote[]>([]);
   const [ isLoading, setIsLoading ] = useState(false);
 
+  /* 검색한 키워드에 강조 표시 */
+  const highlightKeyword = (content: string, keyword:string, snippetLength:number = 50) => {
+
+    const shortenFromBegin = content.length > snippetLength * 2
+        ? content.slice(0, snippetLength * 2) + '...'
+        : content;
+
+    if (!keyword.trim()) {
+      return (<span>{shortenFromBegin}</span>)
+    }
+    
+    const keywordStart = content.toLowerCase().indexOf(keyword.toLowerCase());
+    const keywordEnd = keywordStart + keyword.length
+
+    if (keywordStart === -1) {
+      return (<span>{shortenFromBegin}</span>)
+    } 
+
+    const trimStart = Math.max(0, keywordStart - snippetLength);
+    const trimEnd = Math.min(content.length, keywordEnd + snippetLength);
+    const highlightBefore = content.slice(trimStart, keywordStart);
+    const highlight = content.slice(keywordStart, keywordEnd);
+    const highlightAfter = content.slice(keywordEnd, trimEnd);
+
+    const prefix = trimStart > 0 ? '... ' : '';
+    const suffix = trimEnd < content.length ? ' ...' : '';
+
+    return (
+      <>
+        <span key="before">{prefix}{highlightBefore}</span>
+        <strong key="keyword">{highlight}</strong>
+        <span key="after">{highlightAfter}{suffix}</span>
+      </>
+    )
+  }
+  
   useEffect(() => {
     if(!keyword.trim()) return;
 
@@ -37,28 +74,26 @@ function SearchQuote( { keyword }:SearchQuoteProps ) {
   return (
     <section className={S["quote-result-container"]}>
       { isLoading && 
-        <div className={S.loader}>
-          <div className={S["loading-spinner"]}></div>
-          <p className={S["loading-message"]}>검색 결과를 불러오고 있어요 🔍</p> 
-        </div>
+        <SearchLoading />
       }
       { !isLoading && quotes.length === 0 &&
         <SearchNotFound />
       }
       {
         !isLoading &&
-        <ul className={S["quotes-list"]}>
+        <div className={S["quotes-list"]}>
           {
             quotes.map((quote) => (
               <QuoteCard
                 key={quote.id}
                 quote={quote}
                 onRemove={handleRemove}
-                className={S["search-quotes"]}
+                isSearch={true}
+                highlight={highlightKeyword(quote.content, keyword)}
                />
             ))
           }
-        </ul>
+        </div>
       } 
     </section>
   )
