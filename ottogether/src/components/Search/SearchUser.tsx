@@ -52,6 +52,7 @@ function SearchUser( {keyword}:SearchUserProps ) {
               profileData={profileList}
               reviewData={reviewList}
               quotesData={quotesList}
+              isSearch={true}
              />
           }
         </div>
