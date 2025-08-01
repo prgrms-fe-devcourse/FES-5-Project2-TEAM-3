@@ -6,13 +6,14 @@ import { useEffect, useState } from "react";
 import Hero from "./Hero";
 import S from "./Home.module.css";
 import OttSelector from "../../components/Search/OttSelector";
+import { ottListTotal } from "../../lib/data";
 
 
 function Home() {
 
   const { sectionGroups, quotes } = useGenreSections()
   const [visibleIndex, setVisibleIndex] = useState(1);
-  const [selectedOtt, setSelectedOtt] = useState<string[]>([]);
+  const [selectedOtt, setSelectedOtt] = useState<string[]>(ottListTotal);
 
   useEffect(() => {
   const observer = new IntersectionObserver((entries) => {
