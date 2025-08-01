@@ -88,18 +88,31 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-   background-color: transparent;
+  background-color: transparent;
+  transition: all 0.2s ease;
 }
 
 .likeBtn img {
   width: 30px;
   height: 30px;
+  transition:transform 0.2s ease;
+  filter: grayscale(1) brightness(0.7);
+}
+
+.likeBtn.liked img {
+  filter: none;
 }
 
 .likeBtn span {
   margin-left: 6px;
   font-size: 14px;
-  color: var(--foreground, #ffffff);
+  color: gray;
+  transition: color 0.2s ease;
+}
+
+.likeBtn.liked span {
+  color: gold;
+  font-weight: bold;
 }
 
 .person {

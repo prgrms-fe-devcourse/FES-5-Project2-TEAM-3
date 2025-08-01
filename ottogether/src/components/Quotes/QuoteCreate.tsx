@@ -18,6 +18,11 @@ function QuoteCreate({onAdd}:Props) {
     const handleSubmit = async () => {
   if (!content.trim()) return;
 
+  if (content.length > 300) {
+    alert(`명대사는 최대 300자까지 입력할 수 있습니다.`);
+    return;
+  }
+
     const userId = await getUserInfo('id');
 
     if (!userId) {
@@ -25,6 +30,7 @@ function QuoteCreate({onAdd}:Props) {
       return;
     }
 
+    
     const newQuote: TablesInsert<'quotes'> = {
       content,
       person: person || '익명',
@@ -42,6 +48,15 @@ function QuoteCreate({onAdd}:Props) {
     onAdd(); 
   } else {
     console.error('다시 입력해 주세요:', error.message);
+  }
+};
+
+const handlePersonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const input = e.target.value;
+  if (input.length <= 30) {
+    setPerson(input);
+  } else {
+    alert('이름은 최대 30자까지 입력할 수 있습니다.');
   }
 };
 
@@ -70,12 +85,20 @@ if (!isExpanded) {
     onChange={(e) => setContent(e.target.value)}
     placeholder="대사를 입력해주세요."
     />
+    <span className={S.charCount}>
+      {content.length} / 300
+    </span>
   </div>
   <div className={S.bottom}>
     <div className={S.bottomLeft}>
       <input 
-      onChange={(e) => setPerson(e.target.value)}
-      placeholder="누가 말했을까" />
+      value={person}
+      onChange={handlePersonChange}
+      placeholder="누가 말했을까"  
+      />
+      <span className={S.charCountPerson}>
+  {person.length} / 30
+</span>
     </div>
     <div className={S.bottomRight}>
       <button onClick={handleSubmit}>Save</button>
