@@ -26,6 +26,7 @@ export interface MovieDetailType {
   runtime: number | null;
   tagline: string | null;
   title: string;
+	original_language : string;
 }
 
 
