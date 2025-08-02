@@ -1,0 +1,78 @@
+.my-container {
+  display: flex;
+  flex-direction: column;
+  margin: 1.5rem auto;
+  width: 100%;
+  max-width: 800px;
+}
+
+.my-title {
+  font-size: 1.5rem;
+}
+
+.my-notice {
+  text-align: center;
+  font-size: 0.95rem;
+  margin-top: 2rem;
+  color: var(--color-grey-400);
+}
+
+.my-quote-wrapper {
+  transition: margin 0.2s ease;
+}
+
+.my-new-date-group {
+  margin-top: 2rem;
+}
+
+.my-date {
+  font-size: 0.9rem;
+  color: var(--color-grey-400);
+  margin: 0 0 0.3rem 0.5rem;
+  text-align: right;
+  font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+  .my-container {
+    max-width: 90%;
+  }
+
+  .my-title {
+    font-size: 1.2rem;
+  }
+
+  .my-notice {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .my-container {
+    max-width: 95%;
+    margin: 1rem auto;
+  }
+
+  .my-title {
+    font-size: 1.1rem;
+  }
+
+  .my-notice {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .my-container {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .my-title {
+    font-size: 1rem;
+  }
+
+  .my-notice {
+    font-size: 0.8rem;
+  }
+}
