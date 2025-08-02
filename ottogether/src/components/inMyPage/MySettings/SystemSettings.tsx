@@ -1,8 +1,8 @@
-import DeleteAccountSection from "./DeleteAccountSection";
+import { useState } from "react";
 import NotificationSection from "./NotificationSection";
 import PasswordSection from "./PasswordSection";
+import DeleteAccountModal from "./DeleteAccountModal";
 import S from "./SystemSettings.module.css";
-import VisibilitySection from "./VisibilitySection";
 
 interface UserType {
   id: string;
@@ -23,13 +23,30 @@ interface Props {
 }
 
 function SystemSettings({ user, profile }: Props) {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   return (
     <div className={S["settings-container"]}>
-      
-      <VisibilitySection user={user} profile={profile} />
       <NotificationSection user={user} profile={profile} />
-      <PasswordSection user={user} profile={profile} onOpenModal={() => console.log("비밀번호 변경 모달 열기")} />
-      <DeleteAccountSection user={user} profile={profile} onOpenModal={() => console.log("탈퇴 모달 열기")} />
+      <PasswordSection
+        user={user}
+        profile={profile}
+        onOpenModal={() => console.log("비밀번호 변경 모달 열기")}
+      />
+
+      <section className={S["settings-section-buttons"]}>
+        <h2 className={S["section-title"]}>탈퇴하기</h2>
+        <button
+          className={`${S["action-button"]} ${S["danger"]}`}
+          onClick={() => setShowDeleteModal(true)}
+        >
+          계정 탈퇴하기
+        </button>
+      </section>
+
+      {showDeleteModal && (
+        <DeleteAccountModal onClose={() => setShowDeleteModal(false)} user={user} />
+      )}
     </div>
   );
 }

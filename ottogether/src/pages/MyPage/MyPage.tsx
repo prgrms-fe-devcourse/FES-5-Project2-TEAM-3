@@ -10,7 +10,6 @@ import { useAuth } from "../../contexts/AuthProvider";
 import Settings from "../../components/inMyPage/MySettings/Settings";
 import Notifications from "../../components/inMyPage/Notifications";
 import ProfileBox from "../../components/inMyPage/ProfileBox";
-import ShowDefault from "../../components/inMyPage/ShowDefault";
 
 type ProfileType = {
   user_id: string;
@@ -23,28 +22,28 @@ type ProfileType = {
   favorite_genre: string[] | null;
 };
 
-function CreatedContents() {
+function CreatedContents({ user, profile }: { user: UserType, profile: ProfileType | null }) {
   return (
     <>
       <CreatedReviews />
-      <CreatedQuotes />
+      <CreatedQuotes user={user} profile={profile} />
     </>
   );
 }
-function LikedContents() {
+function LikedContents({ user, profile }: { user: UserType, profile: ProfileType | null }) {
   return (
     <>
       <LikedVideoContents />
       <LikedReviews />
-      <LikedQuotes />
+      <LikedQuotes user={user} profile={profile}/>
     </>
   );
 }
-function AllContents() {
+function AllContents({ user, profile }: { user: UserType, profile: ProfileType | null }) {
   return (
     <>
-      <CreatedContents></CreatedContents>
-      <LikedContents></LikedContents>
+      <CreatedContents user={user} profile={profile} />
+      <LikedContents user={user} profile={profile}/>
     </>
   );
 }
@@ -81,25 +80,25 @@ function MyPage() {
   const renderContent = () => {
     switch (activeTab) {
       case "createdContents":
-        return <CreatedContents />;
+        return <CreatedContents user={user} profile={profile}/>;
       case "createdReviews":
         return <CreatedReviews />;
       case "createdQuotes":
-        return <CreatedQuotes />;
+        return <CreatedQuotes user={user} profile={profile} />;
       case "likedContents":
-        return <LikedContents />;
+        return <LikedContents user={user} profile={profile}/>;
       case "likedVideoContents":
         return <LikedVideoContents />;
       case "likedReviews":
         return <LikedReviews />;
       case "likedQuotes":
-        return <LikedQuotes />;
+        return <LikedQuotes user={user} profile={profile} />;
       case "notifications":
         return <Notifications />;
       case "settings":
         return <Settings user={user} profile={profile} />;
       default:
-        return <AllContents />;
+        return <AllContents user={user} profile={profile}/>;
     }
   };
 
