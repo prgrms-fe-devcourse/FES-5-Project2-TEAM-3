@@ -1,6 +1,6 @@
 import { useState } from "react";
 import S from "./SystemSettings.module.css";
-import ToggleSwitch from "./ToggoleSwitch";
+import ToggleSwitch from "./ToggleSwitch";
 
 interface UserType {
   id: string;

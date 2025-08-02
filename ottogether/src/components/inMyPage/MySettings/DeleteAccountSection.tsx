@@ -22,10 +22,10 @@ interface Props {
 function DeleteAccountSection({ user, profile, onOpenModal }: Props) {
   return (
     <section className={S["settings-section"]}>
-      <h2 className={S["section-title"]}>탈퇴하기</h2>
-      <button className={`${S["action-button"]} ${S["danger"]}`} onClick={onOpenModal}>
-        계정 탈퇴하기
-      </button>
+      <h2 
+      className={S["section-title"]} 
+      onClick={onOpenModal}
+      >탈퇴하기</h2>
     </section>
   );
 }

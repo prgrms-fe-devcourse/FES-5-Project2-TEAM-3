@@ -22,10 +22,10 @@ interface Props {
 function PasswordSection({ user, profile, onOpenModal }: Props) {
   return (
     <section className={S["settings-section"]}>
-      <h2 className={S["section-title"]}>비밀번호 변경</h2>
-      <button className={S["action-button"]} onClick={onOpenModal}>
-        비밀번호 변경하기
-      </button>
+      <h2 
+      className={S["section-title"]} 
+      onClick={onOpenModal}
+      >비밀번호 변경</h2>
     </section>
   );
 }

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import DeleteAccountSection from "./DeleteAccountSection";
 import NotificationSection from "./NotificationSection";
 import PasswordSection from "./PasswordSection";
@@ -23,10 +24,13 @@ interface Props {
 }
 
 function SystemSettings({ user, profile }: Props) {
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+
   return (
     <div className={S["settings-container"]}>
-      
-      <VisibilitySection user={user} profile={profile} />
       <NotificationSection user={user} profile={profile} />
       <PasswordSection user={user} profile={profile} onOpenModal={() => console.log("비밀번호 변경 모달 열기")} />
       <DeleteAccountSection user={user} profile={profile} onOpenModal={() => console.log("탈퇴 모달 열기")} />
