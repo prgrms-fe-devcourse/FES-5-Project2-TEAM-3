@@ -137,7 +137,7 @@ function ProfileSettings({ user, profile }: Props) {
         const extension = avatarFile.name.split(".").pop()?.toLowerCase() || "png";
         const filePath = `user-avatar-${user.id}-${Date.now()}.${extension}`;
         const result = await uploadImage({ bucketName: "avatars", file: avatarFile, path: filePath });
-        if (result.success) avatarUrl = result.url;
+        if (result.success) avatarUrl = result.url ?? null;
       }
 
       let headerUrl: string | null = profile?.header_url ?? null;
@@ -149,7 +149,7 @@ function ProfileSettings({ user, profile }: Props) {
         const extension = headerFile.name.split(".").pop()?.toLowerCase() || "png";
         const filePath = `user-header-${user.id}-${Date.now()}.${extension}`;
         const result = await uploadImage({ bucketName: "headers", file: headerFile, path: filePath });
-        if (result.success) headerUrl = result.url;
+        if (result.success) headerUrl = result.url ?? null;
       }
 
       const { error } = await upsertTable({

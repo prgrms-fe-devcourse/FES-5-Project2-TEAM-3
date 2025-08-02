@@ -1,9 +1,9 @@
 import S from './ReviewDetailPopup.module.css'
-import type { Tables } from '../../components/reviewCard/supabase.type';
+import type { Tables } from '../../supabase/supabase.type';
 import { useAuth } from '../../contexts/AuthProvider';
 import { formatDateNoYear } from '../../util/formatDate';
-import { findUserById } from '../reviewCard/ReviewCard';
-import StarRating from '../reviewCard/StarRating';
+import { findUserById } from '../ReviewCard/ReviewCard';
+import StarRating from '../ReviewCard/StarRating';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase/supabase';
 
