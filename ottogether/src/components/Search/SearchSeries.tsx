@@ -15,6 +15,9 @@ interface SearchProps {
     ratingRange: [number, number];
     releaseRange: [string, string];
   }
+  previewCount?: number;
+  onResult?: (hasData:boolean) => void;
+  shouldFetch: boolean;
 }
 
 const TMDB_HEADER_INFO = {
@@ -22,13 +25,14 @@ const TMDB_HEADER_INFO = {
               accept: "application/json",
             }
 
-function SearchSeries({ keyword, filters }:SearchProps) {
+function SearchSeries({ keyword, filters, previewCount, onResult, shouldFetch }:SearchProps) {
   const [ seriesList, setSeriesList ] = useState<MovieData[]>([]);
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchSeries = async () => {
       if (!keyword.trim()) return;
+      if (!shouldFetch) return;
 
       try {
         setIsLoading(true);
@@ -76,7 +80,17 @@ function SearchSeries({ keyword, filters }:SearchProps) {
             }
           })
         );
-        setSeriesList(filteredWithProvider);
+
+        if (!previewCount) {
+          setSeriesList(filteredWithProvider);
+        } else {
+          setSeriesList(filteredWithProvider.slice(0,previewCount));
+        }
+
+        if (onResult) {
+          onResult(filteredWithProvider.length > 0);
+        }
+
       } catch (err) {
         console.error('영화 검색 결과 불러오기 실패:', err);
       } finally {
@@ -85,18 +99,18 @@ function SearchSeries({ keyword, filters }:SearchProps) {
     }
 
     fetchSeries();
-  }, [keyword, filters]);
+  }, [keyword, filters, previewCount]);
 
   return (
     <section className={S["movie-result-container"]}>
-      { isLoading && 
+      { isLoading &&
         <SearchLoading />
       }
-      { !isLoading && seriesList.length === 0 &&
-        <SearchNotFound />
+      { !isLoading && seriesList.length === 0 && !previewCount &&
+        <SearchNotFound keyword={keyword} tab='시리즈' />
       }
       {
-        !isLoading &&
+        !isLoading && seriesList.length > 0 &&
         <div className={S["movie-list"]}>
           {
             seriesList.map((series) => (

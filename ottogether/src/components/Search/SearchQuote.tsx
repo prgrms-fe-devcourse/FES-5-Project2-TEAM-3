@@ -9,11 +9,14 @@ import SearchLoading from './SearchLoading';
 
 interface SearchQuoteProps {
   keyword: string
+  previewCount?: number;
+  onResult?: (hasData:boolean) => void;
+  shouldFetch: boolean;
 }
 
 type Quote = Database['public']['Tables']['quotes']['Row'];
 
-function SearchQuote( { keyword }:SearchQuoteProps ) {
+function SearchQuote( { keyword, previewCount, onResult, shouldFetch }:SearchQuoteProps ) {
 
   const [ quotes, setQuotes ] = useState<Quote[]>([]);
   const [ isLoading, setIsLoading ] = useState(false);
@@ -55,16 +58,27 @@ function SearchQuote( { keyword }:SearchQuoteProps ) {
   /* quotes fetch */
   useEffect(() => {
     if(!keyword.trim()) return;
+    if(!shouldFetch) return;
 
     const fetchQuotes = async () => {
       setIsLoading(true);
       const data = await searchQuotes(keyword);
-      setQuotes(data);
+
+      if (!previewCount) {
+        setQuotes(data);
+      } else {
+        setQuotes(data.slice(0, previewCount));
+      }
+
+      if (onResult) {
+        onResult(data.length > 0);
+      }
+
       setIsLoading(false);
     };
 
     fetchQuotes();
-  }, [keyword]);
+  }, [keyword, previewCount]);
 
   const handleRemove = (id: number) => {
     setQuotes((prevQuotes) => prevQuotes.filter((quote) => quote.id !== id));
@@ -72,14 +86,14 @@ function SearchQuote( { keyword }:SearchQuoteProps ) {
 
   return (
     <section className={S["quote-result-container"]}>
-      { isLoading && 
+      { isLoading &&
         <SearchLoading />
       }
-      { !isLoading && quotes.length === 0 &&
-        <SearchNotFound />
+      { !isLoading && quotes.length === 0 && !previewCount &&
+        <SearchNotFound keyword={keyword} tab='명대사' />
       }
       {
-        !isLoading &&
+        !isLoading && quotes.length > 0 &&
         <div className={S["quotes-list"]}>
           {
             quotes.map((quote) => (
