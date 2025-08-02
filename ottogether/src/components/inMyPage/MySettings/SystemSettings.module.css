@@ -9,6 +9,14 @@
   border-radius: 0.8rem;
 }
 
+.settings-section-buttons {
+  padding: 1rem 0;
+  border-radius: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .section-title {
   font-size: 1.2rem;
   margin-bottom: 1rem;
@@ -72,4 +80,86 @@
 
 .danger:hover {
   background: var(--color-error-600);
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  /* 부드러운 페이드 인 효과 */
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-box {
+  background: var(--color-grey-800);
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  color: var(--color-grey-100);
+  max-width: 400px;
+  width: 90%;
+
+  /* 살짝 위에서 내려오는 애니메이션 */
+  transform: translateY(-20px);
+  animation: slideDown 0.3s ease forwards;
+}
+
+.modal-box h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  gap: 1rem;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.modal-buttons button:first-child {
+  background: var(--color-grey-600);
+  color: var(--color-grey-100);
+}
+
+.modal-buttons button:first-child:hover {
+  background: var(--color-grey-500);
+}
+
+.modal-buttons .danger {
+  background: var(--color-error-500);
+  color: #fff;
+}
+
+.modal-buttons .danger:hover {
+  background: var(--color-error-600);
+}
+
+/* 애니메이션 정의 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
