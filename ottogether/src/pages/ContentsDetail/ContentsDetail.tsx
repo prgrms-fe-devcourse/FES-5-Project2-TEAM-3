@@ -24,6 +24,7 @@ function extractMovieDetail(fullMovieData: any): MovieDetailType {
     runtime: fullMovieData.runtime,
     tagline: fullMovieData.tagline,
     title: fullMovieData.title,
+		original_language: fullMovieData.original_language,
   };
 }
 
@@ -67,7 +68,46 @@ function ContentsDetail({mediaId, mediaType} : Props) {
 				<div className={S["text-info"]}>
 					<h2>{mediaData.tagline}</h2>
 					<p>{mediaData.overview}</p>
-					.›
+					<div className={S["data-item"]}>
+						<p className={S.label}>Language</p>
+						<p>{mediaData.original_language}</p>
+					</div>
+					<div className={S["data-item"]}>
+						<p className={S.label}>Release Date</p>
+						<p>{mediaData.release_date}</p>
+					</div>
+					<div className={S["data-item"]}>
+						<p className={S.label}>Run time</p>
+						<p>{mediaData.runtime}</p>
+					</div>
+					<div className={S["data-item"]}>
+						<p className={S.label}>Genres</p>
+						<p>{mediaData.genres.map(elem => elem.name).join(', ')}</p>
+					</div>
+				</div>
+				<div className="rating-container">
+					<h2>Rating</h2>
+					<p>User rating</p>
+					<img src="./star/fullStar.svg" alt="starIcon" />
+					{/* <p>별점</p> */}
+					{/*  */}
+				</div>
+				<div className="members-container">
+					<h2>Favorites</h2>
+					<p>Likes by</p>
+					{/* <p>이 영화를 좋아하는 사람 수</p> */}
+					{/* 영화를 좋아하는 유저 프로필 사진 (최대 4개) */}
+					<button className={S["more-member"]}>+</button>
+				</div>
+				<div className="reviews-container">
+					<h2>Reviews</h2>
+					<button className={S["see-all"]}>See All</button>
+					{/* ReviewCard를 커스텀한 컴포넌트 개발해야할듯? */}
+				</div>
+				<div className="quotes-container">
+					<h2>Favorite Quotes</h2>
+					<button className={S["see-all"]}>See All</button>
+					{/* 영화 ID를 받아서 Quote db의 가장 많이 좋아요를 받은 Quote를 받은 뒤, QuoteCard 출력하는 함수 */}
 				</div>
 			</div>
 			</>
