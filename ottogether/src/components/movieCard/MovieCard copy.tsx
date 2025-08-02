@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { toggleFavoriteMovie, isMovieLiked } from "../../util/toggleFavoriteMovie";
 import type { MovieData } from "../../tmdbApi/movie.type";
 import { getUserInfo } from "../../supabase/auth/getUserInfo";
-import { useNavigate } from "react-router-dom";
 
 type MovieCardProps = {
   movie: MovieData;
@@ -21,7 +20,6 @@ function MovieCard({ movie }: MovieCardProps) {
   } = movie;
 
   const [liked, setLiked] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLikedStatus = async () => {
@@ -47,25 +45,17 @@ function MovieCard({ movie }: MovieCardProps) {
     }
   };
 
-  const handleCardClick = () => {
-    console.log("✅ 클릭한 movie 데이터:", movie);
-    navigate(`/media/${movie.media_type}/${movie.id}`);
-  };
-
   return (
-    <div className={S["movie-card"]}
-         onClick={handleCardClick}>
+    <div className={S["movie-card"]}>
       <div className={S["poster-wrapper"]}>
         <button
-  onClick={(e) => {
-    e.stopPropagation();
-    handleToggleLike();
-  }}
-  className={S["heart-button"]}
-  aria-label={liked ? "좋아요 취소" : "좋아요"}
->
-  {liked ? "❤️" : "🤍"}
-</button>
+        onClick={handleToggleLike}
+        className={S["heart-button"]}
+        aria-label={liked ? "좋아요 취소" : "좋아요"}
+      >
+        {liked ? "❤️" : "🤍"}
+      </button>
+
       <img
         src={poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : "/default-poster.png"}
         alt={title}
@@ -74,6 +64,7 @@ function MovieCard({ movie }: MovieCardProps) {
         }}
       />
       </div>
+      
       <div className={S["movie-info"]}>
         <p className={S["release-date"]}>{release_date}</p>
         <h3 className={S["title"]}>{title}</h3>
@@ -81,6 +72,9 @@ function MovieCard({ movie }: MovieCardProps) {
           <span>⭐</span>
           <span>{vote_average} / 10</span>
         </div>
+        {/* {genre_names && (
+          <p className={S["genre"]}>{genre_names.join(", ")}</p>
+        )} */}
       </div>
       {provider_logo_path && (
         <div className={S["provider-logo"]}>

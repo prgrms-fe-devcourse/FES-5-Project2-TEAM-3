@@ -1,8 +1,10 @@
 export * from './fetchPopular';
 export * from './fetchGenres';
 export * from './fetchMoviesByGenre';
-export * from './getMovieDetail';
+export * from './getContentDetail';
 export * from './getMovieProvider';
+export * from './getMovieDetail';
+
 
 
 

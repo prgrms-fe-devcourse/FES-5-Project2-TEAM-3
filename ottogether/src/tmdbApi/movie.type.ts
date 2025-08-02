@@ -10,6 +10,7 @@ export type MovieData = {
   backdrop_path: string | null;
   overview: string | null;
   media_type: 'movie' | 'tv';
+  
 };
 
 export type Genre = {

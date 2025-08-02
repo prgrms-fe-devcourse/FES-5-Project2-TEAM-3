@@ -12,6 +12,8 @@ import SearchResult from '../pages/SearchResult/SearchResult';
 import Review from '../pages/Review_/Review';
 import Members from '../pages/Members/Members';
 import MyPage from '../pages/MyPage/MyPage';
+import MovieDetail from '../pages/MovieDetail/MovieDetail';
+
 
 export const router = createBrowserRouter([
   {
@@ -65,6 +67,10 @@ export const router = createBrowserRouter([
       {
          path: '/my-page',
          element: <MyPage />
+      },
+      {
+        path: '/media/:mediaType/:id',
+        element: <MovieDetail />
       },
     ]
   },
