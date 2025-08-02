@@ -21,6 +21,7 @@ export async function fetchMoviesByGenre(genreId: number): Promise<MovieData[]> 
     const movies: MovieData[] = data.results.map((movie: any) => ({
       id: movie.id,
       title: movie.title,
+      media_type: 'movie',
       poster_path: movie.poster_path,
       release_date: movie.release_date,
       vote_average: movie.vote_average,

@@ -1,14 +1,16 @@
+
 import type { MovieData } from "./movie.type";
 
-// const BASE_URL = "https://api.themoviedb.org/3";
 const BASE_URL = "/api/tmdb";
 const TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
 
-export async function getMovieProvider(movies: MovieData[]): Promise<MovieData[]> {
+export default async function getMovieProvider(movies: MovieData[]): Promise<MovieData[]> {
   return Promise.all(
     movies.map(async (movie) => {
+      const path = movie.media_type === 'tv' ? 'tv' : 'movie'; // ← 조건 분기
+
       try {
-        const res = await fetch(`${BASE_URL}/movie/${movie.id}/watch/providers`, {
+        const res = await fetch(`${BASE_URL}/${path}/${movie.id}/watch/providers`, {
           headers: {
             accept: "application/json",
             Authorization: `Bearer ${TOKEN}`,
@@ -16,11 +18,11 @@ export async function getMovieProvider(movies: MovieData[]): Promise<MovieData[]
         });
 
         const data = await res.json();
-        const providerLogoPath = data?.results?.KR?.flatrate?.[0]?.logo_path || null;
+        const logoPath = data?.results?.KR?.flatrate?.[0]?.logo_path ?? null;
 
         return {
           ...movie,
-          provider_logo_path: providerLogoPath,
+          provider_logo_path: logoPath,
         };
       } catch (err) {
         console.warn("provider fetch error for", movie.title);

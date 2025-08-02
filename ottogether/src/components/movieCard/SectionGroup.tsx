@@ -1,10 +1,13 @@
+
+
 import { useEffect, useState } from "react";
-import { fetchGenres, fetchMoviesByGenre } from "../../tmdbApi";
+import { fetchGenres, } from "../../tmdbApi";
 import MovieList from "./MovieList";
 import type { Genre } from "../../tmdbApi/movie.type";
 import QuoteCard from "../Quotes/QuoteCard";
-import type { Tables } from "../review_/supabase.type";
+import type { Tables } from "../reviewCard/supabase.type";
 import { getQuotes } from "../../util/getQuote";
+import { fetchContentsByGenre } from "../../tmdbApi/fetchContentByGenre";
 
 interface SectionGroupProps {
   genres: Genre[];
@@ -16,19 +19,16 @@ function SectionGroup({ genres, quote }: SectionGroupProps) {
       {genres.map((g) => (
         <MovieList
           key={g.id}
-          title={`${g.name} 영화`}
-          fetchFn={() => fetchMoviesByGenre(g.id)}
+          title={`${g.name}`}
+          fetchFn={() => fetchContentsByGenre(g.id)}
         />
       ))}
       {quote && (
         <QuoteCard
-          key={quote.id}
-          id={quote.id}
-          content={quote.content}
-          person={quote.person}
-          likes={quote.likes ?? 0}
-          user_id={quote.user_id ?? ""}
-        />
+    key={quote.id}
+    quote={quote}
+    onRemove={() => {}}
+  />
       )}
     </>
   );
