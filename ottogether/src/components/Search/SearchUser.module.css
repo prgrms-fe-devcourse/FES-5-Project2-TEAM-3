@@ -1,11 +1,11 @@
-.quote-result-container {
+.user-result-container {
 	max-width: 20%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-.quotes-list {
+.user-list {
 	max-width: 75vw;
 	width: 100%;
 	display: flex;
