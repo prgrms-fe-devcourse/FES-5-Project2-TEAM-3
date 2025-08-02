@@ -12,7 +12,7 @@ import SearchResult from '../pages/SearchResult/SearchResult';
 import Review from '../pages/Review_/Review';
 import Members from '../pages/Members/Members';
 import MyPage from '../pages/MyPage/MyPage';
-import ContentsDetail from '../pages/ContentsDetail/ContentsDetail';
+import MovieDetail from '../pages/MovieDetail/MovieDetail';
 
 export const router = createBrowserRouter([
   {
@@ -68,8 +68,8 @@ export const router = createBrowserRouter([
          element: <MyPage />
       },
       {
-         path: '/contents-detail',
-         element: <ContentsDetail mediaId={24428} mediaType='movie'/>
+        path: '/media/:mediaType/:id',
+        element: <MovieDetail />
       },
     ]
   },

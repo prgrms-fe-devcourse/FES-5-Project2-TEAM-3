@@ -1,4 +1,3 @@
-// src/tmdbApi/fetchSeriesByGenre.ts
 import type { MovieData } from "./movie.type";
 
 export async function fetchTvSeriesByGenre(genreId: number): Promise<MovieData[]> {

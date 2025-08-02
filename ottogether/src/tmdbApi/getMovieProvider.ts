@@ -7,7 +7,7 @@ const TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
 export default async function getMovieProvider(movies: MovieData[]): Promise<MovieData[]> {
   return Promise.all(
     movies.map(async (movie) => {
-      const path = movie.media_type === 'tv' ? 'tv' : 'movie'; // ← 조건 분기
+      const path = movie.media_type === 'tv' ? 'tv' : 'movie'; 
 
       try {
         const res = await fetch(`${BASE_URL}/${path}/${movie.id}/watch/providers`, {
