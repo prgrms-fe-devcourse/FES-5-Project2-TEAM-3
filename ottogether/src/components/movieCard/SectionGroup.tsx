@@ -5,7 +5,7 @@ import { fetchGenres, } from "../../tmdbApi";
 import MovieList from "./MovieList";
 import type { Genre } from "../../tmdbApi/movie.type";
 import QuoteCard from "../Quotes/QuoteCard";
-import type { Tables } from "../reviewCard/supabase.type";
+import type { Tables } from "../../supabase/supabase.type";
 import { getQuotes } from "../../util/getQuote";
 import { fetchContentsByGenre } from "../../tmdbApi/fetchContentByGenre";
 

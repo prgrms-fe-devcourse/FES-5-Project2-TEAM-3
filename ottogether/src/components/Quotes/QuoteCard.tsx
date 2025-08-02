@@ -5,7 +5,7 @@ import likeIcon from '@/assets/icons/like-icon.svg';
 import quoteLeft from '@/assets/icons/quotes-left.svg';
 import quoteRight from '@/assets/icons/quotes-right.svg';
 import { toggleQuoteLike } from '../../util/toggleQuoteLike';
-import type { Database } from '../reviewCard/supabase.type';
+import type { Database } from '../../supabase/supabase.type';
 
 type Quote = Database['public']['Tables']['quotes']['Row'];
 

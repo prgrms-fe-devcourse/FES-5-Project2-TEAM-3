@@ -1,15 +1,18 @@
-import { createClient } from "@supabase/supabase-js"
+import { supabase } from "../../supabase/supabase";
+import type { Database } from "../../supabase/supabase.type";
 
-const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
+type Tables = keyof Database['public']['Tables'];
 
-export async function getData(table : string, orderOption : string = 'created_at'){
+export async function getData(table : Tables, orderOption : string = 'created_at'){
 	const {data, error} = await supabase
 		.from(table)
 		.select('*')
 		.order(orderOption, {ascending: false});
 
-	if (error)
+	if (error) {
 		console.error('error occured');
+		return null;
+	}
 	else
 		return data;
 }

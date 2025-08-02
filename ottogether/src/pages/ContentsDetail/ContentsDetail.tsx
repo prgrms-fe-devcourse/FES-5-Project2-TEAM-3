@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getMovieDetail } from "../../tmdbApi";
 import type { MovieDetailType } from "../../lib/movieDetailType";
 import S from './ContentsDetail.module.css';
-import type { Tables } from '../../components/reviewCard/supabase.type';
+import type { Tables } from '../../supabase/supabase.type';
 
 interface Props{
 	mediaId : number;

@@ -1,5 +1,5 @@
 
-import type { Tables } from './supabase.type';
+import type { Tables } from '../../supabase/supabase.type';
 import S from "./ReviewCard.module.css";
 import StarRating from "./StarRating";
 import { formatDateNoYear } from "../../util/formatDate";

@@ -1,8 +1,8 @@
 import MemberCard from '../../components/member/MemberCard'
 import S from './Members.module.css'
 import { useEffect, useState } from "react";
-import type { Tables } from '../../components/reviewCard/supabase.type';
-import { getData } from "../../components/reviewCard/SupaData"
+import type { Tables } from '../../supabase/supabase.type';
+import { getData } from "../../components/ReviewCard/SupaData"
 
 type Profile = Tables<'profile'>;
 type ReviewLike = Tables<'review_like'>;
@@ -18,9 +18,9 @@ function Members() {
 
 	useEffect(()=>{
 		async function generateData(){
-			setProfileData(await getData('profile'));
-			setReviewData(await getData('review_like'));
-			setQuotesData(await getData('quotes_like'));
+			setProfileData(await getData('profile') as Profile[] | undefined);
+			setReviewData(await getData('review_like') as ReviewLike[] | null);
+			setQuotesData(await getData('quotes_like') as QuotesLike[] | null);
 		}
 		generateData()
 	}, [])
