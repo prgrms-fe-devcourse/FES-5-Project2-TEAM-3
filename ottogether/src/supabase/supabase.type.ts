@@ -20,7 +20,7 @@ export type Database = {
           user_id: string;
           sender_id: string;
           type: "comment" | "like_review" | "like_quote";
-          target_id: string;
+          target_id: number;
           message: string;
           is_read: boolean;
           created_at: string;
@@ -30,7 +30,7 @@ export type Database = {
           user_id: string;
           sender_id: string;
           type: "comment" | "like_review" | "like_quote";
-          target_id: string;
+          target_id: number;
           message: string;
           is_read?: boolean;
           created_at?: string;
@@ -40,7 +40,7 @@ export type Database = {
           user_id?: string;
           sender_id?: string;
           type?: "comment" | "like_review" | "like_quote";
-          target_id?: string;
+          target_id?: number;
           message?: string;
           is_read?: boolean;
           created_at?: string;
@@ -135,54 +135,6 @@ export type Database = {
             foreignKeyName: "notification_settings_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: true
-            referencedRelation: "profile"
-            referencedColumns: ["user_id"]
-          },
-        ]
-      }
-      notifications: {
-        Row: {
-          created_at: string
-          id: string
-          is_read: boolean
-          message: string
-          sender_id: string
-          target_id: string
-          type: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          is_read?: boolean
-          message: string
-          sender_id: string
-          target_id: string
-          type: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          is_read?: boolean
-          message?: string
-          sender_id?: string
-          target_id?: string
-          type?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "notifications_sender_id_fkey"
-            columns: ["sender_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "notifications_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["user_id"]
           },
