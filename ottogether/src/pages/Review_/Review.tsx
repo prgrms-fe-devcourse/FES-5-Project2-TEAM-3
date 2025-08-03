@@ -1,4 +1,4 @@
-import ReviewCard, { findReviewById } from "../../components/ReviewCard/ReviewCard"
+import ReviewCard, { findReviewById, findUserById } from "../../components/reviewCard/ReviewCard"
 import S from './Review.module.css'
 import type { Tables } from '../../supabase/supabase.type';
 import { getData } from "../../components/ReviewCard/SupaData";
@@ -35,11 +35,6 @@ function Review() {
 	}, [])
 
 	const activatePopup = (id : number) => {
-		console.log('active Popup 실행');
-		console.log('profileData : ', profileData);
-		console.log('reviewData : ', reviewData);
-		console.log('commentData : ', commentData);
-		console.log('commentData : ', findReviewById(id, reviewData!));
 		setIsPopupOpen(true);
 		setCurrentPopupReview(findReviewById(id, reviewData!));
 	}
@@ -65,7 +60,15 @@ function Review() {
 				<p className={S.heading}>Reviews and Rating</p>
 			</div>
 			<ReviewCreate reviewAdded={generateData}/>
-			{(reviewData && profileData) && <ReviewCard reviewData={reviewData} profileData={profileData} activePopUp={activatePopup}/>}
+			{reviewData && reviewData.map(element => (
+        <div key={element.id}>
+          <ReviewCard
+            reviewData={element}
+            profileData={findUserById(element.user_id, profileData! ?? undefined)}
+            activePopUp={activatePopup}
+          />
+        </div>
+      ))}
 			<div className={S["footer"]}></div>
 			{isPopupOpen
 			 && (profileData && reviewData && commentData && currentPopupReview)
