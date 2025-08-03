@@ -65,6 +65,8 @@ function Header() {
 
   // 검색창 바깥 클릭 시 닫기
   useEffect(() => {
+    if (!showSearch) return;
+
     const handleClickOutside = (e:MouseEvent) => {
       if (
         searchRef.current &&
@@ -73,11 +75,8 @@ function Header() {
         closeSearch();
       }
     };
-    if (showSearch) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
+    
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showSearch]);
@@ -96,7 +95,7 @@ function Header() {
     setShowSearch(false);
     setTimeout(() => {
       setSearchKeyword('');
-    },0);
+    },100);
   };
 
   const handleSearchKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
@@ -108,7 +107,9 @@ function Header() {
     const confirmLogout = confirm('정말 로그아웃 하시겠습니까?');
     if ( !confirmLogout ) return;
 
+    if (isMenuOpen) setCloseTrigger(true);
     logout();
+    alert('로그아웃 되었습니다.');
   }
 
   /* route list */
@@ -118,6 +119,7 @@ function Header() {
                     <NavLink
                     to={route.path}
                     className={({isActive}) => (isActive ? S["active-route"] : '')}
+                    onClick={()=> setCloseTrigger(true)}
                     >{route.label}</NavLink>
                   </li>
                 ));
@@ -237,7 +239,10 @@ function Header() {
           type='button' 
           className={S["in-menu-button"]} 
           aria-label='마이 페이지로 이동합니다'
-          onClick={() => navigate('/my-page')}
+          onClick={() => {
+            navigate('/my-page');
+            setCloseTrigger(true);
+          }}
           >My Page</button>
         </li>
       </ul>
@@ -251,7 +256,10 @@ function Header() {
           type='button' 
           className={S["in-menu-button"]} 
           aria-label='회원가입 페이지로 이동합니다'
-          onClick={() => navigate('/register')}
+          onClick={() => {
+            navigate('/register');
+            setCloseTrigger(true);
+          }}
           >Sign Up</button>
         </li>
       </ul>
