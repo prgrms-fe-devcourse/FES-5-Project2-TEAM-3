@@ -87,6 +87,10 @@
 
 .additional-info{
 	width: 100%;
+
+	& h2{
+		font-size: 24px;
+	}
 }
 
 .poster-wrapper {
@@ -150,18 +154,12 @@
 
 .rating-favorites{
 	display: flex;
-
+	gap: 95px;
 }
 
 .rating-container {
   width: 100%;
-  margin-top: 2rem;
   border-radius: 12px;
-}
-
-.rating-container h2 {
-  font-size: 18px;
-  margin-bottom: 0.3rem;
 }
 
 .rate-wrap{
@@ -188,29 +186,33 @@
 }
 .members-container {
   width: 100%;
-  margin-top: 2rem;
-  padding: 1rem;
   border-radius: 12px;
 }
 
-.members-container h2 {
-  font-size: 18px;
-  margin-bottom: 0.3rem;
-}
-
-.members-container p {
-  font-size: 14px;
-  margin-bottom: 0.5rem;
-}
-
 .more-member {
-  margin-top: 0.5rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 50%;
-  background-color: #3a3a3a;
-  color: white;
+  color: var(--color-warning-500);
+	background-color: transparent;
   border: none;
   cursor: pointer;
+	font-size: 35px;
+}
+
+.members-layout{
+	display: flex;
+	gap: 36px;
+	margin-top: 40px;
+}
+
+.like-amount{
+	color: #ffca45;
+	font-size: 32px;
+}
+
+.like-amount-container{
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
 .reviews-container,
@@ -222,12 +224,6 @@
   border-radius: 12px;
 }
 
-.reviews-container h2,
-.quotes-container h2 {
-  font-size: 18px;
-  margin-bottom: 0.5rem;
-}
-
 .see-all {
   position: absolute;
   top: 1rem;
@@ -235,7 +231,7 @@
   font-size: 14px;
   background: none;
   border: none;
-  color: #aaa;
+  color: #ffb703;
   cursor: pointer;
 }
 @media (max-width: 768px) {

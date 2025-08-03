@@ -8,8 +8,12 @@ import { supabase } from "../../supabase/supabase";
 import RatingBarChart from "./RatingBarChart";
 import { useAuth } from "../../contexts/AuthProvider";
 import { isMovieLiked, toggleFavoriteMovie } from "../../util/toggleFavoriteMovie";
+import { findUserById } from "../../components/reviewCard/ReviewCard";
+import ProfileList from "./ProfileList";
 
 type Review = Tables<'review'>;
+type Favorite = Tables<'favorite_movies'>;
+type Profile = Tables<'profile'>;
 
 /*
 export type MovieData = {
@@ -40,6 +44,9 @@ function MovieDetail() {
 	const IMAGE_URL = 'https://image.tmdb.org/t/p/original/';
 	const [currentReviewData, setCurrentReviewData] = useState<Review[] | null>(null);
 	const [isMyLove, setIsMyLove] = useState(false);
+	// const [profileData, setProfileData] = useState<Profile[] | null>(null);
+	const [favoriteUsers, setFavoriteUsers] = useState<Profile[]>([]);
+	// const [favoriteData, setFavoriteData] = useState<Favorite[]>([]);
 
   useEffect(() => {
     if (!mediaType || !id) return;
@@ -62,18 +69,6 @@ function MovieDetail() {
 	if (!id)
 		return <p>Movie / TV를 찾을 수 없습니다.</p>
 
-	const dataLoading = async () => {
-		if (!id)
-			return ;
-		const {data, error} = await supabase.from('review').select('*').eq('movie_id', id);
-		if (error)
-		{
-			console.error('Error : 데이터를 불러오는 중 에러 : ', error);
-			return ;
-		}
-		setCurrentReviewData(data);
-	}
-
 	const handleFavorite = async () => {
 		if (!isAuth || !user)
 		{
@@ -84,6 +79,20 @@ function MovieDetail() {
 		if (!result.error) {
       setIsMyLove(result.liked);
     }
+	}
+
+	const findFavoriteUser = (favor : Favorite[], profileData : Profile[]) => {
+		console.log('favorData :', favor, '\nprofileData : ', profileData);
+		if (!profileData)
+			return ;
+		let temp : Profile[] = [];
+		for (const element of favor) {
+			const profile = findUserById(element.user_id!, profileData);
+			if (profile)
+				temp.push(profile);
+		}
+		console.log('favorite User List : ' ,temp);
+		setFavoriteUsers(temp);
 	}
 
 	useEffect(() => {
@@ -97,15 +106,32 @@ function MovieDetail() {
 		}, [id]);
 
 	useEffect(() => {
-		async function dataInit(){
-			// const profile = await getData('profile');
-			// const quotes = await getData('quotes');
-			// setProfileData(profile);
-			// setQuotesData(quotes);
-			dataLoading();
+		const dataLoading = async () => {
+		if (!id)
+			return ;
+		const {data, error} = await supabase.from('review').select('*').eq('movie_id', id);
+		if (error)
+		{
+			console.error('Error : 데이터를 불러오는 중 에러 : ', error);
+			return ;
 		}
-		dataInit();
-		// setIsMyLove 가져오는 함수 추가
+		setCurrentReviewData(data);
+
+		const {data:profileLoad, error:profileError} = await supabase.from('profile').select('*');
+		if (profileError)
+		{
+			console.error('Error : 데이터를 불러오는 중 에러 : ', profileError);
+			return ;
+		}
+		const {data : favorData, error : favorError} = await supabase.from('favorite_movies').select('*').eq('movie_id', +id);
+		if (favorError)
+		{
+			console.error('Error : 좋아요 누른 인원을 불러오는 중 에러 : ', favorError);
+			return ;
+		}
+		findFavoriteUser(favorData,profileLoad);
+	}
+	dataLoading();
 	}, [])
 
 	const getAverageRate = () => {
@@ -186,10 +212,14 @@ function MovieDetail() {
 				</div>
 				<div className={S["members-container"]}>
 					<h2>Favorites</h2>
-					<p>Likes by</p>
-					{/* <p>이 영화를 좋아하는 사람 수</p> */}
-					{/* 영화를 좋아하는 유저 프로필 사진 (최대 4개) */}
-					<button className={S["more-member"]}>+</button>
+					<div className={S["members-layout"]}>
+						<div className={S["like-amount-container"]}>
+							<p>Likes by</p>
+							<p className={S["like-amount"]}>{favoriteUsers.length}</p>
+						</div>
+						<ProfileList profiles={favoriteUsers}></ProfileList>
+						<button className={S["more-member"]}>+</button>
+					</div>
 				</div>
 				</div>
 				<div className={S["reviews-container"]}>
