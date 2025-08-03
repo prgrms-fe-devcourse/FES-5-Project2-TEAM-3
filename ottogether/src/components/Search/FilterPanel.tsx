@@ -22,8 +22,6 @@ interface FilterPanelProps {
   releaseFrom: string;
   releaseTo: string;
   onReleaseChange: (from:string, to:string) => void;
-
-  onApply: () => void;
 }
 
 const RATING_MIN = 0;
@@ -42,7 +40,6 @@ function FilterPanel({
   releaseFrom,
   releaseTo,
   onReleaseChange,
-  onApply,
 }:FilterPanelProps) {
 
   const [ error, setError ] = useState<string | null>(null);
@@ -201,7 +198,6 @@ function FilterPanel({
     const safeMax = isNaN(max) ? RATING_MAX : max;
     onRatingChange(safeMin, safeMax);
 
-    onApply();
     dialogRef.current?.close();
     onClose();
   }

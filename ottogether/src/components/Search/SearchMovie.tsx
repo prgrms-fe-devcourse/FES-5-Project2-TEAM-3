@@ -4,6 +4,7 @@ import type { MovieData } from '../../tmdbApi/movie.type';
 import { applyFilters } from '../../util/applyFilters';
 import SearchNotFound from './SearchNotFound';
 import MovieCard from '../movieCard/MovieCard';
+import SearchLoading from './SearchLoading';
 
 interface SearchProps {
   keyword: string;
@@ -85,10 +86,7 @@ function SearchMovie({ keyword, filters }:SearchProps) {
   return (
     <section className={S["movie-result-container"]}>
       { isLoading && 
-        <div className={S.loader}>
-          <div className={S["loading-spinner"]}></div>
-          <p className={S["loading-message"]}>검색 결과를 불러오고 있어요 🔍</p> 
-        </div>
+        <SearchLoading />
       }
       { !isLoading && movieList.length === 0 &&
         <SearchNotFound />

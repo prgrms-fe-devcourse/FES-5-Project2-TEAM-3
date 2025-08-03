@@ -7,9 +7,9 @@ import LikedVideoContents from "../../components/inMyPage/LikedVideoContents";
 import LikedReviews from "../../components/inMyPage/LikedReviews";
 import LikedQuotes from "../../components/inMyPage/LikedQuotes";
 import { useAuth } from "../../contexts/AuthProvider";
-import Settings from "../../components/inMyPage/Settings";
+import Settings from "../../components/inMyPage/MySettings/Settings";
 import Notifications from "../../components/inMyPage/Notifications";
-import ProfileBox from "../../components/inMyPage/ProfileBox"; // 👈 추가
+import ProfileBox from "../../components/inMyPage/ProfileBox";
 
 type ProfileType = {
   user_id: string;
@@ -22,26 +22,34 @@ type ProfileType = {
   favorite_genre: string[] | null;
 };
 
-function CreatedContents() {
+function CreatedContents({ user, profile }: { user: UserType, profile: ProfileType | null }) {
   return (
     <>
       <CreatedReviews />
-      <CreatedQuotes />
+      <CreatedQuotes user={user} profile={profile} />
     </>
   );
 }
-function LikedContents() {
+function LikedContents({ user, profile }: { user: UserType, profile: ProfileType | null }) {
   return (
     <>
       <LikedVideoContents />
       <LikedReviews />
-      <LikedQuotes />
+      <LikedQuotes user={user} profile={profile}/>
+    </>
+  );
+}
+function AllContents({ user, profile }: { user: UserType, profile: ProfileType | null }) {
+  return (
+    <>
+      <CreatedContents user={user} profile={profile} />
+      <LikedContents user={user} profile={profile}/>
     </>
   );
 }
 
 function MyPage() {
-  const [activeTab, setActiveTab] = useState("settings");
+  const [activeTab, setActiveTab] = useState("");
   const { user } = useAuth();
   const [profile, setProfile] = useState<ProfileType | null>(null);
 
@@ -72,51 +80,51 @@ function MyPage() {
   const renderContent = () => {
     switch (activeTab) {
       case "createdContents":
-        return <CreatedContents />;
+        return <CreatedContents user={user} profile={profile}/>;
       case "createdReviews":
         return <CreatedReviews />;
       case "createdQuotes":
-        return <CreatedQuotes />;
+        return <CreatedQuotes user={user} profile={profile} />;
       case "likedContents":
-        return <LikedContents />;
+        return <LikedContents user={user} profile={profile}/>;
       case "likedVideoContents":
         return <LikedVideoContents />;
       case "likedReviews":
         return <LikedReviews />;
       case "likedQuotes":
-        return <LikedQuotes />;
+        return <LikedQuotes user={user} profile={profile} />;
       case "notifications":
         return <Notifications />;
       case "settings":
-        return <Settings user={user} profile={profile}/>;
+        return <Settings user={user} profile={profile} />;
       default:
-        return <div>카테고리를 선택해주세요.</div>;
+        return <AllContents user={user} profile={profile}/>;
     }
   };
 
   return (
     <div className={S.page}>
-      {/* 배너 영역 */}
-      <div className={S.banner}>
+      <div 
+        className={S.banner}
+        onClick={() => setActiveTab("")} 
+        style={{ cursor: "pointer" }}
+      >
         <img
-          src={profile?.header_url || ""}
+          src={profile?.header_url ?? "/default-header3.png"}
           alt="banner"
-          className={S.bannerImg}
+          className={S["banner-img"]}
         />
       </div>
 
-      {/* 컨텐츠 영역 */}
       <div className={S.container}>
-        {/* 왼쪽 사이드바 */}
         <aside className={S.sidebar}>
-          {/* 기존 profileBox 전체 삭제 후 ProfileBox 컴포넌트 사용 */}
           <ProfileBox 
             user={user} 
             profile={profile} 
             setActiveTab={setActiveTab} 
           />
 
-          <nav className={S.navMenu}>
+          <nav className={S["nav-menu"]}>
             <h4
               className={activeTab === "createdContents" ? S.active : ""}
               onClick={() => setActiveTab("createdContents")}
@@ -167,8 +175,7 @@ function MyPage() {
           </nav>
         </aside>
 
-        {/* 오른쪽 메인 블록 */}
-        <main className={S.mainContent}>{renderContent()}</main>
+        <main className={S["main-content"]}>{renderContent()}</main>
       </div>
     </div>
   );

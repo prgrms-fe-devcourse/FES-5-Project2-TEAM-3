@@ -14,7 +14,6 @@ import Members from '../pages/Members/Members';
 import MyPage from '../pages/MyPage/MyPage';
 import MovieDetail from '../pages/MovieDetail/MovieDetail';
 
-
 export const router = createBrowserRouter([
   {
     path: '/',
