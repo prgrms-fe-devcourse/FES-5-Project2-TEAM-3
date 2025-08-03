@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchPopularMovies, getMovieDetail } from "../../tmdbApi";
 import S from "./Hero.module.css";
 import type { MovieData } from "../../tmdbApi/movie.type";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -9,10 +10,14 @@ function Hero() {
   const [movies, setMovies] = useState<number[]>([]); 
   const [current, setCurrent] = useState(0);
   const [movie, setMovie] = useState<null | {
+    id: number; 
     title: string;
     overview: string | null;
     backdrop_path: string | null;
+    media_type: 'movie';
   }>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function loadMovies() { 
@@ -36,9 +41,11 @@ function Hero() {
       const detail = await getMovieDetail(id);
       if (detail) {
         setMovie({
+          id: detail.id,
           title: detail.title,
           overview: detail.overview,
           backdrop_path: detail.backdrop_path,
+          media_type: "movie",
         });
       }
     }
@@ -56,7 +63,10 @@ function Hero() {
 
 
  return (
-    <section className={S.hero}>
+    <section className={S.hero}
+    onClick={() => { if (movie) {
+    navigate(`/media/${movie.media_type}/${movie.id}`);}}}
+    >
       {movie.backdrop_path && (
         <img
           className={S.backdrop}

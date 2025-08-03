@@ -48,7 +48,6 @@ function MovieCard({ movie }: MovieCardProps) {
   };
 
   const handleCardClick = () => {
-    console.log("✅ 클릭한 movie 데이터:", movie);
     navigate(`/media/${movie.media_type}/${movie.id}`);
   };
 
