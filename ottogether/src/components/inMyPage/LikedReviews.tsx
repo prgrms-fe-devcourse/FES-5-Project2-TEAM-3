@@ -2,20 +2,22 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabase/supabase";
 import type { Tables } from "../../supabase/supabase.type";
 import ReviewCard from "../reviewCard/ReviewCard";
-import { useAuth } from "../../contexts/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import S from "./MyPageReviews.module.css";
 
 type Review = Tables<"review">;
 type Profile = Tables<"profile">;
 
-function LikedReviews() {
-  const { user } = useAuth();
+interface Props {
+  user: { id: string; email?: string } | null;
+  profile: Profile | null;
+}
+
+function LikedReviews({ user, profile }: Props) {
   const navigate = useNavigate();
 
   const [reviews, setReviews] = useState<Review[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [myProfile, setMyProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,7 +34,11 @@ function LikedReviews() {
 
         if (likeError) throw likeError;
 
-        const reviewIds = likedRows?.map((row) => row.review_id) ?? [];
+        // null 제거 후 number[] 확정
+        const reviewIds = (likedRows ?? [])
+          .map((row) => row.review_id)
+          .filter((id): id is number => id !== null);
+
         if (reviewIds.length === 0) {
           setReviews([]);
           return;
@@ -48,7 +54,10 @@ function LikedReviews() {
         if (reviewError) throw reviewError;
 
         // 3. 리뷰 작성자들의 프로필 가져오기
-        const userIds = likedReviews?.map((r) => r.user_id) ?? [];
+        const userIds = (likedReviews ?? [])
+          .map((r) => r.user_id)
+          .filter((id): id is string => id !== null);
+
         const { data: profilesData, error: profileError } = await supabase
           .from("profile")
           .select("*")
@@ -65,23 +74,7 @@ function LikedReviews() {
       }
     };
 
-    const fetchMyProfile = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("profile")
-          .select("*")
-          .eq("user_id", user.id)
-          .maybeSingle();
-
-        if (error) throw error;
-        setMyProfile(data);
-      } catch (err) {
-        console.error("내 프로필 불러오기 실패:", err);
-      }
-    };
-
     fetchLikedReviews();
-    fetchMyProfile();
   }, [user]);
 
   if (!user) {
@@ -99,7 +92,7 @@ function LikedReviews() {
   return (
     <div className={S["my-container"]}>
       <h1 className={S["my-title"]}>
-        {myProfile?.nickname ?? "Guest"} 님이 좋아요한 리뷰 (총 {reviews.length}개)
+        {profile?.nickname ?? "Guest"} 님이 좋아요한 리뷰 (총 {reviews.length}개)
       </h1>
       <hr />
       {reviews.map((review) => {

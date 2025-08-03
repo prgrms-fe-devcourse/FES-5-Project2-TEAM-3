@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabase/supabase";
 import type { Tables } from "../../supabase/supabase.type";
 import ReviewCard from "../reviewCard/ReviewCard";
-import { useAuth } from "../../contexts/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import S from "./MyPageReviews.module.css"; // Quotes CSS 재활용
+import S from "./MyPageReviews.module.css";
 
 type Review = Tables<"review">;
 type Profile = Tables<"profile">;
+
+interface Props {
+  user: { id: string; email?: string } | null;
+  profile: Profile | null;
+}
 
 // 날짜 포맷 함수
 function formatDate(dateString: string | null): string {
@@ -19,15 +23,11 @@ function formatDate(dateString: string | null): string {
   });
 }
 
-function CreatedReviews() {
-  const { user } = useAuth();
+function CreatedReviews({ user, profile }: Props) {
   const navigate = useNavigate();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // 로그인한 유저의 프로필
-  const myProfile = profiles.find((p) => p.user_id === user?.id);
 
   useEffect(() => {
     if (!user) return;
@@ -81,7 +81,7 @@ function CreatedReviews() {
   return (
     <div className={S["my-container"]}>
       <h1 className={S["my-title"]}>
-        {myProfile?.nickname ?? "Guest"} 님이 작성한 리뷰
+        {profile?.nickname ?? "Guest"} 님이 작성한 리뷰
         <hr />
       </h1>
       {reviewsWithFlags.map((review) => {
