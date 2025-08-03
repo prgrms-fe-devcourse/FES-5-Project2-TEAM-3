@@ -31,6 +31,7 @@ function CreatedContents({ user, profile }: { user: UserType, profile: ProfileTy
   return (
     <>
       <CreatedReviews />
+      <br />
       <CreatedQuotes user={user} profile={profile} />
     </>
   );
@@ -39,7 +40,9 @@ function LikedContents({ user, profile }: { user: UserType, profile: ProfileType
   return (
     <>
       <LikedVideoContents />
+      <br />
       <LikedReviews />
+      <br />
       <LikedQuotes user={user} profile={profile}/>
     </>
   );
@@ -48,6 +51,7 @@ function AllContents({ user, profile }: { user: UserType, profile: ProfileType |
   return (
     <>
       <CreatedContents user={user} profile={profile} />
+      <br />
       <LikedContents user={user} profile={profile}/>
     </>
   );

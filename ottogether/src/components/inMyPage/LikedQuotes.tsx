@@ -17,15 +17,11 @@ interface ProfileType {
   header_url: string | null;
 }
 
-interface Props {
-  user: UserType | null;
-  profile: ProfileType | null;
-}
-
 type Quote = Database["public"]["Tables"]["quotes"]["Row"];
 
-function LikedQuotes({ user, profile }: Props) {
+function LikedQuotes({ user }: { user: UserType | null }) {
   const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [myProfile, setMyProfile] = useState<ProfileType | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -63,7 +59,23 @@ function LikedQuotes({ user, profile }: Props) {
       }
     };
 
+    const fetchMyProfile = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("profile")
+          .select("nickname, bio, url, avatar_url, header_url")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if (error) throw error;
+        setMyProfile(data);
+      } catch (err) {
+        console.error("내 프로필 불러오기 실패:", err);
+      }
+    };
+
     fetchLikedQuotes();
+    fetchMyProfile();
   }, [user]);
 
   const handleRemove = (id: number) => {
@@ -78,11 +90,13 @@ function LikedQuotes({ user, profile }: Props) {
   return (
     <div className={S["my-container"]}>
       <h1 className={S["my-title"]}>
-        {profile?.nickname ?? "Guest"} 님이 좋아요한 명대사
+        {myProfile?.nickname ?? "Guest"} 님이 좋아요한 명대사 (총 {quotes.length}개)
       </h1>
       <hr />
       {quotes.map((quote) => (
-        <QuoteCard key={quote.id} quote={quote} onRemove={handleRemove} />
+        <div key={quote.id} className={S["my-quote-wrapper"]}>
+          <QuoteCard quote={quote} onRemove={handleRemove} />
+        </div>
       ))}
     </div>
   );
