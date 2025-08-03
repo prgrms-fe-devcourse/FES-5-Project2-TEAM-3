@@ -1,9 +1,9 @@
 import ReviewCard, { findReviewById, findUserById } from "../../components/reviewCard/ReviewCard"
 import S from './Review.module.css'
-import type { Tables } from '../../components/reviewCard/supabase.type';
-import { getData } from "../../components/reviewCard/SupaData";
+import type { Tables } from '../../supabase/supabase.type';
+import { getData } from "../../components/ReviewCard/SupaData";
 import { useEffect, useState } from "react"
-import ReviewCreate from "../../components/reviewCard/ReviewCreate";
+import ReviewCreate from "../../components/ReviewCard/ReviewCreate";
 import ReviewDetailPopup from "../../components/ReviewDetailPopup/reviewDetailPopup";
 
 type Review = Tables<'review'>;

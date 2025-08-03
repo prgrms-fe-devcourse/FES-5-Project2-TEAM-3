@@ -14,6 +14,52 @@ export type Database = {
   }
   public: {
     Tables: {
+      notifications: {
+        Row: {
+          id: string;
+          user_id: string;
+          sender_id: string;
+          type: "comment" | "like_review" | "like_quote";
+          target_id: string;
+          message: string;
+          is_read: boolean;
+          created_at: string;
+        }
+        Insert: {
+          id?: string;
+          user_id: string;
+          sender_id: string;
+          type: "comment" | "like_review" | "like_quote";
+          target_id: string;
+          message: string;
+          is_read?: boolean;
+          created_at?: string;
+        }
+        Update: {
+          id?: string;
+          user_id?: string;
+          sender_id?: string;
+          type?: "comment" | "like_review" | "like_quote";
+          target_id?: string;
+          message?: string;
+          is_read?: boolean;
+          created_at?: string;
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "profile";
+            referencedColumns: ["user_id"];
+          },
+          {
+            foreignKeyName: "notifications_sender_id_fkey";
+            columns: ["sender_id"];
+            referencedRelation: "profile";
+            referencedColumns: ["user_id"];
+          }
+        ]
+      }
       comment: {
         Row: {
           created_at: string
@@ -61,6 +107,86 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      notification_settings: {
+        Row: {
+          comment: boolean | null
+          like_quote: boolean | null
+          like_review: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          comment?: boolean | null
+          like_quote?: boolean | null
+          like_review?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          comment?: boolean | null
+          like_quote?: boolean | null
+          like_review?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_settings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profile"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          sender_id: string
+          target_id: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          sender_id: string
+          target_id: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          sender_id?: string
+          target_id?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       profile: {
         Row: {
@@ -259,6 +385,11 @@ export type Database = {
     }
     Enums: {
       "Like/Dislike": "like" | "dislike"
+      notification_type:
+        | "comment"
+        | "review_like"
+        | "review_dislike"
+        | "quote_like"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -387,6 +518,12 @@ export const Constants = {
   public: {
     Enums: {
       "Like/Dislike": ["like", "dislike"],
+      notification_type: [
+        "comment",
+        "review_like",
+        "review_dislike",
+        "quote_like",
+      ],
     },
   },
 } as const

@@ -14,6 +14,12 @@ export async function fetchPopularMovies() {
   if (!res.ok) throw new Error('TMDB불러오기 실패');
 
   const data = await res.json();
-  return data.results;
+
+  // return data.results;
+
+  return data.results.map((item: any) => ({
+    ...item,
+    media_type: "movie", // 여기 추가!!
+  }));
 }
 

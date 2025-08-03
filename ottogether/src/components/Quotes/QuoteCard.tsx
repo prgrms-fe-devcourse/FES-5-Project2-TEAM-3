@@ -5,26 +5,24 @@ import likeIcon from '@/assets/icons/like-icon.svg';
 import quoteLeft from '@/assets/icons/quotes-left.svg';
 import quoteRight from '@/assets/icons/quotes-right.svg';
 import { toggleQuoteLike } from '../../util/toggleQuoteLike';
-import type { Database } from '../reviewCard/supabase.type';
+import type { Database } from '../../supabase/supabase.type';
 
 type Quote = Database['public']['Tables']['quotes']['Row'];
 
 type QuoteCardProps = {
   quote: Quote;
   onRemove: (id: number) => void;
-  isSearch?: boolean;
-  highlight?: React.ReactNode;
+  className?: string;
 };
 
 export default function QuoteCard({
   quote,
   onRemove,
-  isSearch = false,
-  highlight
+  className = ''
 }: QuoteCardProps) {
   
   if (!quote) return null;
-
+  
   const { id, content, person, likes } = quote;
 
   const [likeCount, setLikeCount] = useState(likes);
@@ -48,12 +46,10 @@ export default function QuoteCard({
         .eq('user_id', user.id)
         .eq('quote_id', id)
         .maybeSingle();
-
       if (data) {
         setIsLiked(true);
       }
     };
-
   
     checkLike();
   }, [id]);
@@ -67,7 +63,6 @@ export default function QuoteCard({
   fetchUser();
 }, []);  
     
-
 
   const handleLike = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -116,10 +111,7 @@ export default function QuoteCard({
   setIsEditing(false);
 };
 
-
-
   const handleRemove = async () => {
-
   const isConfirmed = window.confirm('정말 삭제하시겠습니까?');
   if (!isConfirmed) return;  
 
@@ -131,7 +123,7 @@ export default function QuoteCard({
 };
 
   return (
-    <div className={`${S.card} ${isEditing ? S.editing : ''} ${isSearch ? S["search-quotes"] : ''}`.trim()}>
+    <div className={`${S.card} ${isEditing ? S.editing : ''} ${className ? className : ''}`.trim()}>
       <div className={S.body}>
         <div className={S.top}>
           <img src={quoteLeft} alt="left quote" className={S.quoteIconLeft} />
@@ -142,7 +134,7 @@ export default function QuoteCard({
               placeholder="명대사를 입력하세요"
             />
           ) : (
-            <p className={S.content}>{highlight ?? editContent}</p>
+            <p className={S.content}>{editContent}</p>
           )}
           <img src={quoteRight} alt="right quote" className={S.quoteIconRight} />
         </div>
@@ -177,7 +169,6 @@ export default function QuoteCard({
                 <button className={S.removeBtn} onClick={handleRemove}>Remove</button>
       </>
     )}
-      
   </div>
 )}
         </div>
