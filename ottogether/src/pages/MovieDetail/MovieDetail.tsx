@@ -6,6 +6,8 @@ import S from './MovieDetail.module.css';
 import type { Tables } from '../../supabase/supabase.type';
 import { supabase } from "../../supabase/supabase";
 import RatingBarChart from "./RatingBarChart";
+import { useAuth } from "../../contexts/AuthProvider";
+import { isMovieLiked, toggleFavoriteMovie } from "../../util/toggleFavoriteMovie";
 
 type Review = Tables<'review'>;
 
@@ -32,10 +34,12 @@ export type Genre = {
 */
 
 function MovieDetail() {
+	const {isAuth, user} = useAuth();
   const { mediaType, id } = useParams<{ mediaType: "movie" | "tv"; id: string }>();
   const [content, setContent] = useState<MovieData | null>(null);
 	const IMAGE_URL = 'https://image.tmdb.org/t/p/original/';
 	const [currentReviewData, setCurrentReviewData] = useState<Review[] | null>(null);
+	const [isMyLove, setIsMyLove] = useState(false);
 
   useEffect(() => {
     if (!mediaType || !id) return;
@@ -55,6 +59,9 @@ function MovieDetail() {
     fetchData();
   }, [mediaType, id]);
 
+	if (!id)
+		return <p>Movie / TV를 찾을 수 없습니다.</p>
+
 	const dataLoading = async () => {
 		if (!id)
 			return ;
@@ -67,6 +74,28 @@ function MovieDetail() {
 		setCurrentReviewData(data);
 	}
 
+	const handleFavorite = async () => {
+		if (!isAuth || !user)
+		{
+			alert('로그인이 필요한 서비스입니다.');
+    	return;
+		}
+		const result = await toggleFavoriteMovie(user.id, +id);
+		if (!result.error) {
+      setIsMyLove(result.liked);
+    }
+	}
+
+	useEffect(() => {
+			const fetchLikedStatus = async () => {
+				if (!user) return;
+				const liked = await isMovieLiked(user.id, +id);
+				setIsMyLove(liked);
+			};
+	
+			fetchLikedStatus();
+		}, [id]);
+
 	useEffect(() => {
 		async function dataInit(){
 			// const profile = await getData('profile');
@@ -76,6 +105,7 @@ function MovieDetail() {
 			dataLoading();
 		}
 		dataInit();
+		// setIsMyLove 가져오는 함수 추가
 	}, [])
 
 	const getAverageRate = () => {
@@ -107,8 +137,11 @@ function MovieDetail() {
 				<div className={S["main-information"]}>
 				<div className={S["poster-wrapper"]}>
 					<img className={S['main-poster-image']} src={IMAGE_URL + content.poster_path} alt="main-poster-image" />
-						<button className={S["favorite-btn"]}>
-							<img src="/favorite.svg" alt="favorite-icon" />
+						<button className={S["favorite-btn"]} onClick={handleFavorite}>
+							{	!isMyLove &&
+								<img src="/emptyFavorite.svg" alt="empty-favorite-icon" />
+							}
+							{isMyLove &&  <img src="/fullFavorite.svg" alt="favorite-icon" />}
 						</button>
 				</div>
 
