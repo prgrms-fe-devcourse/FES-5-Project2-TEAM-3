@@ -30,9 +30,12 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 	const [isLiked, setIsLiked] = useState(false);
 	const [likeCount, setLikeCount] = useState(0);
 	const [isDisLiked, setIsDisliked] = useState(false);
-	const [disLikeCount, setDislikeCount] = useState(0);
+	// const [disLikeCount, setDislikeCount] = useState(0);
 	if (!(reviewData && profileData))
-		return <p>페이지 로딩 에러..</p>;
+	{
+		console.error('Error : 올바르지 않은 프로필 혹은 리뷰입니다.', reviewData, '||', profileData);
+		return ;
+	}
 	const handleThumb = async (input : 'like' | 'dislike') => {
   if (!isAuth) {
     alert('로그인이 필요한 서비스입니다.');
@@ -51,13 +54,13 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
     if (liked && isDisLiked) setIsDisliked(false);
     
     setLikeCount(prev => liked ? prev + 1 : prev - 1);
-    if (isDisLiked) setDislikeCount(prev => prev - 1);
+    // if (isDisLiked) setDislikeCount(prev => prev - 1);
     
   } else {
     setIsDisliked(liked!);
     if (liked && isLiked) setIsLiked(false);
     
-    setDislikeCount(prev => liked ? prev + 1 : prev - 1);
+    // setDislikeCount(prev => liked ? prev + 1 : prev - 1);
     if (isLiked) setLikeCount(prev => prev - 1);
   }
 };
@@ -82,7 +85,7 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 		if (reviewData && profileData)
 		{
 			setLikeCount(reviewData.like_count!);
-			setDislikeCount(reviewData.dislike_count!);
+			// setDislikeCount(reviewData.dislike_count!);
 			checkThumb();
 		}
 	}, [reviewData])
@@ -104,10 +107,10 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 				<img src={isLiked ? "/thumbsUp.svg" : "/emptyThumbsUp.svg"} alt="ThumbsUpIcon" />
 				<p>{likeCount}</p>
 			</div>
-			<div className={S['reaction-item']} onClick={() => handleThumb('dislike')}>
+			{/* <div className={S['reaction-item']} onClick={() => handleThumb('dislike')}>
 				<img src={isDisLiked ? "/thumbsDown.svg" : "/emptyThumbsDown.svg"} alt="ThumbsUpIcon" />
 				<p>{disLikeCount}</p>
-			</div>
+			</div> */}
 			<div className={S['reaction-item']}>
 				<img src="/comment.svg" alt="commentIcon" />
 				<p>{reviewData.comment_count}</p>
