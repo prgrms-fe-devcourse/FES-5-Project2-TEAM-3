@@ -14,6 +14,52 @@ export type Database = {
   }
   public: {
     Tables: {
+      notifications: {
+        Row: {
+          id: string;
+          user_id: string;
+          sender_id: string;
+          type: "comment" | "like_review" | "like_quote";
+          target_id: string;
+          message: string;
+          is_read: boolean;
+          created_at: string;
+        }
+        Insert: {
+          id?: string;
+          user_id: string;
+          sender_id: string;
+          type: "comment" | "like_review" | "like_quote";
+          target_id: string;
+          message: string;
+          is_read?: boolean;
+          created_at?: string;
+        }
+        Update: {
+          id?: string;
+          user_id?: string;
+          sender_id?: string;
+          type?: "comment" | "like_review" | "like_quote";
+          target_id?: string;
+          message?: string;
+          is_read?: boolean;
+          created_at?: string;
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "profile";
+            referencedColumns: ["user_id"];
+          },
+          {
+            foreignKeyName: "notifications_sender_id_fkey";
+            columns: ["sender_id"];
+            referencedRelation: "profile";
+            referencedColumns: ["user_id"];
+          }
+        ]
+      }
       comment: {
         Row: {
           created_at: string
