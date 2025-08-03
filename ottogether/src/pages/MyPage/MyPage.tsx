@@ -8,8 +8,13 @@ import LikedReviews from "../../components/inMyPage/LikedReviews";
 import LikedQuotes from "../../components/inMyPage/LikedQuotes";
 import { useAuth } from "../../contexts/AuthProvider";
 import Settings from "../../components/inMyPage/MySettings/Settings";
-import Notifications from "../../components/inMyPage/Notifications";
 import ProfileBox from "../../components/inMyPage/ProfileBox";
+import Notifications from "../../components/Notifications/Notifications";
+
+type UserType = {
+  id: string;
+  email?: string;
+};
 
 type ProfileType = {
   user_id: string;

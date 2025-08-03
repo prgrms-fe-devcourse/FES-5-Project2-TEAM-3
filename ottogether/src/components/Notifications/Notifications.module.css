@@ -1,0 +1,138 @@
+.container {
+  border-radius: 8px;
+  padding: 1rem;
+  color: #fff;
+  width: 100%;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.markAll {
+  background: none;
+  border: none;
+  color: #4da6ff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  background: none;
+  border: none;
+  color: #bbb;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.tab span {
+  margin-left: 4px;
+  font-weight: bold;
+}
+
+.active {
+  color: #4da6ff;
+  border-bottom: 2px solid #4da6ff;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  padding: 0.8rem;
+  border-radius: 6px;
+  margin-bottom: 0.6rem;
+  transition: background 0.2s, transform 0.1s;
+  cursor: pointer;
+}
+
+.item:hover {
+  transform: translateY(-2px);
+}
+
+.unread {
+  background: #2a3b5f; /* 안 읽음 → 파란색 톤 */
+}
+
+.read {
+  background: #2a2a3a; /* 읽음 → 회색 톤 */
+}
+
+.avatar {
+  flex-shrink: 0;
+  margin-right: 0.8rem;
+}
+
+.avatar img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatarFallback {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #eee;
+}
+
+.content {
+  flex: 1;
+}
+
+.content p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.meta {
+  font-size: 0.8rem;
+  color: #ccc;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+
+.footer {
+  text-align: center;
+  padding-top: 0.8rem;
+}
+
+.viewAll {
+  background: none;
+  border: none;
+  color: #4da6ff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}

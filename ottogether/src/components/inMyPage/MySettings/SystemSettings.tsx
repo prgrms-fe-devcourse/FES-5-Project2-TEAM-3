@@ -1,8 +1,8 @@
 import { useState } from "react";
-import NotificationSection from "./NotificationSection";
 import DeleteAccountModal from "./DeleteAccountModal";
 import PasswordModal from "./PasswordModal";
 import S from "./SystemSettings.module.css";
+import NotificationSection from "./NotificationSection";
 
 interface UserType {
   id: string;
