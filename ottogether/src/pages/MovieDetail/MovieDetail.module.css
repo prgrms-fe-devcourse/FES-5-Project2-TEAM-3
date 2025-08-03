@@ -59,6 +59,8 @@
 	align-items: center;
 }
 
+
+
 .information {
   display: flex;
 	flex-direction: column;
@@ -154,7 +156,6 @@
 .rating-container {
   width: 100%;
   margin-top: 2rem;
-  padding: 1rem;
   border-radius: 12px;
 }
 
@@ -163,11 +164,28 @@
   margin-bottom: 0.3rem;
 }
 
-.rating-container p {
-  font-size: 14px;
-  margin-bottom: 0.5rem;
+.rate-wrap{
+	display: flex;
+	flex-direction: column;
 }
 
+.rate-layout{
+	display: flex;
+	gap: 33px;
+	align-items: center;
+}
+
+.rate-container{
+	display: flex;
+	gap: 13px;
+	padding-top: 10px;
+	align-items: center;
+}
+
+.rate-container p{
+	font-size: 32px;
+	color: var(--color-warning-500);
+}
 .members-container {
   width: 100%;
   margin-top: 2rem;

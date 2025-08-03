@@ -4,8 +4,8 @@ import { getContentDetail } from "../../tmdbApi/getContentDetail";
 import type { MovieData } from "../../tmdbApi/movie.type";
 import S from './MovieDetail.module.css';
 import type { Tables } from '../../supabase/supabase.type';
-import { getData } from "../../components/ReviewCard/SupaData";
 import { supabase } from "../../supabase/supabase";
+import RatingBarChart from "./RatingBarChart";
 
 type Review = Tables<'review'>;
 
@@ -87,7 +87,7 @@ function MovieDetail() {
 		}
 		sum /= currentReviewData.length;
 
-		return sum;
+		return sum.toFixed(2);
 	}
 
  return (<>
@@ -140,10 +140,16 @@ function MovieDetail() {
 
 				<div className={S["rating-container"]}>
 					<h2>Rating</h2>
-					<p>User rating</p>
-					<img src="/star/fullStar.svg" alt="starIcon" />
-					<p>{getAverageRate()}</p>
-					{/* 도표 */}
+					<div className={S["rate-layout"]}>
+						<div className={S["rate-wrap"]}>
+							<p>User rating</p>
+							<div className={S["rate-container"]}>
+								<img src="/star/fullStar.svg" alt="starIcon" />
+								<p>{getAverageRate()}</p>
+							</div>
+						</div>
+						{RatingBarChart(currentReviewData)}
+					</div>
 				</div>
 				<div className={S["members-container"]}>
 					<h2>Favorites</h2>

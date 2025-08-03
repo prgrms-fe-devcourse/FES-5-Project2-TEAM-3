@@ -1,0 +1,35 @@
+.rating-bar-chart {
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0; /* 위아래 여백 약간 주기 */
+}
+
+.bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rating-label {
+  width: 24px;
+  font-size: 14px;
+  text-align: right;
+  color: #aaa;
+}
+
+.bar-background {
+  flex: 1;
+  height: 16px;
+  background-color: #2C2C2C;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background-color: var(--color-warning-500);
+  border-radius: 8px;
+  transition: width 0.3s ease; /* 부드럽게 늘어나게 */
+}
