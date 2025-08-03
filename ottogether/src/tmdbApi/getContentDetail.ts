@@ -29,25 +29,30 @@ export async function getContentDetail(
         backdrop_path: data.backdrop_path,
         overview: data.overview,
         media_type: "movie",
+				tagline: data.tagline,
+				original_language : data.original_language,
       };
     }
 
     if (mediaType === "tv") {
       const seriesData: SeriesData = {
-        id: data.id,
-        name: data.name,
-        poster_path: data.poster_path,
-        first_air_date: data.first_air_date,
-        vote_average: data.vote_average,
-        genre_ids: data.genres.map((g: any) => g.id),
-        provider_logo_path: null,
-        backdrop_path: data.backdrop_path,
-        overview: data.overview,
-      };
+				id: data.id,
+				name: data.name,
+				poster_path: data.poster_path,
+				first_air_date: data.first_air_date,
+				vote_average: data.vote_average,
+				genre_ids: data.genres.map((g: any) => g.id),
+				provider_logo_path: null,
+				backdrop_path: data.backdrop_path,
+				overview: data.overview,
+				tagline: data.tagline,
+				media_type: "tv",
+				original_language : data.original_language,
+			};
       return normalizeSeriesData(seriesData);
     }
-
-    return null;
+		return data;
+    // return null;
   } catch (error) {
     console.error("getContentDetail Error:", error);
     return null;

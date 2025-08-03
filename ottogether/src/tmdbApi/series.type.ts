@@ -10,6 +10,9 @@ export type SeriesData = {
   provider_logo_path?: string | null;
   backdrop_path: string | null;
   overview: string | null;
+	tagline : string;
+	media_type : "movie" | "tv";
+	original_language : string,
 }
 
 export function normalizeSeriesData(series: SeriesData): MovieData {
@@ -22,7 +25,10 @@ export function normalizeSeriesData(series: SeriesData): MovieData {
     genre_ids: series.genre_ids,
     provider_logo_path: series.provider_logo_path ?? null,
     backdrop_path: series.backdrop_path ?? null,
-    overview: series.overview ?? null
+    overview: series.overview ?? null,
+		tagline : series.tagline,
+		media_type : series.media_type,
+		original_language : series.original_language,
   };
 }
 

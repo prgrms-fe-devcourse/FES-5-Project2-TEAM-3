@@ -77,7 +77,6 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 							.maybeSingle();
 			
 		if (data) {
-			console.log('useEffect Data : ', data);
 			data.reaction_type === 'like' ? setIsLiked(true) : setIsDisliked(true);
 		}
 		}
