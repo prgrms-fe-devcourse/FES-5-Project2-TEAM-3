@@ -35,11 +35,6 @@ function Review() {
 	}, [])
 
 	const activatePopup = (id : number) => {
-		console.log('active Popup 실행');
-		console.log('profileData : ', profileData);
-		console.log('reviewData : ', reviewData);
-		console.log('commentData : ', commentData);
-		console.log('commentData : ', findReviewById(id, reviewData!));
 		setIsPopupOpen(true);
 		setCurrentPopupReview(findReviewById(id, reviewData!));
 	}

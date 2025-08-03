@@ -4,6 +4,9 @@ import S from "./ReviewCard.module.css";
 import StarRating from "./StarRating";
 import { formatDateNoYear } from "../../util/formatDate";
 import { useAuth } from '../../contexts/AuthProvider';
+import toggleReviewThumbs from './toggleReviewThumbs';
+import { useEffect, useState } from 'react';
+import { supabase } from '../../supabase/supabase';
 
 type Review = Tables<'review'>;
 type Profile = Tables<'profile'>;
@@ -24,51 +27,95 @@ export function findReviewById(inputId : number, reviewData : Review[]) : Review
 
 function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 	const {isAuth, user} = useAuth();
+	const [isLiked, setIsLiked] = useState(false);
+	const [likeCount, setLikeCount] = useState(0);
+	const [isDisLiked, setIsDisliked] = useState(false);
+	const [disLikeCount, setDislikeCount] = useState(0);
+	if (!(reviewData && profileData))
+		return <p>페이지 로딩 에러..</p>;
+	const handleThumb = async (input : 'like' | 'dislike') => {
+  if (!isAuth) {
+    alert('로그인이 필요한 서비스입니다.');
+    return;
+  }
+  
+  const { liked, error } = await toggleReviewThumbs(reviewData.id, user!.id, input);
+  
+  if (error) {
+    console.error('좋아요/싫어요 처리 중 오류:', error);
+    return;
+  }
+  
+  if (input === 'like') {
+    setIsLiked(liked!);
+    if (liked && isDisLiked) setIsDisliked(false);
+    
+    setLikeCount(prev => liked ? prev + 1 : prev - 1);
+    if (isDisLiked) setDislikeCount(prev => prev - 1);
+    
+  } else {
+    setIsDisliked(liked!);
+    if (liked && isLiked) setIsLiked(false);
+    
+    setDislikeCount(prev => liked ? prev + 1 : prev - 1);
+    if (isLiked) setLikeCount(prev => prev - 1);
+  }
+};
 
-	const handleLike = () => {
-		if (!isAuth)
-		{
-			alert('로그인이 필요한 서비스입니다.');
-			return ;
+	useEffect(() => {
+		const checkThumb = async () => {
+			if (!user)
+				return ;
+			const { data } = await supabase
+							.from('review_like')
+							.select('*')
+							.eq('user_id', user.id)
+							.eq('review_id', reviewData.id)
+							.maybeSingle();
+			
+		if (data) {
+			console.log('useEffect Data : ', data);
+			data.reaction_type === 'like' ? setIsLiked(true) : setIsDisliked(true);
+		}
 		}
 
-	}
-	const handleDislike = () => {
-
-	}
-
+		if (reviewData && profileData)
+		{
+			setLikeCount(reviewData.like_count!);
+			setDislikeCount(reviewData.dislike_count!);
+			checkThumb();
+		}
+	}, [reviewData])
 	
 	return (
-		<>
-		{ (reviewData && profileData) &&
-				<div className={S["card-container"]}>
-				<header className={S.header}>
-					<img className={S['user-avatar']} src={profileData.avatar_url ?? "./beomTeacher.svg"} alt="profile_image" />
-					<p>{profileData.nickname ?? 'Guest'} · {formatDateNoYear(reviewData.updated_at!)}</p>
-					{((isAuth && user) && profileData.user_id == user.id) && <img src="/YouBadge.svg" alt="isItMeCheck"></img>} 
-					<div className={S['star-container']}>{StarRating(reviewData.rating)}</div>
-				</header>
-				<main>
-					<p>{reviewData.text_content}</p>
-				</main>
-				<footer className={S.footer}>
-					<div className={S['reaction-item']} onClick={handleLike}>
-						<img src="/thumbsUp.svg" alt="ThumbsUpIcon" />
-						<p>{reviewData.like_count}</p>
-					</div>
-					<div className={S['reaction-item']} onClick={handleDislike}>
-						<img src="/thumbsDown.svg" alt="ThumbsUpIcon" />
-						<p>{reviewData.dislike_count}</p>
-					</div>
-					<div className={S['reaction-item']}>
-						<img src="/comment.svg" alt="commentIcon" />
-						<p>{reviewData.comment_count}</p>
-					</div>
-					<p className={S['read-more']} onClick={() => activePopUp(reviewData.id)}>Read More</p>
-				</footer>
-				</div>
-		}
-		</>
+	<>
+		<div className={S["card-container"]}>
+		<header className={S.header}>
+			<img className={S['user-avatar']} src={profileData.avatar_url ?? "./beomTeacher.svg"} alt="profile_image" />
+			<p>{profileData.nickname ?? 'Guest'} · {formatDateNoYear(reviewData.updated_at!)}</p>
+			{((isAuth && user) && profileData.user_id == user.id) && <img src="/YouBadge.svg" alt="isItMeCheck"></img>} 
+			<div className={S['star-container']}>{StarRating(reviewData.rating)}</div>
+		</header>
+		<main>
+			<p>{reviewData.text_content}</p>
+		</main>
+		<footer className={S.footer}>
+			<div className={S['reaction-item']} onClick={() => handleThumb('like')}>
+				<img src={isLiked ? "/thumbsUp.svg" : "/emptyThumbsUp.svg"} alt="ThumbsUpIcon" />
+				<p>{likeCount}</p>
+			</div>
+			<div className={S['reaction-item']} onClick={() => handleThumb('dislike')}>
+				<img src={isDisLiked ? "/thumbsDown.svg" : "/emptyThumbsDown.svg"} alt="ThumbsUpIcon" />
+				<p>{disLikeCount}</p>
+			</div>
+			<div className={S['reaction-item']}>
+				<img src="/comment.svg" alt="commentIcon" />
+				<p>{reviewData.comment_count}</p>
+			</div>
+			<p className={S['read-more']} onClick={() => activePopUp(reviewData.id)}>Read More</p>
+		</footer>
+		</div>
+	</>
 	)
 }
 export default ReviewCard
