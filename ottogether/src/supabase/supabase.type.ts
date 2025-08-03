@@ -14,52 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      notifications: {
-        Row: {
-          id: string;
-          user_id: string;
-          sender_id: string;
-          type: "comment" | "like_review" | "like_quote";
-          target_id: string;
-          message: string;
-          is_read: boolean;
-          created_at: string;
-        }
-        Insert: {
-          id?: string;
-          user_id: string;
-          sender_id: string;
-          type: "comment" | "like_review" | "like_quote";
-          target_id: string;
-          message: string;
-          is_read?: boolean;
-          created_at?: string;
-        }
-        Update: {
-          id?: string;
-          user_id?: string;
-          sender_id?: string;
-          type?: "comment" | "like_review" | "like_quote";
-          target_id?: string;
-          message?: string;
-          is_read?: boolean;
-          created_at?: string;
-        }
-        Relationships: [
-          {
-            foreignKeyName: "notifications_user_id_fkey";
-            columns: ["user_id"];
-            referencedRelation: "profile";
-            referencedColumns: ["user_id"];
-          },
-          {
-            foreignKeyName: "notifications_sender_id_fkey";
-            columns: ["sender_id"];
-            referencedRelation: "profile";
-            referencedColumns: ["user_id"];
-          }
-        ]
-      }
       comment: {
         Row: {
           created_at: string
@@ -130,15 +84,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "notification_settings_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "profile"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       notifications: {
         Row: {
@@ -303,7 +249,7 @@ export type Database = {
           dislike_count: number | null
           id: number
           like_count: number | null
-          movie_id: number | null
+          movie_id: string | null
           rating: number
           text_content: string | null
           updated_at: string | null
@@ -315,7 +261,7 @@ export type Database = {
           dislike_count?: number | null
           id?: number
           like_count?: number | null
-          movie_id?: number | null
+          movie_id?: string | null
           rating: number
           text_content?: string | null
           updated_at?: string | null
@@ -327,7 +273,7 @@ export type Database = {
           dislike_count?: number | null
           id?: number
           like_count?: number | null
-          movie_id?: number | null
+          movie_id?: string | null
           rating?: number
           text_content?: string | null
           updated_at?: string | null

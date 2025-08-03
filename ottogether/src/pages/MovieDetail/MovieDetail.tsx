@@ -3,7 +3,9 @@ import { useParams } from "react-router-dom";
 import { getContentDetail } from "../../tmdbApi/getContentDetail";
 import type { MovieData } from "../../tmdbApi/movie.type";
 import S from './MovieDetail.module.css';
-import type { Tables } from '../../components/reviewCard/supabase.type';
+import type { Tables } from '../../supabase/supabase.type';
+import { getData } from "../../components/ReviewCard/SupaData";
+import { supabase } from "../../supabase/supabase";
 
 type Review = Tables<'review'>;
 
@@ -33,7 +35,7 @@ function MovieDetail() {
   const { mediaType, id } = useParams<{ mediaType: "movie" | "tv"; id: string }>();
   const [content, setContent] = useState<MovieData | null>(null);
 	const IMAGE_URL = 'https://image.tmdb.org/t/p/original/';
-	const [currentReviewData, setCurrentReviewData] = useState<Review | null>(null);
+	const [currentReviewData, setCurrentReviewData] = useState<Review[] | null>(null);
 
   useEffect(() => {
     if (!mediaType || !id) return;
@@ -53,23 +55,63 @@ function MovieDetail() {
     fetchData();
   }, [mediaType, id]);
 
+	const dataLoading = async () => {
+		if (!id)
+			return ;
+		const {data, error} = await supabase.from('review').select('*').eq('movie_id', id);
+		if (error)
+		{
+			console.error('Error : 데이터를 불러오는 중 에러 : ', error);
+			return ;
+		}
+		setCurrentReviewData(data);
+	}
+
+	useEffect(() => {
+		async function dataInit(){
+			// const profile = await getData('profile');
+			// const quotes = await getData('quotes');
+			// setProfileData(profile);
+			// setQuotesData(quotes);
+			dataLoading();
+		}
+		dataInit();
+	}, [])
+
+	const getAverageRate = () => {
+		let sum = 0;
+		if (!currentReviewData || currentReviewData.length === 0)
+			return sum;
+		for (const element of currentReviewData) {
+			sum += element.rating;
+		}
+		sum /= currentReviewData.length;
+
+		return sum;
+	}
+
  return (<>
 		{ content &&
 			<>
-			<img className={S["hero-section-image"]} src={IMAGE_URL + content.backdrop_path} alt="hero-section-image" />
-			<div className={S["header"]}>
-				<p>${mediaType}</p>
-				<h1>${content.title}</h1>
-				<div className={S["average-rate-container"]}>
-					<img src="/star/fullStar.svg" alt="starIcon" />
-					<p>현재 movieId를 가진 리뷰의 별점의 평균을 내는 함수</p>
+			<div className={S["hero-section"]}>
+				<img className={S["hero-section-image"]} src={IMAGE_URL + content.backdrop_path} alt="hero-section-image" />
+				<div className={S["header"]}>
+					<h1>{content.title}</h1>
+					<div className={S["average-rate-container"]}>
+						<img className={S["star-icon"]} src="/star/fullStar.svg" alt="starIcon" />
+						<p>{getAverageRate()}</p>
+					</div>
 				</div>
 			</div>
-			<div className={S["main-information"]}>
-				<img className={S['main-poster-image']} src={IMAGE_URL + content.poster_path} alt="main-poster-image" />
-				<button className={S["favorite-btn"]}>
-					<img src="/favorite.svg" alt="favorite-icon" />
-				</button>
+			<div className={S["information"]}>
+				<div className={S["main-information"]}>
+				<div className={S["poster-wrapper"]}>
+					<img className={S['main-poster-image']} src={IMAGE_URL + content.poster_path} alt="main-poster-image" />
+						<button className={S["favorite-btn"]}>
+							<img src="/favorite.svg" alt="favorite-icon" />
+						</button>
+				</div>
+
 				<div className={S["text-info"]}>
 					<h2>{content.tagline}</h2>
 					<p>{content.overview}</p>
@@ -82,38 +124,46 @@ function MovieDetail() {
 						<p>{content.release_date}</p>
 					</div>
 					<div className={S["data-item"]}>
-						<p className={S.label}>Run time</p>
-						{/* <p>{content.runtime}</p> */}
+						<p className={S.label}>Media Type</p>
+						<p>{content.media_type}</p>
 					</div>
 					<div className={S["data-item"]}>
 						<p className={S.label}>Genres</p>
 						<p>{content.genre_names!.join(', ')}</p>
 					</div>
+					</div>
 				</div>
-				<div className="rating-container">
+
+			
+			<div className={S["additional-info"]}>
+				<div className={S["rating-favorites"]}>
+
+				<div className={S["rating-container"]}>
 					<h2>Rating</h2>
 					<p>User rating</p>
 					<img src="/star/fullStar.svg" alt="starIcon" />
-					{/* <p>별점</p> */}
-					{/*  */}
+					<p>{getAverageRate()}</p>
+					{/* 도표 */}
 				</div>
-				<div className="members-container">
+				<div className={S["members-container"]}>
 					<h2>Favorites</h2>
 					<p>Likes by</p>
 					{/* <p>이 영화를 좋아하는 사람 수</p> */}
 					{/* 영화를 좋아하는 유저 프로필 사진 (최대 4개) */}
 					<button className={S["more-member"]}>+</button>
 				</div>
-				<div className="reviews-container">
+				</div>
+				<div className={S["reviews-container"]}>
 					<h2>Reviews</h2>
 					<button className={S["see-all"]}>See All</button>
 					{/* ReviewCard를 커스텀한 컴포넌트 개발해야할듯? */}
 				</div>
-				<div className="quotes-container">
+				<div className={S["quotes-container"]}>
 					<h2>Favorite Quotes</h2>
 					<button className={S["see-all"]}>See All</button>
 					{/* 영화 ID를 받아서 Quote db의 가장 많이 좋아요를 받은 Quote를 받은 뒤, QuoteCard 출력하는 함수 */}
 				</div>
+			</div>
 			</div>
 			</>
 		}
