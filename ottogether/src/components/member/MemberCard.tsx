@@ -1,7 +1,7 @@
 import S from "./MemberCard.module.css"
 
 
-import type { Tables } from '../reviewCard/supabase.type';
+import type { Tables } from '../../supabase/supabase.type';
 import { formatDate } from "../../util/formatDate";
 
 type Profile = Tables<'profile'>;
