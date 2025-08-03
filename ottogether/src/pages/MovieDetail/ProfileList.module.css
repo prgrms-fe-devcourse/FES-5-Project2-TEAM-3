@@ -1,0 +1,22 @@
+.profileContainer {
+	width: 266px;
+    display: flex;
+    gap: -15px; 
+    align-items: center;
+    position: relative;
+    padding-left: 15px;
+}
+
+.profileItem {
+    position: relative;
+    border: 3px solid #1e1e1e; 
+    border-radius: 50%; 
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+
+.profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}}
