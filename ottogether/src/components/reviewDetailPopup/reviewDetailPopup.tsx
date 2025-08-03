@@ -286,10 +286,10 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 						<img src="/thumbsUp.svg" alt="ThumbsUpIcon" />
 						<p>{reviewSingleData.like_count}</p>
 					</div>
-					<div className={S['reaction-item']}>
+					{/* <div className={S['reaction-item']}>
 						<img src="/thumbsDown.svg" alt="ThumbsUpIcon" />
 						<p>{reviewSingleData.dislike_count}</p>
-					</div>
+					</div> */}
 					<div className={S['reaction-item']}>
 						<img src="/comment.svg" alt="commentIcon" />
 						<p>{commentCount}</p>

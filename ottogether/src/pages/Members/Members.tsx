@@ -86,21 +86,21 @@ function Members() {
 
 
 	return (
-		<>
-		<div className={S['section-header']}>
-			<button onClick={movePreviousPage} disabled={currentPageNum === 1}>&lt;</button>
-			<p>···</p>
-			<div className={S["button-group"]}>
-				{renderPageNumbers()}
+		<div className={S['container']}>
+			<div className={S['section-header']}>
+				<button onClick={movePreviousPage} disabled={currentPageNum === 1}>&lt;</button>
+				<p>···</p>
+				<div className={S["button-group"]}>
+					{renderPageNumbers()}
+				</div>
+				<p>···</p>
+				<button onClick={moveNextPage} disabled={currentPageNum === totalPageCount}>&gt;</button>
 			</div>
-			<p>···</p>
-			<button onClick={moveNextPage} disabled={currentPageNum === totalPageCount}>&gt;</button>
+			<div className={S.divider}></div>
+			{
+				(profileData && reviewData && quotesData) && <MemberCard profileData={currentProfile} reviewData={reviewData} quotesData={quotesData}/>
+			}
 		</div>
-		<div className={S.divider}></div>
-		{
-			(profileData && reviewData && quotesData) && <MemberCard profileData={currentProfile} reviewData={reviewData} quotesData={quotesData}/>
-		}
-		</>
 	)
 }
 export default Members

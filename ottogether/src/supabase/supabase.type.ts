@@ -130,15 +130,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "notification_settings_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "profile"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       profile: {
         Row: {
@@ -255,7 +247,7 @@ export type Database = {
           dislike_count: number | null
           id: number
           like_count: number | null
-          movie_id: number | null
+          movie_id: string | null
           rating: number
           text_content: string | null
           updated_at: string | null
@@ -267,7 +259,7 @@ export type Database = {
           dislike_count?: number | null
           id?: number
           like_count?: number | null
-          movie_id?: number | null
+          movie_id?: string | null
           rating: number
           text_content?: string | null
           updated_at?: string | null
@@ -279,7 +271,7 @@ export type Database = {
           dislike_count?: number | null
           id?: number
           like_count?: number | null
-          movie_id?: number | null
+          movie_id?: string | null
           rating?: number
           text_content?: string | null
           updated_at?: string | null
