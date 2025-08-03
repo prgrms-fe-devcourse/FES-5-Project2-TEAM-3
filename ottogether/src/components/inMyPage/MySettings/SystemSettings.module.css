@@ -95,7 +95,6 @@
   align-items: center;
   z-index: 1000;
 
-  /* 부드러운 페이드 인 효과 */
   animation: fadeIn 0.3s ease;
 }
 
@@ -108,7 +107,6 @@
   max-width: 400px;
   width: 90%;
 
-  /* 살짝 위에서 내려오는 애니메이션 */
   transform: translateY(-20px);
   animation: slideDown 0.3s ease forwards;
 }
@@ -153,7 +151,6 @@
   background: var(--color-error-600);
 }
 
-/* 애니메이션 정의 */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }

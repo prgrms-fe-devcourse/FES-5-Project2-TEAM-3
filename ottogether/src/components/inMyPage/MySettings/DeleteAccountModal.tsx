@@ -26,7 +26,6 @@ function DeleteAccountModal({ onClose, user }: Props) {
       console.log("🔎 탈퇴 요청 시작");
       console.log("user:", user);
 
-      // ✅ 세션 확인
       const { data, error: sessionError } = await supabase.auth.getSession();
       console.log("session data:", data, "session error:", sessionError);
 
@@ -37,7 +36,6 @@ function DeleteAccountModal({ onClose, user }: Props) {
       const token = data.session.access_token;
       console.log("access_token:", token);
 
-      // ✅ fetch 요청
       const response = await fetch(
         "https://ifvtongrzrnoyiflqmcs.supabase.co/functions/v1/deleteUser",
         {
