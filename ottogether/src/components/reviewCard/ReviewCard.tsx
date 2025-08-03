@@ -9,8 +9,8 @@ type Review = Tables<'review'>;
 type Profile = Tables<'profile'>;
 
 interface Prop{
-	reviewData : Review[],
-	profileData : Profile[],
+	reviewData : Review,
+	profileData : Profile | undefined,
 	activePopUp : (id : number) => void
 }
 
@@ -25,39 +25,48 @@ export function findReviewById(inputId : number, reviewData : Review[]) : Review
 function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 	const {isAuth, user} = useAuth();
 
+	const handleLike = () => {
+		if (!isAuth)
+		{
+			alert('로그인이 필요한 서비스입니다.');
+			return ;
+		}
+
+	}
+	const handleDislike = () => {
+
+	}
+
 	
 	return (
-		/* TODO : (element.user_id == 1004)에서 1004 대신 현재 접속중인 유저 ID로 치환하기 */
 		<>
-		{
-			reviewData && reviewData.map(element => (
-				<div key={element.id} className={S["card-container"]}>
+		{ (reviewData && profileData) &&
+				<div className={S["card-container"]}>
 				<header className={S.header}>
-					<img className={S['user-avatar']} src={findUserById(element.user_id, profileData)?.avatar_url ?? "./beomTeacher.svg"} alt="profile_image" />
-					<p>{findUserById(element.user_id, profileData)?.nickname ?? 'User'} · {formatDateNoYear(element.updated_at!)}</p>
-					{((isAuth && user) && element.user_id == user.id) && <img src="/YouBadge.svg" alt="isItMeCheck"></img>} 
-					<div className={S['star-container']}>{StarRating(element.rating)}</div>
+					<img className={S['user-avatar']} src={profileData.avatar_url ?? "./beomTeacher.svg"} alt="profile_image" />
+					<p>{profileData.nickname ?? 'Guest'} · {formatDateNoYear(reviewData.updated_at!)}</p>
+					{((isAuth && user) && profileData.user_id == user.id) && <img src="/YouBadge.svg" alt="isItMeCheck"></img>} 
+					<div className={S['star-container']}>{StarRating(reviewData.rating)}</div>
 				</header>
 				<main>
-					<p>{element.text_content}</p>
+					<p>{reviewData.text_content}</p>
 				</main>
 				<footer className={S.footer}>
-					<div className={S['reaction-item']}>
+					<div className={S['reaction-item']} onClick={handleLike}>
 						<img src="/thumbsUp.svg" alt="ThumbsUpIcon" />
-						<p>{element.like_count}</p>
+						<p>{reviewData.like_count}</p>
 					</div>
-					<div className={S['reaction-item']}>
+					<div className={S['reaction-item']} onClick={handleDislike}>
 						<img src="/thumbsDown.svg" alt="ThumbsUpIcon" />
-						<p>{element.dislike_count}</p>
+						<p>{reviewData.dislike_count}</p>
 					</div>
 					<div className={S['reaction-item']}>
 						<img src="/comment.svg" alt="commentIcon" />
-						<p>{element.comment_count}</p>
+						<p>{reviewData.comment_count}</p>
 					</div>
-					<p className={S['read-more']} onClick={() => activePopUp(element.id)}>Read More</p>
+					<p className={S['read-more']} onClick={() => activePopUp(reviewData.id)}>Read More</p>
 				</footer>
 				</div>
-			))
 		}
 		</>
 	)
