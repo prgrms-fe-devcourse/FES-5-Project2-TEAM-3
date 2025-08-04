@@ -83,34 +83,32 @@ function Review() {
     };
   }, [isPopupOpen]);
 
-  return (
-    <>
-      <div className={S["heading-container"]}>
-        <p className={S.heading}>Reviews and Rating</p>
-      </div>
-      <ReviewCreate reviewAdded={generateData} />
-      {reviewData &&
-        reviewData.map((element) => (
-          <div key={element.id}>
-            <ReviewCard
-              reviewData={element}
-              profileData={findUserById(element.user_id, profileData ?? [])}
-              activePopUp={activatePopup}
-            />
-          </div>
-        ))}
-      <div className={S["footer"]}></div>
-      {isPopupOpen && profileData && commentData && currentPopupReview && (
-        <ReviewDetailPopup
-          profileData={profileData}
-          reviewSingleData={currentPopupReview}
-          commentData={commentData}
-          closePopup={closePopup}
-          reviewUpdate={generateData}
-        />
-      )}
-    </>
-  );
+	useEffect(() => {
+		generateData();
+	}, [])
+
+	return (
+		<>
+			<div className={S["heading-container"]}>
+				<p className={S.heading}>Reviews and Rating</p>
+			</div>
+			<ReviewCreate reviewAdded={generateData}/>
+			{(reviewData && profileData) && reviewData.map(element => (
+        <div key={element.id}>
+          <ReviewCard
+            reviewData={element}
+            profileData={findUserById(element.user_id, profileData ?? undefined)}
+            activePopUp={activatePopup}
+          />
+        </div>
+      ))}
+			<div className={S["footer"]}></div>
+			{isPopupOpen
+			 && (profileData && reviewData && commentData && currentPopupReview)
+			  && <ReviewDetailPopup profileData={profileData} reviewSingleData={currentPopupReview} commentData={commentData} closePopup={closePopup} reviewUpdate={generateData}/>}
+		</>
+	)
+
 }
 
 export default Review;
