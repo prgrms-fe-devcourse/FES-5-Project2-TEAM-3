@@ -242,7 +242,7 @@ function MovieDetail() {
 				<div className={S["reviews-container"]}>
 					<div className={S["top-bar"]}>
 						<h2>Reviews</h2>
-						<button className={S["see-all"]} onClick={() => handleReviewCardClick}>See All</button>
+						<button className={S["see-all"]} onClick={() => handleReviewCardClick()}>See All</button>
 					</div>
 				{ currentReviewData.length !== 0 && 
 					<div className={S["review-container"]}>
