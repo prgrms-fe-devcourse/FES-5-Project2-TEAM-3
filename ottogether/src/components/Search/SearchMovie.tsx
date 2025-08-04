@@ -69,10 +69,11 @@ function SearchMovie({ keyword, filters, previewCount, onResult, shouldFetch }:S
               return {
                 ...movie,
                 provider_logo_path: providerLogoPath,
+                media_type: 'movie' as const,
               };
             } catch ( err ) {
               console.error(`Provider 정보 가져오기 실패: ${movie.title}`, err);
-              return { ...movie, provider_logo_path: null };
+              return { ...movie, provider_logo_path: null, media_type: 'movie' as const };
             }
           })
         );

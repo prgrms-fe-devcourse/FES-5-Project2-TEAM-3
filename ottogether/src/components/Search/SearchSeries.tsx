@@ -73,10 +73,15 @@ function SearchSeries({ keyword, filters, previewCount, onResult, shouldFetch }:
               return {
                 ...series,
                 provider_logo_path: providerLogoPath,
+                media_type: 'tv' as const,
               };
             } catch ( err ) {
               console.error(`Provider 정보 가져오기 실패: ${series.title}`, err);
-              return { ...series, provider_logo_path: null };
+              return { 
+                ...series, 
+                provider_logo_path: null,
+                media_type: 'tv' as const,
+              };
             }
           })
         );

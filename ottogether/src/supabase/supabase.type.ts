@@ -85,6 +85,7 @@ export type Database = {
           like_quote?: boolean
           like_review?: boolean
           updated_at?: string | null
+
           user_id?: string
         }
         Relationships: []

@@ -63,6 +63,7 @@
 	}
 
 	.total-list {
+		width: 20%;
 		display: flex;
 		flex-direction: column;
 		gap: 3rem;
@@ -87,6 +88,13 @@
 
 		.hidden {
 			display: none;
+		}
+
+		.not-found {
+			width: 20%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 	}
 }
