@@ -1,10 +1,9 @@
 import ReviewCard, { findReviewById, findUserById } from "../../components/reviewCard/ReviewCard";
 import S from './Review.module.css';
 import type { Tables } from '../../supabase/supabase.type';
-// import { getData } from "../../components/reviewCard/SupaData";
 import { useEffect, useState } from "react";
 import ReviewCreate from "../../components/reviewCard/ReviewCreate";
-import ReviewDetailPopup from "../../components/reviewDetailPopup/reviewDetailPopup";
+import ReviewDetailPopup, { calculateCommentCount } from "../../components/ReviewDetailPopup/reviewDetailPopup";
 import { useLocation } from "react-router-dom";
 import { supabase } from "../../supabase/supabase";
 
@@ -93,11 +92,12 @@ function Review() {
 				<p className={S.heading}>Reviews and Rating</p>
 			</div>
 			<ReviewCreate reviewAdded={generateData}/>
-			{(reviewData && profileData) && reviewData.map(element => (
+			{(reviewData && profileData && commentData) && reviewData.map(element => (
         <div key={element.id}>
           <ReviewCard
             reviewData={element}
             profileData={findUserById(element.user_id, profileData ?? undefined)}
+						commentCount={calculateCommentCount(element.id, commentData!)}
             activePopUp={activatePopup}
           />
         </div>

@@ -32,6 +32,16 @@ interface Props{
 	}
 */
 
+
+	export const calculateCommentCount = (reviewId : number, data : Comment[]) : number => {
+		let result = 0;
+		for (const element of data) {
+			if (element.review_id === reviewId)	
+				result++;
+		}
+		return result;
+	}
+
 function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePopup, reviewUpdate} : Props) {
 	const {isAuth, user} = useAuth();
 	const [commentInputOpen, setCommentInputOpen] = useState(false);
@@ -206,20 +216,12 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		</div>
 	}
 
-	const calculateCommentCount = (reviewId : number) : number => {
-		let result = 0;
-		for (const element of commentData) {
-			if (element.review_id === reviewId)	
-				result++;
-		}
-		return result;
-	}
 
 
 	useEffect(()=> {
 		if (reviewSingleData)
 		{
-			setCommentCount(calculateCommentCount(reviewSingleData.id));
+			setCommentCount(calculateCommentCount(reviewSingleData.id, commentData));
 			setRating(reviewSingleData.rating);
 		}
 
