@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabase/supabase";
-import { useAuth } from "../../contexts/AuthProvider";
 import type { Tables } from "../../supabase/supabase.type"; 
 import S from "./Notifications.module.css";
+
+type ProfileType = Tables<"profile">;
+type UserType = { id: string; email?: string };
 
 type NotificationRow = Tables<"notifications"> & {
   sender?: {
@@ -12,11 +14,15 @@ type NotificationRow = Tables<"notifications"> & {
   };
 };
 
-function Notifications() {
+interface Props {
+  user: UserType;
+  profile: ProfileType | null;
+}
+
+function Notifications({ user, profile }: Props) {
   const [activeTab, setActiveTab] = useState<"all" | "likes" | "comments" | "unread">("all");
   const [notifications, setNotifications] = useState<NotificationRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,10 +69,6 @@ function Notifications() {
     return true;
   });
 
-
-
-
-
   const handleClick = async (noti: NotificationRow) => {
     if (!noti.is_read) {
       const { error } = await supabase
@@ -88,16 +90,13 @@ function Notifications() {
     }
   };
 
-
-  
-
   if (!user) return <div>로그인이 필요합니다.</div>;
   if (loading) return <div>알림을 불러오는 중...</div>;
 
   return (
     <div className={S.container}>
       <div className={S.header}>
-        <h1>Notifications</h1>
+        <h1>{profile?.nickname ?? "Guest"} 님의 Notifications</h1>
       </div>
 
       <div className={S.tabs}>
