@@ -1,10 +1,10 @@
 import ReviewCard, { findReviewById, findUserById } from "../../components/reviewCard/ReviewCard"
 import S from './Review.module.css'
 import type { Tables } from '../../supabase/supabase.type';
-import { getData } from "../../components/reviewCard/SupaData";
 import { useEffect, useState } from "react"
 import ReviewCreate from "../../components/reviewCard/ReviewCreate";
 import ReviewDetailPopup from "../../components/ReviewDetailPopup/reviewDetailPopup";
+import { supabase } from "../../supabase/supabase";
 
 type Review = Tables<'review'>;
 type Comment = Tables<'comment'>;
@@ -18,12 +18,33 @@ function Review() {
 	const [currentPopupReview, setCurrentPopupReview] = useState<Review>();
 
 	async function generateData(){
-		const data = await getData('review');
-		const profile = await getData('profile');
-		const comment = await getData('comment');
-		setReviewData(data);
-		setProfileData(profile);
-		setCommentData(comment)
+		const {data : reviewData, error:reviewError} = await supabase
+				.from('review')
+				.select('*')
+				.order('created_at', {ascending: false});
+		if (reviewError) {
+			console.error('Erorr! 리뷰 데이터를 불러오는 중 오류 : ', reviewError);
+			return;
+		}
+		setReviewData(reviewData);
+		const {data : profileData, error:profileError} = await supabase
+				.from('profile')
+				.select('*')
+				.order('created_at', {ascending: false});
+		if (profileError) {
+			console.error('Erorr! 프로필 데이터를 불러오는 중 오류 : ', profileError);
+			return;
+		}
+		setProfileData(profileData);
+		const {data : commentData, error:commentError} = await supabase
+				.from('comment')
+				.select('*')
+				.order('created_at', {ascending: false});
+		if (commentError) {
+			console.error('Erorr! 댓글 데이터를 불러오는 중 오류 : ', commentError);
+			return;
+		}
+		setCommentData(commentData);
 	}
 
 	const closePopup = () => {

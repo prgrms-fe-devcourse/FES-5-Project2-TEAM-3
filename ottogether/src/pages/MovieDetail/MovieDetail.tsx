@@ -110,7 +110,7 @@ function MovieDetail() {
 	const dataLoading = async () => {
 		if (!id)
 			return ;
-		const {data, error} = await supabase.from('review').select('*').eq('movie_id', id);
+		const {data, error} = await supabase.from('review').select('*').eq('movie_id', +id);
 		if (error)
 		{
 			console.error('Error : 데이터를 불러오는 중 에러 : ', error);
@@ -234,7 +234,8 @@ function MovieDetail() {
 						<h2>Reviews</h2>
 						<button className={S["see-all"]}>See All</button>
 					</div>
-					{/* ReviewCard를 커스텀한 컴포넌트 개발해야할듯? */}
+					
+
 				</div>
 				<div className={S["quotes-container"]}>
 					<div className={S["top-bar"]}>
