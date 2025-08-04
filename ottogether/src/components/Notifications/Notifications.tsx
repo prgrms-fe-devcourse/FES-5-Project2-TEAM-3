@@ -50,9 +50,7 @@ function Notifications({ user, profile }: Props) {
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("알림 불러오기 오류:", error.message);
-      } else {
+      if (!error) {
         setNotifications(data || []);
       }
 
