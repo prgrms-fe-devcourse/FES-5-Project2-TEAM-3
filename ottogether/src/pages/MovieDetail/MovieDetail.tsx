@@ -68,7 +68,7 @@ function MovieDetail() {
     };
 
     fetchData();
-  }, [mediaType, id]);
+  }, []);
 
 	useEffect(() => {
 			const fetchLikedStatus = async () => {
@@ -115,7 +115,7 @@ function MovieDetail() {
 		setQuotesData(quoteData);
 	}
 	dataLoading();
-	}, [])
+	}, [id])
 
 	const handleFavorite = async () => {
 		if (!id)
@@ -128,8 +128,17 @@ function MovieDetail() {
 		const result = await toggleFavoriteMovie(user.id, +id);
 		if (!result.error) {
       setIsMyLove(result.liked);
+			if (result.liked) {
+          const myProfile = findUserById(user.id, profileData);
+          if (myProfile) {
+              setFavoriteUsers((prev) => [...prev, myProfile]);
+          }
+      } else {
+          setFavoriteUsers((prev) => prev.filter((profile) => profile.user_id !== user.id));
+      }
     }
 	}
+
 	const findFavoriteUser = (favor : Favorite[], profileData : Profile[]) => {
 		console.log('favorData :', favor, '\nprofileData : ', profileData);
 		if (!profileData)
