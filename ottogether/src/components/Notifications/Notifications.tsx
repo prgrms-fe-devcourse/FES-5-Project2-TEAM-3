@@ -145,7 +145,7 @@ function Notifications() {
               </div>
               <div className={S.content}>
                 <p>
-                  <strong>{n.sender?.nickname ?? "알 수 없음"}</strong> {n.message}
+                  <strong>{n.sender?.nickname ?? "Guest"}</strong> {n.message}
                 </p>
               </div>
               <div className={S.meta}>
