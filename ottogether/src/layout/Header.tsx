@@ -164,7 +164,7 @@ function Header() {
             )
           }
         </button>
-        <div className={S['notification-wrapper']}>
+        <div className={S['notification-wrapper']} onClick={()=>setHasNewNoti(false)}>
           <img src={bellIcon} alt="알림" className={S.icon} />
           { hasNewNoti && <span className={S["red-dot"]} /> }
         </div>
