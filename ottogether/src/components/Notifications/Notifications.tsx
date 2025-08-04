@@ -5,7 +5,6 @@ import { useAuth } from "../../contexts/AuthProvider";
 import type { Tables } from "../../supabase/supabase.type"; 
 import S from "./Notifications.module.css";
 
-// DB notifications Row 타입 그대로 가져옴
 type NotificationRow = Tables<"notifications"> & {
   sender?: {
     nickname: string | null;
@@ -64,6 +63,10 @@ function Notifications() {
     return true;
   });
 
+
+
+
+
   const handleClick = async (noti: NotificationRow) => {
     if (!noti.is_read) {
       const { error } = await supabase
@@ -79,11 +82,14 @@ function Notifications() {
     }
 
     if (noti.type === "comment" || noti.type === "like_review") {
-      navigate(`/reviews/${noti.target_id}`);
+      navigate("/review", { state: { highlightId: Number(noti.target_id) } });
     } else if (noti.type === "like_quote") {
-      navigate(`/quotes/${noti.target_id}`);
+      navigate("/quotes", { state: { highlightId: Number(noti.target_id) } });
     }
   };
+
+
+  
 
   if (!user) return <div>로그인이 필요합니다.</div>;
   if (loading) return <div>알림을 불러오는 중...</div>;
