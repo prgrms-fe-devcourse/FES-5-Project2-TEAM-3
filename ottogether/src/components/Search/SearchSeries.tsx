@@ -37,7 +37,7 @@ function SearchSeries({ keyword, filters, previewCount, onResult, shouldFetch }:
       try {
         setIsLoading(true);
         const res = await fetch(
-          `/api/tmdb/search/tv?query=${encodeURIComponent(keyword)}&language=ko-KR&include_adult=false`,
+          `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(keyword)}&language=ko-KR&include_adult=false`,
           {
             headers: TMDB_HEADER_INFO,
           }
@@ -60,7 +60,7 @@ function SearchSeries({ keyword, filters, previewCount, onResult, shouldFetch }:
             filteredSeries.map(async (series: MovieData) => {
             try {
               const providerRes = await fetch(
-                `/api/tmdb/tv/${series.id}/watch/providers`,
+                `https://api.themoviedb.org/3/tv/${series.id}/watch/providers`,
                 {
                   headers: TMDB_HEADER_INFO
                 },
