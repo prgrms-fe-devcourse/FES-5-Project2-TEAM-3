@@ -8,7 +8,7 @@ import { supabase } from "../../supabase/supabase";
 import RatingBarChart from "./RatingBarChart";
 import { useAuth } from "../../contexts/AuthProvider";
 import { isMovieLiked, toggleFavoriteMovie } from "../../util/toggleFavoriteMovie";
-import { findUserById } from "../../components/reviewCard/ReviewCard";
+import ReviewCard, { findUserById } from "../../components/reviewCard/ReviewCard";
 import ProfileList from "./ProfileList";
 import QuoteCard from "../../components/Quotes/QuoteCard";
 
@@ -44,10 +44,11 @@ function MovieDetail() {
   const { mediaType, id } = useParams<{ mediaType: "movie" | "tv"; id: string }>();
   const [content, setContent] = useState<MovieData | null>(null);
 	const IMAGE_URL = 'https://image.tmdb.org/t/p/original/';
-	const [currentReviewData, setCurrentReviewData] = useState<Review[] | null>(null);
+	const [currentReviewData, setCurrentReviewData] = useState<Review[]>([]);
 	const [isMyLove, setIsMyLove] = useState(false);
 	const [favoriteUsers, setFavoriteUsers] = useState<Profile[]>([]);
 	const [quotesData, setQuotesData] = useState<Quotes[]>([]);
+	const [profileData, setProfileData] = useState<Profile[]>([]);
 
   useEffect(() => {
     if (!mediaType || !id) return;
@@ -67,37 +68,9 @@ function MovieDetail() {
     fetchData();
   }, [mediaType, id]);
 
-	if (!id)
-		return <p>Movie / TV를 찾을 수 없습니다.</p>
-
-	const handleFavorite = async () => {
-		if (!isAuth || !user)
-		{
-			alert('로그인이 필요한 서비스입니다.');
-    	return;
-		}
-		const result = await toggleFavoriteMovie(user.id, +id);
-		if (!result.error) {
-      setIsMyLove(result.liked);
-    }
-	}
-
-	const findFavoriteUser = (favor : Favorite[], profileData : Profile[]) => {
-		console.log('favorData :', favor, '\nprofileData : ', profileData);
-		if (!profileData)
-			return ;
-		let temp : Profile[] = [];
-		for (const element of favor) {
-			const profile = findUserById(element.user_id!, profileData);
-			if (profile)
-				temp.push(profile);
-		}
-		console.log('favorite User List : ' ,temp);
-		setFavoriteUsers(temp);
-	}
-
 	useEffect(() => {
 			const fetchLikedStatus = async () => {
+				if (!id) return ;
 				if (!user) return;
 				const liked = await isMovieLiked(user.id, +id);
 				setIsMyLove(liked);
@@ -113,16 +86,17 @@ function MovieDetail() {
 		const {data, error} = await supabase.from('review').select('*').eq('movie_id', +id);
 		if (error)
 		{
-			console.error('Error : 데이터를 불러오는 중 에러 : ', error);
+			console.error('Error : 유저 데이터를 불러오는 중 에러 : ', error);
 			return ;
 		}
 		setCurrentReviewData(data);
 		const {data:profileLoad, error:profileError} = await supabase.from('profile').select('*');
 		if (profileError)
 		{
-			console.error('Error : 데이터를 불러오는 중 에러 : ', profileError);
+			console.error('Error : 프로필 데이터를 불러오는 중 에러 : ', profileError);
 			return ;
 		}
+		setProfileData(profileLoad);
 		const {data : favorData, error : favorError} = await supabase.from('favorite_movies').select('*').eq('movie_id', +id);
 		if (favorError)
 		{
@@ -140,6 +114,33 @@ function MovieDetail() {
 	}
 	dataLoading();
 	}, [])
+
+	const handleFavorite = async () => {
+		if (!id)
+			return ;
+		if (!isAuth || !user)
+		{
+			alert('로그인이 필요한 서비스입니다.');
+    	return;
+		}
+		const result = await toggleFavoriteMovie(user.id, +id);
+		if (!result.error) {
+      setIsMyLove(result.liked);
+    }
+	}
+	const findFavoriteUser = (favor : Favorite[], profileData : Profile[]) => {
+		console.log('favorData :', favor, '\nprofileData : ', profileData);
+		if (!profileData)
+			return ;
+		let temp : Profile[] = [];
+		for (const element of favor) {
+			const profile = findUserById(element.user_id!, profileData);
+			if (profile)
+				temp.push(profile);
+		}
+		console.log('favorite User List : ' ,temp);
+		setFavoriteUsers(temp);
+	}
 
 	const getAverageRate = () => {
 		let sum = 0;
@@ -234,7 +235,14 @@ function MovieDetail() {
 						<h2>Reviews</h2>
 						<button className={S["see-all"]}>See All</button>
 					</div>
-					
+					<div className={S["review-container"]}>
+						{currentReviewData.slice(0, 2).map(elem => {
+							const profile_ = findUserById(elem.user_id, profileData);
+							if (!profile_) return null;
+							return <ReviewCard key={elem.id} reviewData={elem} profileData={profile_} commentCount={undefined} activePopUp={function (id: number): void {
+								 console.log(id, " clicked!");
+							 } }/>})}
+					</div>
 
 				</div>
 				<div className={S["quotes-container"]}>
