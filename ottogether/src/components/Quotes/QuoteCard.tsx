@@ -13,6 +13,7 @@ type Quote = Database['public']['Tables']['quotes']['Row'];
 type QuoteCardProps = {
   quote: Quote;
   onRemove: (id: number) => void;
+  className?: string;
   isSearch?: boolean;
   highlight?: React.ReactNode;
 };
@@ -20,6 +21,7 @@ type QuoteCardProps = {
 export default function QuoteCard({
   quote,
   onRemove,
+  className,
   isSearch = false,
   highlight
 }: QuoteCardProps) {
@@ -137,7 +139,7 @@ export default function QuoteCard({
 };
 
   return (
-    <div className={`${S.card} ${isEditing ? S.editing : ''} ${isSearch ? S["search-quotes"] : ''}`.trim()}>
+    <div className={`${S.card} ${isEditing ? S.editing : ''} ${className ? className : ''} ${isSearch ? S["search-quotes"] : ''}`.trim()}>
       <div className={S.body}>
         <div className={S.top}>
           <img src={quoteLeft} alt="left quote" className={S.quoteIconLeft} />
