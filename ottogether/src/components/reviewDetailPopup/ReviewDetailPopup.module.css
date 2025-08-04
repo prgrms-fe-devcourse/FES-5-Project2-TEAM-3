@@ -1,10 +1,10 @@
-.user-avatar{
+.user-avatar {
 	width: 32px;
 	height: 32px;
 	border-radius: 16px;
 }
 
-.popup-container{
+.popup-container {
 	padding: 16px;
 	top: 25%;
 	left: 50%;
@@ -14,9 +14,9 @@
 	max-width: 1000px;
 	max-height: 789px;
 	position: fixed;
-  background-color: #525252;
+	background-color: #525252;
 	border-radius: 8px;
-  z-index: 999;
+	z-index: 999;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 	overflow-y: auto;
 	display: flex;
@@ -24,13 +24,13 @@
 	gap: 16px;
 
 	&::-webkit-scrollbar {
-    width: 0;  /* 세로 스크롤바 너비 */
-    height: 0; /* 가로 스크롤바 높이 (필요하다면) */
-    background: transparent; /* 스크롤바 배경을 투명하게 */
-  }
+		width: 0; /* 세로 스크롤바 너비 */
+		height: 0; /* 가로 스크롤바 높이 (필요하다면) */
+		background: transparent; /* 스크롤바 배경을 투명하게 */
+	}
 }
 
-.close{
+.close {
 	margin-left: auto;
 }
 
@@ -39,33 +39,32 @@
 	flex-direction: column;
 }
 
-.topbar{
+.topbar {
 	display: flex;
 	gap: 8px;
 	align-items: center;
 	width: 100%;
 }
 
-.star-container{
+.star-container {
 	display: flex;
 	gap: 4px;
 	margin-left: auto;
 }
 
-
-.text-content{
+.text-content {
 	display: flex;
 	flex-direction: column;
 	padding-top: 16px;
 }
 
-.reaction-container{
+.reaction-container {
 	display: flex;
 	justify-content: flex-end;
 	/* margin-left: auto; */
 }
 
-.reaction-item{
+.reaction-item {
 	display: flex;
 	gap: 5px;
 	padding-right: 24px;
@@ -75,36 +74,36 @@
 .divider {
 	padding-left: 16px;
 	padding-right: 16px;
-  border-bottom: 3px solid white;
+	border-bottom: 3px solid white;
 	margin: 0 auto;
 	width: 100%;
 	box-sizing: border-box;
 }
 
-.comment-container{
+.comment-container {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
 }
 
-.comment-fake-container{
+.comment-fake-container {
 	display: flex;
 	gap: 15px;
 	align-content: center;
 }
 
-.comment-input{
+.comment-input {
 	padding: 16px 16px;
-	margin: 20px 0px ;
+	margin: 20px 0px;
 	border-radius: 16px;
 	flex-grow: 1;
 	background-color: #666666;
 	border-width: 0;
-	color: #4A4459;
+	color: #4a4459;
 	font-size: 14px;
 }
 
-.add{
+.add {
 	background-color: var(--color-primary-500);
 	width: 85px;
 	height: 40px;
@@ -114,63 +113,63 @@
 	margin: auto 0;
 }
 
-.comment-cell{
+.comment-cell {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	background-color: #322F35;
+	background-color: #322f35;
 	border-radius: 16px;
 	padding: 16px;
 }
 
-.comment-header{
+.comment-header {
 	display: flex;
 }
 
-.handler-btn-container{
+.handler-btn-container {
 	display: flex;
 	gap: 20px;
-	
-	& img{
+
+	& img {
 		width: 20px;
 		height: 20px;
 	}
 
-	& img:hover{
+	& img:hover {
 		cursor: pointer;
 	}
 }
 
 .popup-overlay {
-  position: fixed; 
-  top: 0;          
-  left: 0;         
-  width: 100%;     
-  height: 100%;    
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 
-  background-color: rgba(0, 0, 0, 0.75); 
+	background-color: rgba(0, 0, 0, 0.75);
 
-  display: flex;
-  justify-content: center;
-  align-items: center; 
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-  z-index: 998;
+	z-index: 998;
 }
 
-.review-input{
+.review-input {
 	padding: 20px 30px;
 	border-radius: 16px;
 	flex-grow: 1;
 }
 
-.button-container{
+.button-container {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
 	padding: 16px 0;
 	margin-left: auto;
-	
-	button{
+
+	button {
 		width: 85px;
 		height: 40px;
 		border-radius: 12px;
@@ -179,12 +178,12 @@
 	}
 }
 
-.button-container-edit{
+.button-container-edit {
 	display: flex;
 	gap: 15px;
 	margin-left: auto;
-	
-	button{
+
+	button {
 		width: 85px;
 		height: 40px;
 		border-radius: 12px;
@@ -192,12 +191,12 @@
 		border-width: 0;
 	}
 }
-.button-container-edit-review{
+.button-container-edit-review {
 	display: flex;
 	gap: 15px;
 	margin-left: auto;
-	
-	button{
+
+	button {
 		width: 85px;
 		height: 40px;
 		border-radius: 12px;
@@ -206,32 +205,32 @@
 	}
 }
 
-.cancel{
-	background-color: #CCC2DC;
+.cancel {
+	background-color: #ccc2dc;
 }
 
-.input-container{
+.input-container {
 	display: flex;
 	gap: 15px;
 }
 
-.edit-container{
+.edit-container {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
 }
 
-.star-container-input{
+.star-container-input {
 	display: flex;
 	gap: 4px;
 	margin: 0 auto;
-};
+}
 
-.text-comment-text-content{
+.text-comment-text-content {
 	display: flex;
 	flex-direction: column;
 }
 
-.text-content-container{
+.text-content-container {
 	margin-top: 5px;
 }
