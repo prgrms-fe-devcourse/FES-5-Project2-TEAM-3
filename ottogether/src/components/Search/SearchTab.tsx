@@ -8,6 +8,7 @@ import SearchSeries from './SearchSeries';
 import SearchQuote from './SearchQuote';
 import SearchUser from './SearchUser';
 import warningIcon from '../../assets/icons/warning.svg';
+import SearchNotFound from './SearchNotFound';
 
 const TAB_TYPES = ['total', 'movie', 'series', 'quote', 'user'] as const;
 type TabType = typeof TAB_TYPES[number];
@@ -42,6 +43,8 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
     quote: true,
     user: true,
   })
+
+  const isFirstRender = useRef<boolean>(true);
   
   // 검색 fetch 요청 제한 관련 변수
   const SEARCH_COOLDOWN_MS = 1000; // 1초간 동일 키워드 검색 제한
@@ -72,8 +75,13 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
     const now = Date.now();
     const lastSearchedAt = searchHistory.current.get(normalizedKeyword);
 
+    if(isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     // 전체 요청 속도 제한
-    if (now - lastSearchTime.current < SEARCH_COOLDOWN_MS) {
+    if (!isFirstRender.current && now - lastSearchTime.current < SEARCH_COOLDOWN_MS) {
       console.error('검색 제한: 요청 속도 너무 빠름');
       setShouldFetch(false);
       return;
@@ -171,6 +179,14 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
       <>
         <div className={S["panel-item"]}>
           <div className={S["total-list"]}>
+            {
+              !hasResult.movie && !hasResult.series && !hasResult.quote && !hasResult.user &&
+              <section className={S["not-found"]}>
+                <SearchNotFound
+                keyword={keyword}
+               />
+              </section> 
+            }
             <section className={ !hasResult.movie ? S.hidden : '' }>
               <div className={S["section-title"]}>
                 <h3>Movies</h3>
