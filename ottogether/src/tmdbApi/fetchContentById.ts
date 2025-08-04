@@ -1,7 +1,7 @@
 import type { MovieData } from "./movie.type";
 import { type SeriesData, normalizeSeriesData } from "./series.type";
 
-const BASE_URL = "/api/tmdb";
+const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
 
 export async function fetchContentById(id: number): Promise<MovieData | null> {
