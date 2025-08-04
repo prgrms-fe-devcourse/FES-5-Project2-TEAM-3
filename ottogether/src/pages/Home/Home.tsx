@@ -1,5 +1,5 @@
 
-import { fetchGenres, fetchMoviesByGenre, fetchPopularMovies } from "../../tmdbApi"
+import { fetchPopularMovies } from "../../tmdbApi"
 import MovieList from "../../components/movieCard/MovieList";
 import SectionGroup, { useGenreSections } from "../../components/movieCard/SectionGroup";
 import { useEffect, useState } from "react";
