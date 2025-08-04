@@ -1,10 +1,10 @@
 import ReviewCard, { findReviewById, findUserById } from "../../components/reviewCard/ReviewCard";
 import S from './Review.module.css';
 import type { Tables } from '../../supabase/supabase.type';
-import { getData } from "../../components/reviewCard/SupaData";
+// import { getData } from "../../components/reviewCard/SupaData";
 import { useEffect, useState } from "react";
 import ReviewCreate from "../../components/reviewCard/ReviewCreate";
-import ReviewDetailPopup from "../../components/ReviewDetailPopup/ReviewDetailPopup";
+import ReviewDetailPopup from "../../components/reviewDetailPopup/reviewDetailPopup";
 import { useLocation } from "react-router-dom";
 import { supabase } from "../../supabase/supabase";
 

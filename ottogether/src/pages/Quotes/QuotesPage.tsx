@@ -60,7 +60,7 @@ const handleSortChange = async (option: { sortBy: "created_at" | "likes"; order:
             key={quote.id}
             quote={quote}
             onRemove={handleRemove}
-            className={highlightId === quote.id ? S.highlight : ""} // 👈 여기로 이동
+            className={highlightId === quote.id ? S.highlight : ""} 
           />
       ))}
 
