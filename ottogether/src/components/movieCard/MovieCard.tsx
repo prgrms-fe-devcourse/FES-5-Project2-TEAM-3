@@ -4,6 +4,7 @@ import { toggleFavoriteMovie, isMovieLiked } from "../../util/toggleFavoriteMovi
 import type { MovieData } from "../../tmdbApi/movie.type";
 import { getUserInfo } from "../../supabase/auth/getUserInfo";
 import { useNavigate } from "react-router-dom";
+import { getSingleAvgRating } from "../../supabase/review/getSingleAvgRating";
 
 type MovieCardProps = {
   movie: MovieData;
@@ -21,18 +22,37 @@ function MovieCard({ movie }: MovieCardProps) {
   } = movie;
 
   const [liked, setLiked] = useState(false);
+  const [avgRating, setAvgRating] = useState<number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchLikedStatus = async () => {
-      const userId = await getUserInfo("id");
-      if (!userId) return;
-      const liked = await isMovieLiked(userId, id);
-      setLiked(liked);
-    };
+  const fetchLikedStatus = async () => {
+    const userId = await getUserInfo("id");
+    if (!userId) return;
+    const liked = await isMovieLiked(userId, id);
+    setLiked(liked);
+  };
 
-    fetchLikedStatus();
-  }, [id]);
+  const fetchAvgRating = async () => {
+    const avg = await getSingleAvgRating(id);
+    setAvgRating(avg);
+  };
+
+  fetchLikedStatus();
+  fetchAvgRating();
+}, [id]);
+
+
+  // useEffect(() => {
+  //   const fetchLikedStatus = async () => {
+  //     const userId = await getUserInfo("id");
+  //     if (!userId) return;
+  //     const liked = await isMovieLiked(userId, id);
+  //     setLiked(liked);
+  //   };
+
+  //   fetchLikedStatus();
+  // }, [id]);
 
   const handleToggleLike = async () => {
     const userId = await getUserInfo("id");
@@ -76,11 +96,22 @@ function MovieCard({ movie }: MovieCardProps) {
       <div className={S["movie-info"]}>
         <p className={S["release-date"]}>{release_date}</p>
         <h3 className={S["title"]}>{title}</h3>
-        <div className={S["rating"]}>
-          <span>⭐</span>
-          <span>{vote_average} / 10</span>
+        <div className={S["rating-wrapper"]}>
+  <div className={S["rating"]}>
+    <span>⭐</span>
+    <span className={S["rating-value"]}>
+            {(avgRating ?? vote_average).toFixed(2)} / {avgRating ? 5 : 10}
+          </span>
+
+          <div className={S["tmdb-tooltip"]}>
+            {avgRating
+              ? <span>TMDB: {vote_average.toFixed(1)} / 10</span>
+              : <img src="/ott/Tmdb.svg" alt="TMDB" />}
+          </div>
         </div>
       </div>
+      </div>
+      
       {provider_logo_path && (
         <div className={S["provider-logo"]}>
           <img

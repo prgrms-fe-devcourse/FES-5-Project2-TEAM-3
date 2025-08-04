@@ -3,6 +3,7 @@ import S from './Members.module.css'
 import { useEffect, useState } from "react";
 import type { Tables } from '../../supabase/supabase.type';
 import { getData } from "../../components/reviewCard/SupaData"
+import { useLocation } from 'react-router-dom';
 
 type Profile = Tables<'profile'>;
 type Review = Tables<'review'>;
@@ -12,18 +13,25 @@ function Members() {
 	const [profileData, setProfileData] = useState<Profile[]>();
 	const [reviewData, setReviewData] = useState<Review[] | null>();
 	const [quotesData, setQuotesData] = useState<Quotes[] | null>();
+	const location = useLocation();
+	const receivedUsers = location.state?.users as Profile[] | undefined;
 
 	const [currentPageNum, setCurrentPage] = useState(1);
 	const [profileCountPerPage] = useState(4);
 
 	useEffect(()=>{
 		async function generateData(){
-			setProfileData(await getData('profile') as Profile[] | undefined);
+			if (receivedUsers){
+				setProfileData(receivedUsers);
+			}
+			else{
+				setProfileData(await getData('profile') as Profile[] | undefined);
+			}
 			setReviewData(await getData('review') as Review[] | null);
 			setQuotesData(await getData('quotes') as Quotes[] | null);
 		}
 		generateData()
-	}, [])
+	}, [receivedUsers])
 
 	if (!profileData || profileData.length === 0){
 		return <p>멤버 데이터를 찾을 수 없습니다 💀</p>

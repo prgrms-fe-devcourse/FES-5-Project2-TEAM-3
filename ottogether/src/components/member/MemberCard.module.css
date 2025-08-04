@@ -2,7 +2,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-top: 34px;
+	padding: 34px 0px;
 	gap: 34px;
 	width: 100%;
 }
@@ -11,12 +11,13 @@
 	display: flex;
 	width: 90%;
 	min-height: 219px;
+	max-width: 900px;
 	gap: 47px;
 	line-height: 25px;
+	border: 1px solid #c0c0c0;
+	border-radius: 8px;
+	align-items: center;
 
-	:hover {
-		cursor: pointer;
-	}
 	.arrow {
 		padding-top: 55.5px;
 		width: 60px;
@@ -27,6 +28,7 @@
 	img {
 		width: 171px;
 		height: 171px;
+		padding-left: 20px;
 	}
 
 	h2 {
@@ -38,6 +40,16 @@
 	p {
 		font-size: 20px;
 		flex-grow: 1;
+	}
+
+	h2,p{
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		line-clamp: 1;
+		line-height: 1.5;
 	}
 }
 

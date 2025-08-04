@@ -85,7 +85,16 @@ function LikedQuotes({ user }: { user: UserType | null }) {
   if (!user) return <p className={S["my-notice"]}>로그인이 필요합니다.</p>;
   if (loading) return <p className={S["my-notice"]}>불러오는 중...</p>;
   if (quotes.length === 0)
-    return <p className={S["my-notice"]}>좋아요한 명대사가 없습니다.</p>;
+    return (
+      <div className={S["my-container"]}>
+        <h1 className={S["my-title"]}>
+          {myProfile?.nickname ?? "Guest"} 님이 좋아요한 명대사 (총 {quotes.length}개)
+        </h1>
+        <hr />
+        <p className={S["my-notice"]}>좋아요한 명대사가 없습니다.</p>
+      </div>
+  
+    );
 
   return (
     <div className={S["my-container"]}>

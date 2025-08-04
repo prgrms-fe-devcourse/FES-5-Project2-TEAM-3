@@ -9,6 +9,8 @@
 	margin: 0 auto;
 	padding: 16px;
 	margin-bottom: 21px;
+
+  box-sizing: border-box;
 }
 
 .button-list{

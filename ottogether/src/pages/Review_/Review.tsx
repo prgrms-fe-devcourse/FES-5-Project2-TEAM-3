@@ -6,6 +6,7 @@ import ReviewCreate from "../../components/reviewCard/ReviewCreate";
 import ReviewDetailPopup, { calculateCommentCount } from "../../components/reviewDetailPopup/reviewDetailPopup";
 import { useLocation } from "react-router-dom";
 import { supabase } from "../../supabase/supabase";
+import { useParams } from "react-router-dom";
 
 
 type Review = Tables<'review'>;
@@ -13,6 +14,7 @@ type Comment = Tables<'comment'>;
 type Profile = Tables<'profile'>;
 
 function Review() {
+	const {id} = useParams<{id : string}>();
   const [reviewData, setReviewData] = useState<Review[] | null>(null);
   const [profileData, setProfileData] = useState<Profile[] | null>(null);
   const [commentData, setCommentData] = useState<Comment[] | null>(null);
@@ -23,9 +25,12 @@ function Review() {
   const highlightId = (location.state as { highlightId?: number })?.highlightId;
 
 	async function generateData(){
+		console.log(id);
+		if (!id) return ;
 		const {data : reviewData, error:reviewError} = await supabase
 				.from('review')
 				.select('*')
+				.eq('movie_id', +id)
 				.order('created_at', {ascending: false});
 		if (reviewError) {
 			console.error('Erorr! 리뷰 데이터를 불러오는 중 오류 : ', reviewError);
@@ -91,7 +96,7 @@ function Review() {
 			<div className={S["heading-container"]}>
 				<p className={S.heading}>Reviews and Rating</p>
 			</div>
-			<ReviewCreate reviewAdded={generateData}/>
+			{id && <ReviewCreate reviewAdded={generateData} movieId={id}/>}
 			{(reviewData && profileData && commentData) && reviewData.map(element => (
         <div key={element.id}>
           <ReviewCard
@@ -99,6 +104,7 @@ function Review() {
             profileData={findUserById(element.user_id, profileData ?? undefined)}
 						commentCount={calculateCommentCount(element.id, commentData!)}
             activePopUp={activatePopup}
+						onDataUpdate={generateData}
           />
         </div>
       ))}

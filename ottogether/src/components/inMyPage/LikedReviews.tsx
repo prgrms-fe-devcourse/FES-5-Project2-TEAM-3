@@ -83,7 +83,15 @@ function LikedReviews({ user, profile }: Props) {
   }
 
   if (reviews.length === 0) {
-    return <p className={S["my-notice"]}>좋아요한 리뷰가 없습니다.</p>;
+    return (
+      <div className={S["my-container"]}>
+        <h1 className={S["my-title"]}>
+          {profile?.nickname ?? "Guest"} 님이 좋아요한 리뷰 (총 {reviews.length}개)
+        </h1>
+        <hr />
+        <p className={S["my-notice"]}>좋아요한 리뷰가 없습니다.</p>
+      </div>
+    );
   }
 
   return (
@@ -102,6 +110,7 @@ function LikedReviews({ user, profile }: Props) {
           >
             <ReviewCard
               reviewData={review}
+              commentCount={review.comment_count ?? 0}
               profileData={profileData}
               activePopUp={(id) => navigate("/review", { state: { highlightId: id } })}
             />

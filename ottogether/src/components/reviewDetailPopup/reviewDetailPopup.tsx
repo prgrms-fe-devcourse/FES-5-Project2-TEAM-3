@@ -7,6 +7,7 @@ import StarRating from '../reviewCard/StarRating';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase/supabase';
 import { createNotification } from '../../util/createNotifications';
+import toggleReviewThumbs from '../reviewCard/toggleReviewThumbs';
 
 
 type Review = Tables<'review'>;
@@ -51,6 +52,8 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 	const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
 	const [reviewEditOpen, setReviewEditOpen] = useState(false);
 	const [rating, setRating] = useState(5);
+	const [isLiked, setIsLiked] = useState(false);
+	const [likeCount, setLikeCount] = useState(0);
 
 	const handleEditComment = async (commentId : number) => {
 		if (!user)
@@ -210,19 +213,61 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		return<div className={S["star-container-edit"]}>
 			{
 				[1,2,3,4,5].map(num => (
-					<img key={num} src={num <= rating ? "./star/fullStar.svg" : "./star/emptyStar.svg"} alt="starRating" onClick={() => handleRating(num)}/>
+					<img key={num} src={num <= rating ? "/star/fullStar.svg" : "/star/emptyStar.svg"} alt="starRating" onClick={() => handleRating(num)}/>
 				))
 			}
 		</div>
 	}
 
+	const handleThumb = async (input : 'like' | 'dislike') => {
+		if (!isAuth) {
+			alert('로그인이 필요한 서비스입니다.');
+			return;
+		}
+		const { liked, error } = await toggleReviewThumbs(reviewSingleData.id, user!.id, input);
+		if (error) {
+			console.error('좋아요/싫어요 처리 중 오류:', error);
+			return;
+		}
+		if (input === 'like') {
+			setIsLiked(liked!);
+			setLikeCount(prev => liked ? prev + 1 : prev - 1);
+			// if (liked && profileData.user_id && user && profileData.user_id !== user.id) {
+			// 		await createNotification({
+			// 			userId: profileData.user_id,
+			// 			senderId: user.id,
+			// 			type: "like_review",
+			// 			targetId: reviewData.id,
+			// 		});
+			// 	}
+		} else {
+			if (liked && isLiked) setIsLiked(false);
+			if (isLiked) setLikeCount(prev => prev - 1);
+		}
+		reviewUpdate();
+	};
 
 
 	useEffect(()=> {
+		const checkThumb = async () => {
+			if (!user)
+				return ;
+			const { data } = await supabase
+							.from('review_like')
+							.select('*')
+							.eq('user_id', user.id)
+							.eq('review_id', reviewSingleData.id)
+							.maybeSingle();
+			
+		if (data?.reaction_type === 'like')
+			setIsLiked(true);
+		}
 		if (reviewSingleData)
 		{
 			setCommentCount(calculateCommentCount(reviewSingleData.id, commentData));
 			setRating(reviewSingleData.rating);
+			checkThumb();
+			setLikeCount(reviewSingleData.like_count!);
 		}
 
 	}, [])
@@ -231,9 +276,9 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		<div className={S["popup-overlay"]}>
 		<div className={S["popup-container"]}>
 			<header className={S.header}>
-				<img className={S.close} src="./close.svg" onClick={closePopup} alt="closeButton"/>
+				<img className={S.close} src="/close.svg" onClick={closePopup} alt="closeButton"/>
 				<div className={S.topbar}>
-					<img className={S['user-avatar']} src={(findUserById(reviewSingleData.user_id, profileData)?.avatar_url ?? "./beomTeacher.svg")} alt="profile_image" />
+					<img className={S['user-avatar']} src={(findUserById(reviewSingleData.user_id, profileData)?.avatar_url ?? "/beomTeacher.svg")} alt="profile_image" />
 					<p>{findUserById(reviewSingleData.user_id, profileData)?.nickname ?? 'User'} · {formatDateNoYear(reviewSingleData.updated_at!)}</p>
 					{((isAuth && user) && (reviewSingleData.user_id == user.id)) && 
 						<>
@@ -241,8 +286,8 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 							{!reviewEditOpen &&
 							<>
 								<div className={S["handler-btn-container"]}>
-								<img src="./edit.svg" alt="editReviewButton" onClick={() => openEditReview(reviewSingleData.text_content!)}/>
-								<img src="./trashcan.svg" alt="deleteReviewButton" onClick={() => handleDeleteReview(reviewSingleData.id)}/>
+								<img src="/edit.svg" alt="editReviewButton" onClick={() => openEditReview(reviewSingleData.text_content!)}/>
+								<img src="/trashcan.svg" alt="deleteReviewButton" onClick={() => handleDeleteReview(reviewSingleData.id)}/>
 							</div>
 							<div className={S['star-container']}>{StarRating(reviewSingleData.rating)}</div>
 							</>
@@ -269,13 +314,9 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 				}
 				{!reviewEditOpen && <div className={S["reaction-container"]}>
 					<div className={S['reaction-item']}>
-						<img src="/thumbsUp.svg" alt="ThumbsUpIcon" />
-						<p>{reviewSingleData.like_count}</p>
+						<img src={isLiked ? "/thumbsUp.svg" : "/emptyThumbsUp.svg"} alt="ThumbsUpIcon" onClick={() => handleThumb('like')}/>
+						<p>{likeCount}</p>
 					</div>
-					{/* <div className={S['reaction-item']}>
-						<img src="/thumbsDown.svg" alt="ThumbsUpIcon" />
-						<p>{reviewSingleData.dislike_count}</p>
-					</div> */}
 					<div className={S['reaction-item']}>
 						<img src="/comment.svg" alt="commentIcon" />
 						<p>{commentCount}</p>
@@ -309,14 +350,14 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 						<div key={comment.id} className={S['comment-cell']}>
 							<div className={S["comment-header"]}>
 								<div className={S.topbar}>
-									<img className={S['user-avatar']} src={(findUserById(comment.user_id, profileData)?.avatar_url ?? "./beomTeacher.svg")} alt="profile_image" />
+									<img className={S['user-avatar']} src={(findUserById(comment.user_id, profileData)?.avatar_url ?? "/beomTeacher.svg")} alt="profile_image" />
 									<p>{findUserById(comment.user_id, profileData)?.nickname ?? 'User'} · {formatDateNoYear(comment.updated_at!)}</p>
 									{((isAuth && user) && (comment.user_id == user.id)) && <img src="/YouBadge.svg" alt="isItMeCheck"></img>}
 								</div>
 								{ comment.user_id === user?.id && editingCommentId !== comment.id &&
 									<div className={S["handler-btn-container"]}>
-										<img src="./edit.svg" alt="editCommentButton" onClick={() => openEditComment(comment.id, comment.text_content)}/>
-										<img src="./trashcan.svg" alt="deleteCommentButton" onClick={() => handleDeleteComment(reviewSingleData.id, comment.id)}/>
+										<img src="/edit.svg" alt="editCommentButton" onClick={() => openEditComment(comment.id, comment.text_content)}/>
+										<img src="/trashcan.svg" alt="deleteCommentButton" onClick={() => handleDeleteComment(reviewSingleData.id, comment.id)}/>
 									</div>
 								}
 							</div>

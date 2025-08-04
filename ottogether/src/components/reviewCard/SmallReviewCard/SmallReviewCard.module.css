@@ -8,21 +8,27 @@
 	display: flex;
 	gap: 10px;
 	align-items: center;
-	padding-bottom: 16px;
 }
 
 .card-container{
 	padding: 16px;
-	max-width: 976px;
-	min-width: 400px;
+	max-width: 336px;
+	max-height: 220px;
 	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 9px;
 	
 	margin : 0 auto;
 	background-color: #525252;
 	border-radius: 8px;
 	margin-bottom: 21px;
 
-  box-sizing: border-box;
+	& p{
+	size: 14px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 }
 
 .star-container{
@@ -32,8 +38,22 @@
 }
 
 .footer{
-	margin-top: 16px;
+	margin-top: auto;
 	display: flex;
+}
+
+.main-container {
+	max-height: 85px;
+	& p{
+		line-height: 1.5;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;
+		line-clamp: 3;
+
+	}
 }
 
 .read-more{
@@ -46,13 +66,24 @@
 	}
 }
 
+.date-text{
+	color: lightgray;
+}
+
 .reaction-item{
 	display: flex;
 	gap: 5px;
 	padding-right: 24px;
 	align-items: center;
+
+	& img{
+		width: 20px;
+		height: 20px;
+	}
 }
 
-p{
-	size: 14px;
+
+
+.name-text{
+	white-space: nowrap;
 }

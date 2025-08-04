@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getContentDetail } from "../../tmdbApi/getContentDetail";
 import type { MovieData } from "../../tmdbApi/movie.type";
 import S from './MovieDetail.module.css';
@@ -8,9 +8,10 @@ import { supabase } from "../../supabase/supabase";
 import RatingBarChart from "./RatingBarChart";
 import { useAuth } from "../../contexts/AuthProvider";
 import { isMovieLiked, toggleFavoriteMovie } from "../../util/toggleFavoriteMovie";
-import ReviewCard, { findUserById } from "../../components/reviewCard/ReviewCard";
+import { findUserById } from "../../components/reviewCard/ReviewCard";
 import ProfileList from "./ProfileList";
 import QuoteCard from "../../components/Quotes/QuoteCard";
+import SmallReviewCard from "../../components/reviewCard/SmallReviewCard/SmallReviewCard";
 
 type Review = Tables<'review'>;
 type Favorite = Tables<'favorite_movies'>;
@@ -49,6 +50,7 @@ function MovieDetail() {
 	const [favoriteUsers, setFavoriteUsers] = useState<Profile[]>([]);
 	const [quotesData, setQuotesData] = useState<Quotes[]>([]);
 	const [profileData, setProfileData] = useState<Profile[]>([]);
+	const navigate = useNavigate();
 
   useEffect(() => {
     if (!mediaType || !id) return;
@@ -66,7 +68,7 @@ function MovieDetail() {
     };
 
     fetchData();
-  }, [mediaType, id]);
+  }, []);
 
 	useEffect(() => {
 			const fetchLikedStatus = async () => {
@@ -77,13 +79,13 @@ function MovieDetail() {
 			};
 	
 			fetchLikedStatus();
-		}, [id]);
+		}, [id, user]);
 
 	useEffect(() => {
 	const dataLoading = async () => {
 		if (!id)
 			return ;
-		const {data, error} = await supabase.from('review').select('*').eq('movie_id', +id);
+		const {data, error} = await supabase.from('review').select('*').eq('movie_id', +id).order('like_count', {ascending: false});
 		if (error)
 		{
 			console.error('Error : 유저 데이터를 불러오는 중 에러 : ', error);
@@ -113,7 +115,7 @@ function MovieDetail() {
 		setQuotesData(quoteData);
 	}
 	dataLoading();
-	}, [])
+	}, [id])
 
 	const handleFavorite = async () => {
 		if (!id)
@@ -126,8 +128,17 @@ function MovieDetail() {
 		const result = await toggleFavoriteMovie(user.id, +id);
 		if (!result.error) {
       setIsMyLove(result.liked);
+			if (result.liked) {
+          const myProfile = findUserById(user.id, profileData);
+          if (myProfile) {
+              setFavoriteUsers((prev) => [...prev, myProfile]);
+          }
+      } else {
+          setFavoriteUsers((prev) => prev.filter((profile) => profile.user_id !== user.id));
+      }
     }
 	}
+
 	const findFavoriteUser = (favor : Favorite[], profileData : Profile[]) => {
 		console.log('favorData :', favor, '\nprofileData : ', profileData);
 		if (!profileData)
@@ -152,6 +163,21 @@ function MovieDetail() {
 		sum /= currentReviewData.length;
 
 		return sum.toFixed(2);
+	}
+
+	const handleReviewCardClick = (targetId : number = 0) => {
+		if (targetId !== 0)
+			navigate(`/media/${mediaType}/${id}/review#${targetId}`);
+		else
+			navigate(`/media/${mediaType}/${id}/review`);
+	}
+
+	const handleMoreMembers = () => {
+		navigate(`/media/${mediaType}/${id}/favorites`, {state: {users : favoriteUsers}});
+	}
+
+	const handleMoreQuotes = () => {
+		navigate(`/media/${mediaType}/${id}/quotes`, { state: { quotes: quotesData } });
 	}
 
  return (<>
@@ -226,29 +252,39 @@ function MovieDetail() {
 							<p className={S["like-amount"]}>{favoriteUsers.length}</p>
 						</div>
 						<ProfileList profiles={favoriteUsers}></ProfileList>
-						<button className={S["more-member"]}>+</button>
+						<button className={S["more-member"]} onClick={handleMoreMembers}>+</button>
 					</div>
 				</div>
 				</div>
 				<div className={S["reviews-container"]}>
 					<div className={S["top-bar"]}>
 						<h2>Reviews</h2>
-						<button className={S["see-all"]}>See All</button>
+						<button className={S["see-all"]} onClick={() => handleReviewCardClick()}>See All</button>
 					</div>
+				{ currentReviewData.length !== 0 && 
 					<div className={S["review-container"]}>
 						{currentReviewData.slice(0, 2).map(elem => {
 							const profile_ = findUserById(elem.user_id, profileData);
 							if (!profile_) return null;
-							return <ReviewCard key={elem.id} reviewData={elem} profileData={profile_} commentCount={undefined} activePopUp={function (id: number): void {
-								 console.log(id, " clicked!");
-							 } }/>})}
+							return <SmallReviewCard key={elem.id} reviewData={elem} profileData={profile_} activePopUp={function (id: number): void {
+								 handleReviewCardClick(id);
+								} }/>})}
 					</div>
+				}
+				{ currentReviewData.length === 0 &&
+					<>
+					<div className={S["notification-container"]}>
+					<h2>아직 이 영화에 작성된 명대사가 없습니다! 😭</h2>	
+					</div>
+					<button className={S["move-page"]} onClick={() => handleReviewCardClick()}>리뷰 작성하러가기 →</button>
+					</>
+				}
 
 				</div>
 				<div className={S["quotes-container"]}>
 					<div className={S["top-bar"]}>
 						<h2>Favorite Quotes</h2>
-						<button className={S["see-all"]}>See All</button>
+						<button className={S["see-all"]} onClick={handleMoreQuotes}>See All</button>
 					</div>
 					{quotesData[0] && 
 						<QuoteCard key={quotesData[0].id} quote={quotesData[0]} onRemove={(id : number) => (console.log(id))}></QuoteCard>
@@ -259,7 +295,7 @@ function MovieDetail() {
 							<div className={S["notification-container"]}>
 								<h2>아직 이 영화에 작성된 명대사가 없습니다! 🥲</h2>	
 							</div>
-							<button className={S["move-page"]}>지금 작성하러가기 →</button>
+							<button className={S["move-page"]} onClick={handleMoreQuotes}>명대사 작성하러가기 →</button>
 						</>
 					}
 				</div>

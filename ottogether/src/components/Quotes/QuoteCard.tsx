@@ -7,6 +7,7 @@ import quoteRight from '@/assets/icons/quotes-right.svg';
 import { toggleQuoteLike } from '../../util/toggleQuoteLike';
 import type { Database } from '../../supabase/supabase.type';
 import { createNotification } from '../../util/createNotifications';
+import { useNavigate } from 'react-router-dom';
 
 type Quote = Database['public']['Tables']['quotes']['Row'];
 
@@ -37,7 +38,7 @@ export default function QuoteCard({
   const [editPerson, setEditPerson] = useState(person ?? '');
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
-  // const user = supabase.auth.getUser;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkLike = async () => {
@@ -65,9 +66,13 @@ export default function QuoteCard({
     if (user) setCurrentUserId(user.id);
   };
 
-  fetchUser();
-}, []);  
-    
+  fetchUser();}, []);  
+
+
+  const handleNavigateToDetail = () => {
+    if (!quote.movie_id) return;
+    navigate(`/media/movie/${quote.movie_id}`);
+  };
 
   const handleLike = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -94,7 +99,6 @@ export default function QuoteCard({
           targetId: id,
         });
       }
-
     }
   };
 
@@ -139,7 +143,9 @@ export default function QuoteCard({
 };
 
   return (
-    <div className={`${S.card} ${isEditing ? S.editing : ''} ${className ? className : ''} ${isSearch ? S["search-quotes"] : ''}`.trim()}>
+    <div 
+    onClick={handleNavigateToDetail}
+    className={`${S.card} ${isEditing ? S.editing : ''} ${className ? className : ''} ${isSearch ? S["search-quotes"] : ''}`.trim()}>
       <div className={S.body}>
         <div className={S.top}>
           <img src={quoteLeft} alt="left quote" className={S.quoteIconLeft} />
@@ -156,7 +162,9 @@ export default function QuoteCard({
         </div>
         <div className={S.bottom}>
           <div className={S.left}>
-            <button className={`${S.likeBtn} ${isLiked ? S.liked : ''}`} onClick={handleLike}>
+            <button 
+            className={`${S.likeBtn} ${isLiked ? S.liked : ''}`} 
+            onClick={(e) => {e.stopPropagation();handleLike();}}>
               <img src={likeIcon} alt="like" />
               <span>{likeCount}</span>
             </button>
@@ -174,19 +182,28 @@ export default function QuoteCard({
             <div className={S.right}>
               {isEditing ? (
                 <>
-                <button className={S.editBtn} onClick={handleUpdate}>Save</button>
+                <button className={S.editBtn} 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleUpdate();}}>Save</button>
                 <div>/</div>
-                <button className={S.removeBtn} onClick={handleCancelEdit}>Cancel</button>
+                <button className={S.removeBtn} onClick={(e) => {
+                  e.stopPropagation();
+                  handleCancelEdit();}}>Cancel</button>
                 </>
                 ) : (
                 <>
-                <button className={S.editBtn} onClick={handleEdit}>Edit</button>
+                <button className={S.editBtn} onClick={(e) => {
+                  e.stopPropagation();
+                  handleEdit();}}>Edit</button>
                 <div>/</div>
-                <button className={S.removeBtn} onClick={handleRemove}>Remove</button>
-      </>
-    )}
-  </div>
-)}
+                <button className={S.removeBtn} onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemove();}}>Remove</button>
+                  </>
+                )}
+                </div>
+              )}
         </div>
       </div>
     </div>
