@@ -5,9 +5,10 @@ import { supabase } from "../../supabase/supabase";
 
 interface Props{
 	reviewAdded : () => void;
+	movieId : string;
 }
 
-function ReviewCreate({reviewAdded} : Props) {
+function ReviewCreate({reviewAdded, movieId} : Props) {
 	const [inputClicked, setInputClicked] = useState(false);
 	const [content, setContent] = useState('');
 	const [rating, setRating] = useState(5);
@@ -46,6 +47,7 @@ function ReviewCreate({reviewAdded} : Props) {
 			rating,
 			text_content : content,
 			user_id : user.id,
+			movie_id : +movieId,
 		}
 		const { error } = await supabase.from('review').insert(newReview);
 		if (error){

@@ -7,9 +7,10 @@ import addIcon from '@/assets/icons/add.svg';
 
 type Props = {
     onAdd: () => void;
+		movieId : string;
 };
 
-function QuoteCreate({onAdd}:Props) {
+function QuoteCreate({onAdd, movieId}:Props) {
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [content, setContent] = useState('');
@@ -36,7 +37,8 @@ function QuoteCreate({onAdd}:Props) {
       person: person || '익명',
       likes: 0,
       is_visible: true,
-      user_id: userId, 
+      user_id: userId,
+			movie_id : +movieId,
     };
 
     const { error } = await supabase.from('quotes').insert(newQuote);

@@ -96,7 +96,7 @@ function Review() {
 			<div className={S["heading-container"]}>
 				<p className={S.heading}>Reviews and Rating</p>
 			</div>
-			<ReviewCreate reviewAdded={generateData}/>
+			{id && <ReviewCreate reviewAdded={generateData} movieId={id}/>}
 			{(reviewData && profileData && commentData) && reviewData.map(element => (
         <div key={element.id}>
           <ReviewCard
