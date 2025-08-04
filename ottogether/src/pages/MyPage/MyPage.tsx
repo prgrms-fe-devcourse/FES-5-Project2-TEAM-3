@@ -62,7 +62,6 @@ function MyPage() {
     const fetchProfile = async () => {
       const { data, error } = await supabase
         .from("profile")
-        // ✅ DB 타입이랑 필드 이름 맞추기
         .select(
           "user_id, nickname, bio, url, header_url, avatar_url, preferred_ott, favorite_genre"
         )
@@ -72,7 +71,7 @@ function MyPage() {
       if (error) {
         console.error("프로필 불러오기 오류:", error.message);
       } else {
-        setProfile(data as ProfileType); // ✅ data를 ProfileType으로 단언
+        setProfile(data as ProfileType);
       }
     };
 

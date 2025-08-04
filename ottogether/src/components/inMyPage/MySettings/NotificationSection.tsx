@@ -25,7 +25,6 @@ function NotificationSection({ user }: Props) {
   const [comments, setComments] = useState(false);
   const [likes, setLikes] = useState(false);
 
-  // 사용자 설정 불러오기
   useEffect(() => {
     if (!user) return;
 
@@ -50,7 +49,6 @@ function NotificationSection({ user }: Props) {
     fetchSettings();
   }, [user]);
 
-  // 댓글 토글
   const handleCommentsToggle = async () => {
     const newState = !comments;
     setComments(newState);
@@ -66,7 +64,6 @@ function NotificationSection({ user }: Props) {
     }
   };
 
-  // 좋아요 토글
   const handleLikesToggle = async () => {
     const newState = !likes;
     setLikes(newState);
@@ -77,9 +74,11 @@ function NotificationSection({ user }: Props) {
         like_review: newState,
         like_quote: newState,
         updated_at: new Date().toISOString(),
-      });
+      })
 
-      if (error) console.error("좋아요 알림 업데이트 실패:", error.message);
+      if (error) {
+        console.error("댓글 알림 업데이트 실패:", error.message);
+      }
     }
   };
 

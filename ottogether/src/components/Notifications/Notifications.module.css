@@ -59,7 +59,7 @@
   padding: 0;
   flex: 1;
   overflow-y: auto;
-  max-height: 500px; /* 스크롤 높이 제한 */
+  max-height: 500px;
 }
 
 .item {

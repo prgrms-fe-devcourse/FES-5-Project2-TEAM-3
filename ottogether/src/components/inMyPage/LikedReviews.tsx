@@ -25,7 +25,7 @@ function LikedReviews({ user, profile }: Props) {
 
     const fetchLikedReviews = async () => {
       try {
-        // 1. 내가 좋아요 누른 리뷰 ID 조회
+
         const { data: likedRows, error: likeError } = await supabase
           .from("review_like")
           .select("review_id")
@@ -34,7 +34,6 @@ function LikedReviews({ user, profile }: Props) {
 
         if (likeError) throw likeError;
 
-        // null 제거 후 number[] 확정
         const reviewIds = (likedRows ?? [])
           .map((row) => row.review_id)
           .filter((id): id is number => id !== null);
@@ -44,7 +43,6 @@ function LikedReviews({ user, profile }: Props) {
           return;
         }
 
-        // 2. 해당 리뷰들 가져오기
         const { data: likedReviews, error: reviewError } = await supabase
           .from("review")
           .select("*")
@@ -53,7 +51,6 @@ function LikedReviews({ user, profile }: Props) {
 
         if (reviewError) throw reviewError;
 
-        // 3. 리뷰 작성자들의 프로필 가져오기
         const userIds = (likedReviews ?? [])
           .map((r) => r.user_id)
           .filter((id): id is string => id !== null);
@@ -101,7 +98,7 @@ function LikedReviews({ user, profile }: Props) {
           <div
             key={review.id}
             className={S["my-liked-review-wrapper"]}
-            onClick={() => navigate("/review", { state: { highlightId: review.id } })} // 👈 추가
+            onClick={() => navigate("/review", { state: { highlightId: review.id } })}
           >
             <ReviewCard
               reviewData={review}
