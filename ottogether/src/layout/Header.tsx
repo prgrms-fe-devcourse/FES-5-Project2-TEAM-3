@@ -25,12 +25,14 @@ function Header() {
 
   /* 프로필 사진 */
   const [ avatar, setAvatar ] = useState<string | null>(null);
+  const [ isAvatarLoading, setIsAvatarLoading ] = useState<boolean>(false);
 
   useEffect(() => {
     if (!user) return;
 
     const fetchAvatarUrl = async () => {
       try {
+        setIsAvatarLoading(true);
         const { data, error } = await supabase
           .from('profile')
           .select('avatar_url')
@@ -43,7 +45,10 @@ function Header() {
       } catch (err) {
       console.error('사용자 avatar 불러오기에 실패했습니다.', err);
       setAvatar(null);
-    }};
+      } finally {
+        setIsAvatarLoading(false);
+      }
+    };
     fetchAvatarUrl();
   }, [user]);
 
@@ -152,7 +157,12 @@ function Header() {
           className={S["user-avatar"]}
           onClick={()=> navigate('/my-page')}
         >
-          <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
+          { isAvatarLoading ? (
+            <div className={S["avatar-skeleton"]} aria-hidden={true} />
+            ) : (
+            <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
+            )
+          }
         </button>
         <div className={S['notification-wrapper']}>
           <img src={bellIcon} alt="알림" className={S.icon} />
@@ -169,7 +179,12 @@ function Header() {
           className={S["user-avatar"]}
           onClick={()=> navigate('/my-page')}
         >
-          <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
+          { isAvatarLoading ? (
+            <div className={S["avatar-skeleton"]} aria-hidden={true} />
+            ) : (
+            <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
+            )
+          }
           { hasNewNoti && <span className={S["red-dot"]} /> }
         </button>
         <button 
