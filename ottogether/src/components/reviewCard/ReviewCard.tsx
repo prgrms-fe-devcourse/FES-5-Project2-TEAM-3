@@ -82,6 +82,8 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 			
 		if (data?.reaction_type === 'like')
 			setIsLiked(true);
+		else
+			setIsLiked(false);
 		}
 
 		if (reviewData && profileData)

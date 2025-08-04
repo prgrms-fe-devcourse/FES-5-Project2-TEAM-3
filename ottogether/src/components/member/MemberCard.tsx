@@ -1,6 +1,4 @@
 import S from "./MemberCard.module.css"
-
-
 import type { Tables } from '../../supabase/supabase.type';
 import { formatDate } from "../../util/formatDate";
 
@@ -39,18 +37,17 @@ function MemberCard({profileData, reviewData, quotesData, isSearch = false} : Pr
 	}
 
 	return (
-		<div className={`${S.container} ${S.cell} ${isSearch ? S["search-container"] : ''}`}>
+		<div className={`${S.container} ${isSearch ? S["search-container"] : ''}`}>
 		{ 
 		profileData && profileData.map(data => (
 			<div key={data.user_id} className={`${S.cell} ${isSearch ? S["search-user"] : ''}`} onClick={() => onClickCell(data)}>
 				<img className={S['profile-image']} src={data.avatar_url as string ?? "./beomTeacher.svg"} alt="profileImage" />
-				<div>
+				<div className={S["info-container"]}>
 					<h2>{data.nickname ?? 'Nickname'}</h2>
 					<p className={S["joined"]}><strong>Joined :</strong> {formatDate(data.created_at)}</p>
-					<p className={S["favorite-genre"]}><strong>Favorite Genre :</strong> {data.favorite_genre?.join(', ')}</p>
+					<p className={S["favorite-genre"]}><strong>Favorite Genre :</strong> {data.favorite_genre?.join(', ') || '없음'}</p>
 					<p className={S["total-reviews"]}><strong>Total Reviews :</strong> {getUserReviewCount(reviewData, data.user_id)}{ isSearch ? <br /> : " | " }<strong>Total Quotes :</strong> {getUserQuotesCount(quotesData, data.user_id)} </p>
 				</div>
-					<img className={S.arrow} src='/Chevron_right.svg' alt="rightArrow" />
 			</div>
 		))}
 		</div>

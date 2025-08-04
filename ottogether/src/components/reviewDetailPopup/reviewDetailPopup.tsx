@@ -213,7 +213,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		return<div className={S["star-container-edit"]}>
 			{
 				[1,2,3,4,5].map(num => (
-					<img key={num} src={num <= rating ? "./star/fullStar.svg" : "./star/emptyStar.svg"} alt="starRating" onClick={() => handleRating(num)}/>
+					<img key={num} src={num <= rating ? "/star/fullStar.svg" : "/star/emptyStar.svg"} alt="starRating" onClick={() => handleRating(num)}/>
 				))
 			}
 		</div>
@@ -278,7 +278,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 			<header className={S.header}>
 				<img className={S.close} src="/close.svg" onClick={closePopup} alt="closeButton"/>
 				<div className={S.topbar}>
-					<img className={S['user-avatar']} src={(findUserById(reviewSingleData.user_id, profileData)?.avatar_url ?? "./beomTeacher.svg")} alt="profile_image" />
+					<img className={S['user-avatar']} src={(findUserById(reviewSingleData.user_id, profileData)?.avatar_url ?? "/beomTeacher.svg")} alt="profile_image" />
 					<p>{findUserById(reviewSingleData.user_id, profileData)?.nickname ?? 'User'} · {formatDateNoYear(reviewSingleData.updated_at!)}</p>
 					{((isAuth && user) && (reviewSingleData.user_id == user.id)) && 
 						<>
@@ -286,8 +286,8 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 							{!reviewEditOpen &&
 							<>
 								<div className={S["handler-btn-container"]}>
-								<img src="./edit.svg" alt="editReviewButton" onClick={() => openEditReview(reviewSingleData.text_content!)}/>
-								<img src="./trashcan.svg" alt="deleteReviewButton" onClick={() => handleDeleteReview(reviewSingleData.id)}/>
+								<img src="/edit.svg" alt="editReviewButton" onClick={() => openEditReview(reviewSingleData.text_content!)}/>
+								<img src="/trashcan.svg" alt="deleteReviewButton" onClick={() => handleDeleteReview(reviewSingleData.id)}/>
 							</div>
 							<div className={S['star-container']}>{StarRating(reviewSingleData.rating)}</div>
 							</>
@@ -350,14 +350,14 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 						<div key={comment.id} className={S['comment-cell']}>
 							<div className={S["comment-header"]}>
 								<div className={S.topbar}>
-									<img className={S['user-avatar']} src={(findUserById(comment.user_id, profileData)?.avatar_url ?? "./beomTeacher.svg")} alt="profile_image" />
+									<img className={S['user-avatar']} src={(findUserById(comment.user_id, profileData)?.avatar_url ?? "/beomTeacher.svg")} alt="profile_image" />
 									<p>{findUserById(comment.user_id, profileData)?.nickname ?? 'User'} · {formatDateNoYear(comment.updated_at!)}</p>
 									{((isAuth && user) && (comment.user_id == user.id)) && <img src="/YouBadge.svg" alt="isItMeCheck"></img>}
 								</div>
 								{ comment.user_id === user?.id && editingCommentId !== comment.id &&
 									<div className={S["handler-btn-container"]}>
-										<img src="./edit.svg" alt="editCommentButton" onClick={() => openEditComment(comment.id, comment.text_content)}/>
-										<img src="./trashcan.svg" alt="deleteCommentButton" onClick={() => handleDeleteComment(reviewSingleData.id, comment.id)}/>
+										<img src="/edit.svg" alt="editCommentButton" onClick={() => openEditComment(comment.id, comment.text_content)}/>
+										<img src="/trashcan.svg" alt="deleteCommentButton" onClick={() => handleDeleteComment(reviewSingleData.id, comment.id)}/>
 									</div>
 								}
 							</div>
