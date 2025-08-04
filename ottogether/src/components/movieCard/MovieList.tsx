@@ -3,8 +3,6 @@ import S from "./MovieList.module.css"
 import MovieCard from "./MovieCard";
 import type { MovieData } from "../../tmdbApi/movie.type";
 import getMovieProvider from "../../tmdbApi/getMovieProvider";
-import leftArrow from '../../assets/icons/arrow-left.svg';
-import rightArrow from '../../assets/icons/arrow-right.svg';
 
 interface MovieListProps {
   title: string;
@@ -73,7 +71,7 @@ const handlePrev = () => {
       </div>
       <div className={S["slider-container"]}>
         <button className={S["arrow-button"]} onClick={handlePrev}>
-          <img src={leftArrow} alt="prev" />
+          <img src="/arrow-left.svg" alt="prev" />
          </button>
         <div className={S["movie-grid"]}>
            {movies.slice(startIndex, startIndex + itemsPerPage).map((movie) => (
@@ -82,7 +80,7 @@ const handlePrev = () => {
           }
          </div>
        <button className={S["arrow-button"]} onClick={handleNext}>
-          <img src={rightArrow} alt="next" />
+          <img src="/arrow-right.svg" alt="next" />
          </button>
          </div>
      </section>
