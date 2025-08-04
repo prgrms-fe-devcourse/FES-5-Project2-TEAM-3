@@ -65,26 +65,26 @@ export type Database = {
       notification_settings: {
         Row: {
           comment: boolean
-          created_at: string | null
+          created_at: string
           like_quote: boolean
           like_review: boolean
-          updated_at: string
+          updated_at: string | null
           user_id: string
         }
         Insert: {
           comment?: boolean
-          created_at?: string | null
+          created_at?: string
           like_quote?: boolean
           like_review?: boolean
-          updated_at: string
+          updated_at?: string | null
           user_id: string
         }
         Update: {
           comment?: boolean
-          created_at?: string | null
+          created_at?: string
           like_quote?: boolean
           like_review?: boolean
-          updated_at?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
@@ -193,7 +193,7 @@ export type Database = {
           id: number
           is_visible: boolean | null
           likes: number
-          movie_id: string | null
+          movie_id: number | null
           person: string | null
           updated_at: string | null
           user_id: string | null
@@ -205,7 +205,7 @@ export type Database = {
           id?: number
           is_visible?: boolean | null
           likes?: number
-          movie_id?: string | null
+          movie_id?: number | null
           person?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -217,7 +217,7 @@ export type Database = {
           id?: number
           is_visible?: boolean | null
           likes?: number
-          movie_id?: string | null
+          movie_id?: number | null
           person?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -252,7 +252,7 @@ export type Database = {
           dislike_count: number | null
           id: number
           like_count: number | null
-          movie_id: string | null
+          movie_id: number | null
           rating: number
           text_content: string | null
           updated_at: string | null
@@ -264,7 +264,7 @@ export type Database = {
           dislike_count?: number | null
           id?: number
           like_count?: number | null
-          movie_id?: string | null
+          movie_id?: number | null
           rating: number
           text_content?: string | null
           updated_at?: string | null
@@ -276,7 +276,7 @@ export type Database = {
           dislike_count?: number | null
           id?: number
           like_count?: number | null
-          movie_id?: string | null
+          movie_id?: number | null
           rating?: number
           text_content?: string | null
           updated_at?: string | null
