@@ -91,10 +91,8 @@ function ProfileBox({ user, profile, setActiveTab }: Props) {
         {profile?.url}
       </a>
 
-      {/* 구분선 */}
       <hr className={S.divider} />
 
-      {/* 통계 */}
       <div className={S["stats-box"]}>
         <div>
           <p>{reviewCount}</p>

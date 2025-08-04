@@ -101,7 +101,7 @@ function LikedReviews({ user, profile }: Props) {
           <div
             key={review.id}
             className={S["my-liked-review-wrapper"]}
-            onClick={() => navigate("/review", { state: { highlightId: review.id } })} // 👈 추가
+            onClick={() => navigate("/review", { state: { highlightId: review.id } })}
           >
             <ReviewCard
               reviewData={review}
