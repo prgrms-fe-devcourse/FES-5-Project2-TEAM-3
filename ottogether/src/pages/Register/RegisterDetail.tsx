@@ -71,7 +71,7 @@ function RegisterDetail() {
     setGenres(genreList);
   }
 
-  /* Supabase Upsert 통신 */
+  /* Supabase Upsert 통신 - profile */
   const submitProfileInfo = async ({
     userId,
     userEmail,
@@ -97,6 +97,25 @@ function RegisterDetail() {
     });
   };
 
+  const handleError = (message: string) => {
+    setError(message);
+    setTimeout(() => setError(null), 3000);
+  }
+
+  /* supabase insert 통신 - notification settings */
+  const setNotificationSettings = async (userId:string) => {
+    return await upsertTable({
+      method: 'insert',
+      tableName: 'notification_settings',
+      uploadData: {
+        user_id: userId,
+        comment: true,
+        like_review: true,
+        like_quote: true,
+      }
+    });
+  };
+
   /* Skip 버튼 클릭 시 - user_id와 이메일만 저장 */
   const handleSkipDetail = async () => {
     // 비동기 처리 중 중복 제출 방지
@@ -109,14 +128,22 @@ function RegisterDetail() {
     }
 
     setIsSubmitting(true);
-    const result = await submitProfileInfo( { userId, userEmail });
+    const profileResult = await submitProfileInfo( { userId, userEmail });
+    const notiResult = await setNotificationSettings(userId);
     setIsSubmitting(false);
 
-    if (result.error) {
-      console.error('skip 데이터 저장 실패:', result.error.message);
-      setError('데이터 저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    if (profileResult.error) {
+      console.error('skip - 프로필 데이터 저장 실패:', profileResult.error.message);
+      handleError('데이터 저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
       return;
     }
+
+    if (notiResult.error) {
+      console.error('skip - 알림 설정 데이터 저장 실패:', notiResult.error.message);
+      handleError('데이터 저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
+
     navigate('/register/profile', { state: { userId } });
   }
 
@@ -134,19 +161,22 @@ function RegisterDetail() {
     }
 
     setIsSubmitting(true);
-    const result = await submitProfileInfo({
+    const profileResult = await submitProfileInfo({
       userId,
       userEmail,
       ottList,
       genres
     });
+    const notiResult = await setNotificationSettings(userId);
     setIsSubmitting(false);
 
-    if(result.error) {
-      console.error('Submit 데이터 업데이트 실패:', result.error.message);
-      setError('데이터 업데이트에 실패했습니다.');
+    if(profileResult.error) {
+      console.error('Submit - 프로필 데이터 업데이트 실패:', profileResult.error.message);
+      handleError('데이터 저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    } else if(notiResult.error) {
+      console.error('Submit - 알림 설정 데이터 업데이트 실패:', notiResult.error.message);
+      handleError('데이터 저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
     } else {
-      // console.log('업데이트 성공:', result.result);
       navigate('/register/profile', { state: { userId } });
     }
   }
