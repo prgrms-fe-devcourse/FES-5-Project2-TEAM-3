@@ -15,11 +15,12 @@ type Profile = Tables<'profile'>;
 interface Prop{
 	reviewData : Review,
 	profileData : Profile | undefined,
-	commentCount : number,
+	commentCount : number | undefined,
 	activePopUp : (id : number) => void
 }
 
 export function findUserById(inputId : string, profileData : Profile[]) : Profile | undefined{
+	// console.log("findUserById : \nInputID - ", inputId, '\nprofileData : ', profileData);
 	return profileData?.find(profile => profile.user_id !== null && profile.user_id === inputId);
 }
 
@@ -33,9 +34,10 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp} : Prop)
 	const [likeCount, setLikeCount] = useState(0);
 	// const [isDisLiked, setIsDisliked] = useState(false);
 	// const [disLikeCount, setDislikeCount] = useState(0);
+	// console.log('reviewData : ', reviewData,'\nprofileData : ' , profileData);
 	if (!(reviewData && profileData))
 	{
-		console.error('Error : 올바르지 않은 프로필 혹은 리뷰입니다.', reviewData, '||', profileData);
+		// console.error('Error : 올바르지 않은 프로필 혹은 리뷰입니다.', reviewData, '||', profileData);
 		return ;
 	}
 	const handleThumb = async (input : 'like' | 'dislike') => {
@@ -128,7 +130,7 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp} : Prop)
 			</div> */}
 			<div className={S['reaction-item']}>
 				<img src="/comment.svg" alt="commentIcon" />
-				<p>{commentCount}</p>
+				{commentCount !== undefined && <p>{commentCount}</p>}
 			</div>
 			<p className={S['read-more']} onClick={() => activePopUp(reviewData.id)}>Read More</p>
 		</footer>

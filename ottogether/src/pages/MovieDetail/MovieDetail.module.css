@@ -257,6 +257,11 @@
 	margin: 0 auto;
 }
 
+.review-container{
+	display: flex;
+	height: 220px;
+}
+
 @media (max-width: 768px) {
   .main-information {
     flex-direction: column;
