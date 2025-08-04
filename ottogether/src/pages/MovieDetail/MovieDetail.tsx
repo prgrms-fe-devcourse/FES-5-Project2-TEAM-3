@@ -158,9 +158,13 @@ function MovieDetail() {
 
 	const handleReviewCardClick = (targetId : number = 0) => {
 		if (targetId !== 0)
-			navigate(`/media/movie/${id}/review#${targetId}`);
+			navigate(`/media/${mediaType}/${id}/review#${targetId}`);
 		else
-			navigate(`/media/movie/${id}/review`);
+			navigate(`/media/${mediaType}/${id}/review`);
+	}
+
+	const handleMoreMembers = () => {
+		navigate(`/media/${mediaType}/${id}/favorites`, {state: {users : favoriteUsers}});
 	}
 
  return (<>
@@ -235,7 +239,7 @@ function MovieDetail() {
 							<p className={S["like-amount"]}>{favoriteUsers.length}</p>
 						</div>
 						<ProfileList profiles={favoriteUsers}></ProfileList>
-						<button className={S["more-member"]}>+</button>
+						<button className={S["more-member"]} onClick={handleMoreMembers}>+</button>
 					</div>
 				</div>
 				</div>
