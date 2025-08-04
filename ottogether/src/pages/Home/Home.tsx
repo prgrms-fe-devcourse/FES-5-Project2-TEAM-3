@@ -1,5 +1,5 @@
 
-import { fetchGenres, fetchMoviesByGenre, fetchPopularMovies } from "../../tmdbApi"
+import {fetchPopularMovies } from "../../tmdbApi"
 import MovieList from "../../components/movieCard/MovieList";
 import SectionGroup, { useGenreSections } from "../../components/movieCard/SectionGroup";
 import { useEffect, useState } from "react";
@@ -7,7 +7,6 @@ import Hero from "./Hero";
 import S from "./Home.module.css";
 import OttSelector from "../../components/Search/OttSelector";
 import { ottListTotal } from "../../lib/data";
-// import { fetchContentsByGenre } from "../../tmdbApi/fetchContentByGenre";
 
 
 function Home() {
@@ -17,10 +16,7 @@ function Home() {
   const [selectedOtt, setSelectedOtt] = useState<string[]>(ottListTotal);
 
   useEffect(() => {
-  // const observer = new IntersectionObserver((entries) => {
-  //   if (entries[0].isIntersecting) {
-  //     setVisibleIndex((prev) => prev + 1);
-  //   }
+    
   let ticking = false;
 
   const observer = new IntersectionObserver((entries) => {
