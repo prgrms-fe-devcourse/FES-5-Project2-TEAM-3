@@ -85,7 +85,6 @@ export type Database = {
           like_quote?: boolean
           like_review?: boolean
           updated_at?: string | null
-
           user_id?: string
         }
         Relationships: []
@@ -194,7 +193,7 @@ export type Database = {
           id: number
           is_visible: boolean | null
           likes: number
-          movie_id: string | null
+          movie_id: number | null
           person: string | null
           updated_at: string | null
           user_id: string | null
@@ -206,7 +205,7 @@ export type Database = {
           id?: number
           is_visible?: boolean | null
           likes?: number
-          movie_id?: string | null
+          movie_id?: number | null
           person?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -218,7 +217,7 @@ export type Database = {
           id?: number
           is_visible?: boolean | null
           likes?: number
-          movie_id?: string | null
+          movie_id?: number | null
           person?: string | null
           updated_at?: string | null
           user_id?: string | null

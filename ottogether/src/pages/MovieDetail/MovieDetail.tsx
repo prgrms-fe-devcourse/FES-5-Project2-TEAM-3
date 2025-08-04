@@ -130,7 +130,7 @@ function MovieDetail() {
 			return ;
 		}
 		findFavoriteUser(favorData,profileLoad);
-		const {data : quoteData, error : quoteError} = await supabase.from('quotes').select('*').eq('movie_id', id).order('likes', {ascending: false});
+		const {data : quoteData, error : quoteError} = await supabase.from('quotes').select('*').eq('movie_id', +id).order('likes', {ascending: false});
 		if (quoteError)
 		{
 			console.error('Error : 명대사 불러오는 중 에러 : ', quoteError);
