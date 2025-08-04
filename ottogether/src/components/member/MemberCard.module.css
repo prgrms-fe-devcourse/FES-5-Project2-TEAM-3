@@ -68,6 +68,7 @@
 
 .search-user {
 	width: 23rem;
+	min-height: 11rem;
 	height: 11rem;
 	border: 1px solid var(--foreground);
 	border-radius: 0.8rem;
