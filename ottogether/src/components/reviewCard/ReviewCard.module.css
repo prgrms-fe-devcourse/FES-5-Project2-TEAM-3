@@ -14,8 +14,7 @@
 .card-container{
 	padding: 16px;
 	max-width: 976px;
-	min-width: 340px;
-	min-width: 220px;
+	min-width: 400px;
 	width: 40%;
 	
 	margin : 0 auto;
@@ -26,6 +25,8 @@
 
 .star-container{
 	margin-left: auto;
+	display: flex;
+	gap: 4px;
 }
 
 .footer{
