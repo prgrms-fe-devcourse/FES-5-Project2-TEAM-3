@@ -217,11 +217,24 @@
 
 .reviews-container,
 .quotes-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
   width: 100%;
   margin-top: 2rem;
   position: relative;
   padding: 1rem;
   border-radius: 12px;
+}
+
+.move-page{
+	width: fit-content;
+	padding: 20px;
+	margin: 0 auto;
+	background-color: var(--color-primary-500);
+	color: white;
+	border-radius: 16px;
+	border-width: 0px;
 }
 
 .see-all {
@@ -234,6 +247,16 @@
   color: #ffb703;
   cursor: pointer;
 }
+
+.top-bar{
+	display: flex;
+}
+
+.notification-container{
+	padding: 24px;
+	margin: 0 auto;
+}
+
 @media (max-width: 768px) {
   .main-information {
     flex-direction: column;
