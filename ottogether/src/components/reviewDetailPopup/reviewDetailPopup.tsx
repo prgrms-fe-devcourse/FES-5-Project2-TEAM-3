@@ -2,8 +2,8 @@ import S from './ReviewDetailPopup.module.css'
 import type { Tables } from '../../supabase/supabase.type';
 import { useAuth } from '../../contexts/AuthProvider';
 import { formatDateNoYear } from '../../util/formatDate';
-import { findUserById } from '../ReviewCard/ReviewCard';
-import StarRating from '../ReviewCard/StarRating';
+import { findUserById } from '../reviewCard/ReviewCard';
+import StarRating from '../reviewCard/StarRating';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase/supabase';
 import { createNotification } from '../../util/createNotifications';
@@ -94,7 +94,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 			return ;
 		}
 		else{
-			await increaseOrDecraseCommentCount(reviewId, false);
+			await supabase.rpc('decrement', {table_name : 'review', id_column: 'id', id_value : reviewId, column_name: 'comment_count'});
 			reviewUpdate();
 		}
 	}
@@ -119,22 +119,6 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		}
 	}
 
-	const increaseOrDecraseCommentCount = async (reviewId : number, isIncrease : boolean) => {
-		if (!user)
-			return ;
-		let temp = 0;
-		if (isIncrease)
-			temp = commentCount + 1;
-		else
-			temp = commentCount - 1;	
-		const {error} = await supabase.from('review').update({comment_count : temp}).eq('id', reviewId);
-		if (error){
-			console.error('Error :', error.message);
-		}
-		else{
-			setCommentCount(temp);
-		}
-	}
 	const handleSubmit = async (reviewId : number) => {
 		if (!commentTextContent.trim()) return ;
 		if (!isAuth)
@@ -159,8 +143,8 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 			console.error('Error :', error.message);
 		}
 		else{
-			await increaseOrDecraseCommentCount(reviewId, true);
-
+			await supabase.rpc('increment', {table_name : 'review', id_column: 'id', id_value : reviewId, column_name: 'comment_count'});
+			setCommentCount(commentCount + 1);
 
 
       if (reviewSingleData.user_id && reviewSingleData.user_id !== user.id) {
@@ -222,11 +206,20 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		</div>
 	}
 
+	const calculateCommentCount = (reviewId : number) : number => {
+		let result = 0;
+		for (const element of commentData) {
+			if (element.review_id === reviewId)	
+				result++;
+		}
+		return result;
+	}
+
 
 	useEffect(()=> {
 		if (reviewSingleData)
 		{
-			setCommentCount(reviewSingleData.comment_count!);
+			setCommentCount(calculateCommentCount(reviewSingleData.id));
 			setRating(reviewSingleData.rating);
 		}
 

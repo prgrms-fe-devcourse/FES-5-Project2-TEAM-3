@@ -107,7 +107,9 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 		<div className={S["card-container"]}>
 		<header className={S.header}>
 			<img className={S['user-avatar']} src={profileData.avatar_url ?? "./beomTeacher.svg"} alt="profile_image" />
-			<p>{profileData.nickname ?? 'Guest'} · {formatDateNoYear(reviewData.updated_at!)}</p>
+			<p className={S['name-text']}>{profileData.nickname ?? 'Guest'}</p>
+			<p>·</p>
+			<p className={S['date-text']}>{formatDateNoYear(reviewData.updated_at!)}</p>
 			{((isAuth && user) && profileData.user_id == user.id) && <img src="/YouBadge.svg" alt="isItMeCheck"></img>} 
 			<div className={S['star-container']}>{StarRating(reviewData.rating)}</div>
 		</header>

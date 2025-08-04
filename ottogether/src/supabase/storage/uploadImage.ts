@@ -10,7 +10,7 @@ interface Args {
   path: string
 }
 export const uploadImage = async ( { bucketName, file, path }:Args ):Promise<{ success: boolean, url?: string, error?:string }> => {
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from(bucketName)
     .upload(path, file, {
       cacheControl: '3600',

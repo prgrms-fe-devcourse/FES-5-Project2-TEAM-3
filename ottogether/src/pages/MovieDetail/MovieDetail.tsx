@@ -10,10 +10,12 @@ import { useAuth } from "../../contexts/AuthProvider";
 import { isMovieLiked, toggleFavoriteMovie } from "../../util/toggleFavoriteMovie";
 import { findUserById } from "../../components/reviewCard/ReviewCard";
 import ProfileList from "./ProfileList";
+import QuoteCard from "../../components/Quotes/QuoteCard";
 
 type Review = Tables<'review'>;
 type Favorite = Tables<'favorite_movies'>;
 type Profile = Tables<'profile'>;
+type Quotes = Tables<'quotes'>;
 
 /*
 export type MovieData = {
@@ -44,9 +46,8 @@ function MovieDetail() {
 	const IMAGE_URL = 'https://image.tmdb.org/t/p/original/';
 	const [currentReviewData, setCurrentReviewData] = useState<Review[] | null>(null);
 	const [isMyLove, setIsMyLove] = useState(false);
-	// const [profileData, setProfileData] = useState<Profile[] | null>(null);
 	const [favoriteUsers, setFavoriteUsers] = useState<Profile[]>([]);
-	// const [favoriteData, setFavoriteData] = useState<Favorite[]>([]);
+	const [quotesData, setQuotesData] = useState<Quotes[]>([]);
 
   useEffect(() => {
     if (!mediaType || !id) return;
@@ -106,17 +107,16 @@ function MovieDetail() {
 		}, [id]);
 
 	useEffect(() => {
-		const dataLoading = async () => {
+	const dataLoading = async () => {
 		if (!id)
 			return ;
-		const {data, error} = await supabase.from('review').select('*').eq('movie_id', id);
+		const {data, error} = await supabase.from('review').select('*').eq('movie_id', +id);
 		if (error)
 		{
 			console.error('Error : 데이터를 불러오는 중 에러 : ', error);
 			return ;
 		}
 		setCurrentReviewData(data);
-
 		const {data:profileLoad, error:profileError} = await supabase.from('profile').select('*');
 		if (profileError)
 		{
@@ -130,6 +130,13 @@ function MovieDetail() {
 			return ;
 		}
 		findFavoriteUser(favorData,profileLoad);
+		const {data : quoteData, error : quoteError} = await supabase.from('quotes').select('*').eq('movie_id', +id).order('likes', {ascending: false});
+		if (quoteError)
+		{
+			console.error('Error : 명대사 불러오는 중 에러 : ', quoteError);
+			return ;
+		}
+		setQuotesData(quoteData);
 	}
 	dataLoading();
 	}, [])
@@ -223,14 +230,30 @@ function MovieDetail() {
 				</div>
 				</div>
 				<div className={S["reviews-container"]}>
-					<h2>Reviews</h2>
-					<button className={S["see-all"]}>See All</button>
-					{/* ReviewCard를 커스텀한 컴포넌트 개발해야할듯? */}
+					<div className={S["top-bar"]}>
+						<h2>Reviews</h2>
+						<button className={S["see-all"]}>See All</button>
+					</div>
+					
+
 				</div>
 				<div className={S["quotes-container"]}>
-					<h2>Favorite Quotes</h2>
-					<button className={S["see-all"]}>See All</button>
-					{/* 영화 ID를 받아서 Quote db의 가장 많이 좋아요를 받은 Quote를 받은 뒤, QuoteCard 출력하는 함수 */}
+					<div className={S["top-bar"]}>
+						<h2>Favorite Quotes</h2>
+						<button className={S["see-all"]}>See All</button>
+					</div>
+					{quotesData[0] && 
+						<QuoteCard key={quotesData[0].id} quote={quotesData[0]} onRemove={(id : number) => (console.log(id))}></QuoteCard>
+					}
+					{
+						!quotesData[0] &&
+						<>
+							<div className={S["notification-container"]}>
+								<h2>아직 이 영화에 작성된 명대사가 없습니다! 🥲</h2>	
+							</div>
+							<button className={S["move-page"]}>지금 작성하러가기 →</button>
+						</>
+					}
 				</div>
 			</div>
 			</div>
