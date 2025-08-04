@@ -1,11 +1,7 @@
-
-
-
 import { useEffect, useState } from "react";
 import S from "./MovieList.module.css"
-// import { getMovieProvider } from "../../tmdbApi/getMovieProvider";
-import type { MovieData } from "../../tmdbApi/movie.type";
 import MovieCard from "./MovieCard";
+import type { MovieData } from "../../tmdbApi/movie.type";
 import getMovieProvider from "../../tmdbApi/getMovieProvider";
 
 interface MovieListProps {
@@ -75,7 +71,7 @@ const handlePrev = () => {
       </div>
       <div className={S["slider-container"]}>
         <button className={S["arrow-button"]} onClick={handlePrev}>
-          <img src="/src/assets/icons/arrow-left.svg" alt="prev" />
+          <img src="/arrow-left.svg" alt="prev" />
          </button>
         <div className={S["movie-grid"]}>
            {movies.slice(startIndex, startIndex + itemsPerPage).map((movie) => (
@@ -84,7 +80,7 @@ const handlePrev = () => {
           }
          </div>
        <button className={S["arrow-button"]} onClick={handleNext}>
-          <img src="/src/assets/icons/arrow-right.svg" alt="next" />
+          <img src="/arrow-right.svg" alt="next" />
          </button>
          </div>
      </section>

@@ -8,9 +8,10 @@ import { supabase } from "../../supabase/supabase";
 import RatingBarChart from "./RatingBarChart";
 import { useAuth } from "../../contexts/AuthProvider";
 import { isMovieLiked, toggleFavoriteMovie } from "../../util/toggleFavoriteMovie";
-import ReviewCard, { findUserById } from "../../components/reviewCard/ReviewCard";
+import { findUserById } from "../../components/reviewCard/ReviewCard";
 import ProfileList from "./ProfileList";
 import QuoteCard from "../../components/Quotes/QuoteCard";
+import SmallReviewCard from "../../components/reviewCard/SmallReviewCard/SmallReviewCard";
 
 type Review = Tables<'review'>;
 type Favorite = Tables<'favorite_movies'>;
@@ -77,7 +78,7 @@ function MovieDetail() {
 			};
 	
 			fetchLikedStatus();
-		}, [id]);
+		}, [id, user]);
 
 	useEffect(() => {
 	const dataLoading = async () => {
@@ -235,14 +236,24 @@ function MovieDetail() {
 						<h2>Reviews</h2>
 						<button className={S["see-all"]}>See All</button>
 					</div>
+				{ currentReviewData.length !== 0 && 
 					<div className={S["review-container"]}>
 						{currentReviewData.slice(0, 2).map(elem => {
 							const profile_ = findUserById(elem.user_id, profileData);
 							if (!profile_) return null;
-							return <ReviewCard key={elem.id} reviewData={elem} profileData={profile_} commentCount={undefined} activePopUp={function (id: number): void {
+							return <SmallReviewCard key={elem.id} reviewData={elem} profileData={profile_} activePopUp={function (id: number): void {
 								 console.log(id, " clicked!");
-							 } }/>})}
+								} }/>})}
 					</div>
+				}
+				{ currentReviewData.length === 0 &&
+					<>
+					<div className={S["notification-container"]}>
+					<h2>아직 이 영화에 작성된 명대사가 없습니다! 😭</h2>	
+					</div>
+					<button className={S["move-page"]}>리뷰 작성하러가기 →</button>
+					</>
+				}
 
 				</div>
 				<div className={S["quotes-container"]}>
@@ -259,7 +270,7 @@ function MovieDetail() {
 							<div className={S["notification-container"]}>
 								<h2>아직 이 영화에 작성된 명대사가 없습니다! 🥲</h2>	
 							</div>
-							<button className={S["move-page"]}>지금 작성하러가기 →</button>
+							<button className={S["move-page"]}>명대사 작성하러가기 →</button>
 						</>
 					}
 				</div>

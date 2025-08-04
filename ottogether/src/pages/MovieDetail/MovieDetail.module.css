@@ -219,7 +219,7 @@
 .quotes-container {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 28px;
   width: 100%;
   margin-top: 2rem;
   position: relative;
@@ -253,7 +253,6 @@
 }
 
 .notification-container{
-	padding: 24px;
 	margin: 0 auto;
 }
 

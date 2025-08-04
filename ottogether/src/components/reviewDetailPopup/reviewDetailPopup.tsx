@@ -7,6 +7,7 @@ import StarRating from '../reviewCard/StarRating';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase/supabase';
 import { createNotification } from '../../util/createNotifications';
+import toggleReviewThumbs from '../reviewCard/toggleReviewThumbs';
 
 
 type Review = Tables<'review'>;
@@ -51,6 +52,8 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 	const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
 	const [reviewEditOpen, setReviewEditOpen] = useState(false);
 	const [rating, setRating] = useState(5);
+	const [isLiked, setIsLiked] = useState(false);
+	const [likeCount, setLikeCount] = useState(0);
 
 	const handleEditComment = async (commentId : number) => {
 		if (!user)
@@ -216,13 +219,55 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		</div>
 	}
 
+	const handleThumb = async (input : 'like' | 'dislike') => {
+		if (!isAuth) {
+			alert('로그인이 필요한 서비스입니다.');
+			return;
+		}
+		const { liked, error } = await toggleReviewThumbs(reviewSingleData.id, user!.id, input);
+		if (error) {
+			console.error('좋아요/싫어요 처리 중 오류:', error);
+			return;
+		}
+		if (input === 'like') {
+			setIsLiked(liked!);
+			setLikeCount(prev => liked ? prev + 1 : prev - 1);
+			// if (liked && profileData.user_id && user && profileData.user_id !== user.id) {
+			// 		await createNotification({
+			// 			userId: profileData.user_id,
+			// 			senderId: user.id,
+			// 			type: "like_review",
+			// 			targetId: reviewData.id,
+			// 		});
+			// 	}
+		} else {
+			if (liked && isLiked) setIsLiked(false);
+			if (isLiked) setLikeCount(prev => prev - 1);
+		}
+		reviewUpdate();
+	};
 
 
 	useEffect(()=> {
+		const checkThumb = async () => {
+			if (!user)
+				return ;
+			const { data } = await supabase
+							.from('review_like')
+							.select('*')
+							.eq('user_id', user.id)
+							.eq('review_id', reviewSingleData.id)
+							.maybeSingle();
+			
+		if (data?.reaction_type === 'like')
+			setIsLiked(true);
+		}
 		if (reviewSingleData)
 		{
 			setCommentCount(calculateCommentCount(reviewSingleData.id, commentData));
 			setRating(reviewSingleData.rating);
+			checkThumb();
+			setLikeCount(reviewSingleData.like_count!);
 		}
 
 	}, [])
@@ -269,13 +314,9 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 				}
 				{!reviewEditOpen && <div className={S["reaction-container"]}>
 					<div className={S['reaction-item']}>
-						<img src="/thumbsUp.svg" alt="ThumbsUpIcon" />
-						<p>{reviewSingleData.like_count}</p>
+						<img src={isLiked ? "/thumbsUp.svg" : "/emptyThumbsUp.svg"} alt="ThumbsUpIcon" onClick={() => handleThumb('like')}/>
+						<p>{likeCount}</p>
 					</div>
-					{/* <div className={S['reaction-item']}>
-						<img src="/thumbsDown.svg" alt="ThumbsUpIcon" />
-						<p>{reviewSingleData.dislike_count}</p>
-					</div> */}
 					<div className={S['reaction-item']}>
 						<img src="/comment.svg" alt="commentIcon" />
 						<p>{commentCount}</p>
