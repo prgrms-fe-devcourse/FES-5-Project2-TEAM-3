@@ -6,7 +6,7 @@ import { getUserInfo } from '../../supabase/auth/getUserInfo';
 import addIcon from '@/assets/icons/add.svg';
 
 type Props = {
-    onAdd: () => void;
+    onAdd: (id : number) => void;
 		movieId : string;
 };
 
@@ -47,7 +47,7 @@ function QuoteCreate({onAdd, movieId}:Props) {
     setContent('');
     setPerson('');
     setIsExpanded(false);
-    onAdd(); 
+    onAdd(+movieId); 
   } else {
     console.error('다시 입력해 주세요:', error.message);
   }

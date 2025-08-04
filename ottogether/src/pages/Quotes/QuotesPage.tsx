@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import type { Database } from "../../supabase/supabase.type";
-import { getQuotes } from "../../util/getQuote";
+import { getQuotes, getQuotesByMovieId } from "../../util/getQuote";
 import QuoteCard from "../../components/Quotes/QuoteCard";
 import QuoteCreate from "../../components/Quotes/QuoteCreate";
 import SortBtn from "../../components/Quotes/SortBtn";
@@ -10,7 +10,6 @@ import { useLocation, useParams } from "react-router-dom";
 type Quote = Database["public"]["Tables"]["quotes"]["Row"];
 
 function QuotesPage() {
-
     const [quotes, setQuotes] = useState<Quote[]>([]);
 		const {id} = useParams<{id : string}>();
     const [highlightId, setHighlightId] = useState<number | null>(null);
@@ -18,19 +17,27 @@ function QuotesPage() {
 		const receivedQuotes = location.state?.quotes as Quote[] | undefined;
 
     const fetchData = async () => {
-			if (receivedQuotes)
-				setQuotes(receivedQuotes);
-			else
-			{
     		const data = await getQuotes();
     		if (data) setQuotes(data);
-			}
   	};
 
-    useEffect(() => {
-    fetchData();
-  }, [receivedQuotes]);
+		const fetchDataByMovieId = async () => {
+			if (!id)
+				return ;
+			const data = await getQuotesByMovieId(id!);
+			if (data) setQuotes(data);
+		}
 
+  //   useEffect(() => {
+  //   fetchData();
+  // }, [receivedQuotes]);
+
+		useEffect(() => {
+		if (receivedQuotes)
+			setQuotes(receivedQuotes);
+		else
+			fetchData();
+		}, []);
 
   useEffect(() => {
     if (location.state?.highlightId) {
@@ -61,7 +68,7 @@ const handleSortChange = async (option: { sortBy: "created_at" | "likes"; order:
         <div className={S.divider} />
       </div>
       <div>
-        {id && <QuoteCreate onAdd={fetchData} movieId={id!}/>}
+				<QuoteCreate onAdd={fetchDataByMovieId} movieId={id!}/>
         {quotes.map((quote) => (
           <QuoteCard
             key={quote.id}
