@@ -94,7 +94,9 @@ function Notifications({ user, profile }: Props) {
   return (
     <div className={S.container}>
       <div className={S.header}>
-        <h1>{profile?.nickname ?? "Guest"} 님의 Notifications</h1>
+        <h1>{profile?.nickname ?? "Guest"} 님의 Notifications
+        </h1>
+        <hr className={S.divider} />
       </div>
 
       <div className={S.tabs}>

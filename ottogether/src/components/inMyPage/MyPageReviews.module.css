@@ -15,20 +15,23 @@
 .my-notice {
   text-align: center;
   font-size: 0.95rem;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   color: var(--color-grey-400);
 }
 
 .my-liked-review-wrapper {
-  transition: margin 0.2s ease;
   margin-top: 1.5rem;
   cursor: pointer;
 }
 
-
 .my-review-wrapper {
   transition: margin 0.2s ease;
   cursor: pointer;
+}
+
+.date-block {
+  width: 100%;
+  margin-bottom: 0.5rem;
 }
 
 .my-new-date-group {
@@ -42,9 +45,9 @@
 .my-date {
   font-size: 0.9rem;
   color: var(--color-grey-400);
-  margin: 0.5rem 0 0.8rem 0.5rem;
-  text-align: right;
   font-weight: 500;
+  text-align: right;
+  margin: 0;
 }
 
 @media (max-width: 1024px) {
@@ -93,6 +96,5 @@
 
   .my-date {
     font-size: 0.8rem;
-    margin: 0 0 0.5rem 0.3rem;
   }
 }

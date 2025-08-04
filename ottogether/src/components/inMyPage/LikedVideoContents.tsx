@@ -61,7 +61,15 @@ function LikedVideoContents({ user, profile }: Props) {
   if (!user) return <p className={S["notice"]}>로그인이 필요합니다.</p>;
   if (loading) return <p className={S["notice"]}>불러오는 중...</p>;
   if (movies.length === 0)
-    return <p className={S["notice"]}>좋아요한 영화/드라마가 없습니다.</p>;
+    return (
+      <div className={S["video-container"]}>
+        <h1 className={S["title"]}>
+          {profile?.nickname ?? "Guest"} 님이 좋아요한 영화 / 드라마 (총 {movies.length}개)
+        </h1>
+        <hr />
+        <p className={S["notice"]}>좋아요한 영화/드라마가 없습니다.</p>
+      </div>
+    );
 
   return (
     <div className={S["video-container"]}>
