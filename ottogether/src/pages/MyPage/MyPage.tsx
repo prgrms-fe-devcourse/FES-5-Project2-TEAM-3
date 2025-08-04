@@ -27,28 +27,34 @@ type ProfileType = {
   favorite_genre: string[] | null;
 };
 
-function CreatedContents({ user, profile }: { user: UserType, profile: ProfileType | null }) {
+function CreatedContents({ user, profile }: { user: UserType; profile: ProfileType | null }) {
   return (
     <>
-      <CreatedReviews />
+      <CreatedReviews user={user} profile={profile} />
+      <br />
       <CreatedQuotes user={user} profile={profile} />
     </>
   );
 }
-function LikedContents({ user, profile }: { user: UserType, profile: ProfileType | null }) {
+
+function LikedContents({ user, profile }: { user: UserType; profile: ProfileType | null }) {
   return (
     <>
-      <LikedVideoContents />
-      <LikedReviews />
-      <LikedQuotes user={user} profile={profile}/>
+      <LikedVideoContents user={user} profile={profile} />
+      <br />
+      <LikedReviews user={user} profile={profile} />
+      <br />
+      <LikedQuotes user={user} profile={profile} />
     </>
   );
 }
-function AllContents({ user, profile }: { user: UserType, profile: ProfileType | null }) {
+
+function AllContents({ user, profile }: { user: UserType; profile: ProfileType | null }) {
   return (
     <>
       <CreatedContents user={user} profile={profile} />
-      <LikedContents user={user} profile={profile}/>
+      <br />
+      <LikedContents user={user} profile={profile} />
     </>
   );
 }
@@ -64,6 +70,7 @@ function MyPage() {
     const fetchProfile = async () => {
       const { data, error } = await supabase
         .from("profile")
+        // 필요한 필드만 선택해서 ProfileType과 일치시킴
         .select("user_id, nickname, bio, url, header_url, avatar_url, preferred_ott, favorite_genre")
         .eq("user_id", user.id)
         .single();
@@ -85,33 +92,33 @@ function MyPage() {
   const renderContent = () => {
     switch (activeTab) {
       case "createdContents":
-        return <CreatedContents user={user} profile={profile}/>;
+        return <CreatedContents user={user} profile={profile} />;
       case "createdReviews":
-        return <CreatedReviews />;
+        return <CreatedReviews user={user} profile={profile} />;
       case "createdQuotes":
         return <CreatedQuotes user={user} profile={profile} />;
       case "likedContents":
-        return <LikedContents user={user} profile={profile}/>;
+        return <LikedContents user={user} profile={profile} />;
       case "likedVideoContents":
-        return <LikedVideoContents />;
+        return <LikedVideoContents user={user} profile={profile} />;
       case "likedReviews":
-        return <LikedReviews />;
+        return <LikedReviews user={user} profile={profile} />;
       case "likedQuotes":
         return <LikedQuotes user={user} profile={profile} />;
       case "notifications":
-        return <Notifications />;
+        return <Notifications user={user} profile={profile} />;
       case "settings":
         return <Settings user={user} profile={profile} />;
       default:
-        return <AllContents user={user} profile={profile}/>;
+        return <AllContents user={user} profile={profile} />;
     }
   };
 
   return (
     <div className={S.page}>
-      <div 
+      <div
         className={S.banner}
-        onClick={() => setActiveTab("")} 
+        onClick={() => setActiveTab("")}
         style={{ cursor: "pointer" }}
       >
         <img
@@ -123,11 +130,7 @@ function MyPage() {
 
       <div className={S.container}>
         <aside className={S.sidebar}>
-          <ProfileBox 
-            user={user} 
-            profile={profile} 
-            setActiveTab={setActiveTab} 
-          />
+          <ProfileBox user={user} profile={profile} setActiveTab={setActiveTab} />
 
           <nav className={S["nav-menu"]}>
             <h4

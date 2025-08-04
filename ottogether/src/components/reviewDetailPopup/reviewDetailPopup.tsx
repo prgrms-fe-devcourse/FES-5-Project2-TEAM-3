@@ -6,6 +6,7 @@ import { findUserById } from '../ReviewCard/ReviewCard';
 import StarRating from '../ReviewCard/StarRating';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase/supabase';
+import { createNotification } from '../../util/createNotifications';
 
 
 type Review = Tables<'review'>;
@@ -159,6 +160,29 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		}
 		else{
 			await increaseOrDecraseCommentCount(reviewId, true);
+
+
+
+      if (reviewSingleData.user_id && reviewSingleData.user_id !== user.id) {
+        const { data: senderProfile } = await supabase
+          .from("profile")
+          .select("nickname")
+          .eq("user_id", user.id)
+          .single();
+
+        const senderName = senderProfile?.nickname ?? "Guest";
+
+        await createNotification({
+          userId: reviewSingleData.user_id,
+          senderId: user.id,
+          type: "comment",
+          targetId: reviewId,
+          message: `${senderName}님이 회원님의 리뷰에 댓글을 남겼습니다.`,
+        });
+      }
+
+
+
 			handleCancel();
 			reviewUpdate();
 		}

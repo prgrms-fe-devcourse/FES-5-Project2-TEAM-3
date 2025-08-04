@@ -7,6 +7,7 @@ import { useAuth } from '../../contexts/AuthProvider';
 import toggleReviewThumbs from './toggleReviewThumbs';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase/supabase';
+import { createNotification } from '../../util/createNotifications';
 
 type Review = Tables<'review'>;
 type Profile = Tables<'profile'>;
@@ -55,6 +56,28 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
     
     setLikeCount(prev => liked ? prev + 1 : prev - 1);
     // if (isDisLiked) setDislikeCount(prev => prev - 1);
+
+
+
+    if (liked && profileData.user_id && user && profileData.user_id !== user.id) {
+      const { data: senderProfile } = await supabase
+        .from("profile")
+        .select("nickname")
+        .eq("user_id", user.id)
+        .single();
+
+      const senderName = senderProfile?.nickname ?? "Guest";
+
+      await createNotification({
+        userId: profileData.user_id,
+        senderId: user.id,
+        type: "like_review",
+        targetId: reviewData.id,
+        message: `${senderName}님이 회원님의 리뷰를 좋아합니다.`,
+      });
+    }
+
+
     
   } else {
     setIsDisliked(liked!);

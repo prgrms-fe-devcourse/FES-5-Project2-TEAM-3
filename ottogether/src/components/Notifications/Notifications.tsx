@@ -2,17 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabase/supabase";
 import { useAuth } from "../../contexts/AuthProvider";
+import type { Tables } from "../../supabase/supabase.type"; 
 import S from "./Notifications.module.css";
 
-type Notification = {
-  id: string;
-  user_id: string;
-  sender_id: string;
-  type: "comment" | "like_review" | "like_quote";
-  target_id: string;
-  message: string;
-  is_read: boolean;
-  created_at: string;
+// DB notifications Row 타입 그대로 가져옴
+type NotificationRow = Tables<"notifications"> & {
   sender?: {
     nickname: string | null;
     avatar_url: string | null;
@@ -21,7 +15,7 @@ type Notification = {
 
 function Notifications() {
   const [activeTab, setActiveTab] = useState<"all" | "likes" | "comments" | "unread">("all");
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<NotificationRow[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -70,47 +64,24 @@ function Notifications() {
     return true;
   });
 
-  const handleClick = async (noti: Notification) => {
-    // 클릭 시 읽음 처리
+  const handleClick = async (noti: NotificationRow) => {
     if (!noti.is_read) {
       const { error } = await supabase
         .from("notifications")
         .update({ is_read: true })
         .eq("id", noti.id);
 
-      if (error) {
-        console.error("읽음 처리 실패:", error.message);
-      } else {
+      if (!error) {
         setNotifications((prev) =>
           prev.map((n) => (n.id === noti.id ? { ...n, is_read: true } : n))
         );
       }
     }
 
-    // 페이지 이동
     if (noti.type === "comment" || noti.type === "like_review") {
       navigate(`/reviews/${noti.target_id}`);
     } else if (noti.type === "like_quote") {
       navigate(`/quotes/${noti.target_id}`);
-    }
-  };
-
-  const handleMarkAllRead = async () => {
-    const unreadIds = notifications.filter((n) => !n.is_read).map((n) => n.id);
-
-    if (unreadIds.length === 0) return;
-
-    const { error } = await supabase
-      .from("notifications")
-      .update({ is_read: true })
-      .in("id", unreadIds);
-
-    if (error) {
-      console.error("전체 읽음 처리 실패:", error.message);
-    } else {
-      setNotifications((prev) =>
-        prev.map((n) => ({ ...n, is_read: true }))
-      );
     }
   };
 
@@ -121,9 +92,6 @@ function Notifications() {
     <div className={S.container}>
       <div className={S.header}>
         <h1>Notifications</h1>
-        <button className={S.markAll} onClick={handleMarkAllRead}>
-          Mark all as read
-        </button>
       </div>
 
       <div className={S.tabs}>
@@ -163,6 +131,8 @@ function Notifications() {
               key={n.id}
               className={`${S.item} ${n.is_read ? S.read : S.unread}`}
               onClick={() => handleClick(n)}
+              role="button"
+              tabIndex={0}
             >
               <div className={S.avatar}>
                 {n.sender?.avatar_url ? (
@@ -179,7 +149,8 @@ function Notifications() {
                 </p>
               </div>
               <div className={S.meta}>
-                {new Date(n.created_at).toLocaleString()}
+                {new Date(n.created_at).toLocaleDateString()}{" "}
+                {new Date(n.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
               </div>
             </li>
           ))

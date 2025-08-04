@@ -101,12 +101,12 @@ function ProfileBox({ user, profile, setActiveTab }: Props) {
           <span>Reviews</span>
         </div>
         <div>
-          <p>{likeCount}</p>
-          <span>Likes</span>
-        </div>
-        <div>
           <p>{quoteCount}</p>
           <span>Quotes</span>
+        </div>
+        <div>
+          <p>{likeCount}</p>
+          <span>Likes</span>
         </div>
       </div>
     </div>

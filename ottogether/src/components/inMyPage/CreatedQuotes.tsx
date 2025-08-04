@@ -24,7 +24,6 @@ interface Props {
 
 type Quote = Database["public"]["Tables"]["quotes"]["Row"];
 
-// 날짜 포맷 함수
 function formatDate(dateString: string | null): string {
   if (!dateString) return "";
   return new Date(dateString).toLocaleDateString("ko-KR", {
@@ -91,7 +90,7 @@ function CreatedQuotes({ user, profile }: Props) {
         <div
           key={quote.id}
           className={`${S["my-quote-wrapper"]} ${
-            quote.showDate ? S["my-new-date-group"] : S["my-same-date-group"]
+            quote.showDate ? S["my-new-date-group"] : ""
           }`}
         >
           {quote.showDate && <p className={S["my-date"]}>{quote.currentDate}</p>}

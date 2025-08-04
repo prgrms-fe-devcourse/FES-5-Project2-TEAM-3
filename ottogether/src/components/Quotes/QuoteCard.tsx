@@ -6,6 +6,7 @@ import quoteLeft from '@/assets/icons/quotes-left.svg';
 import quoteRight from '@/assets/icons/quotes-right.svg';
 import { toggleQuoteLike } from '../../util/toggleQuoteLike';
 import type { Database } from '../../supabase/supabase.type';
+import { createNotification } from '../../util/createNotifications';
 
 type Quote = Database['public']['Tables']['quotes']['Row'];
 
@@ -79,6 +80,25 @@ export default function QuoteCard({
         if (!prev) prev = 0;
         return liked ? prev + 1 : prev - 1 
       });
+
+      if (liked && quote.user_id && quote.user_id !== user.id) {
+        const { data: senderProfile } = await supabase
+          .from("profile")
+          .select("nickname")
+          .eq("user_id", user.id)
+          .single();
+
+        const senderName = senderProfile?.nickname ?? "Guest";
+
+        await createNotification({
+          userId: quote.user_id,
+          senderId: user.id,
+          type: "like_quote",
+          targetId: id,
+          message: `${senderName}님이 회원님의 명대사를 좋아합니다.`,
+        });
+      }
+
     }
   };
 
