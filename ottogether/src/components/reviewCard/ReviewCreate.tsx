@@ -72,7 +72,7 @@ function ReviewCreate({reviewAdded} : Props) {
 		return<div className={S["star-container"]}>
 			{
 				[1,2,3,4,5].map(num => (
-					<img key={num} src={num <= rating ? "./star/fullStar.svg" : "./star/emptyStar.svg"} alt="starRating" onClick={() => handleRating(num)}/>
+					<img key={num} src={num <= rating ? "/star/fullStar.svg" : "/star/emptyStar.svg"} alt="starRating" onClick={() => handleRating(num)}/>
 				))
 			}
 		</div>

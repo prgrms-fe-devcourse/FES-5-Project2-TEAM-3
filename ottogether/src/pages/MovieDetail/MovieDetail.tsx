@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getContentDetail } from "../../tmdbApi/getContentDetail";
 import type { MovieData } from "../../tmdbApi/movie.type";
 import S from './MovieDetail.module.css';
@@ -50,6 +50,7 @@ function MovieDetail() {
 	const [favoriteUsers, setFavoriteUsers] = useState<Profile[]>([]);
 	const [quotesData, setQuotesData] = useState<Quotes[]>([]);
 	const [profileData, setProfileData] = useState<Profile[]>([]);
+	const navigate = useNavigate();
 
   useEffect(() => {
     if (!mediaType || !id) return;
@@ -84,7 +85,7 @@ function MovieDetail() {
 	const dataLoading = async () => {
 		if (!id)
 			return ;
-		const {data, error} = await supabase.from('review').select('*').eq('movie_id', +id);
+		const {data, error} = await supabase.from('review').select('*').eq('movie_id', +id).order('like_count', {ascending: false});
 		if (error)
 		{
 			console.error('Error : 유저 데이터를 불러오는 중 에러 : ', error);
@@ -153,6 +154,13 @@ function MovieDetail() {
 		sum /= currentReviewData.length;
 
 		return sum.toFixed(2);
+	}
+
+	const handleReviewCardClick = (targetId : number = 0) => {
+		if (targetId !== 0)
+			navigate(`/media/movie/${id}/review#${targetId}`);
+		else
+			navigate(`/media/movie/${id}/review`);
 	}
 
  return (<>
@@ -234,7 +242,7 @@ function MovieDetail() {
 				<div className={S["reviews-container"]}>
 					<div className={S["top-bar"]}>
 						<h2>Reviews</h2>
-						<button className={S["see-all"]}>See All</button>
+						<button className={S["see-all"]} onClick={() => handleReviewCardClick}>See All</button>
 					</div>
 				{ currentReviewData.length !== 0 && 
 					<div className={S["review-container"]}>
@@ -242,7 +250,7 @@ function MovieDetail() {
 							const profile_ = findUserById(elem.user_id, profileData);
 							if (!profile_) return null;
 							return <SmallReviewCard key={elem.id} reviewData={elem} profileData={profile_} activePopUp={function (id: number): void {
-								 console.log(id, " clicked!");
+								 handleReviewCardClick(id);
 								} }/>})}
 					</div>
 				}

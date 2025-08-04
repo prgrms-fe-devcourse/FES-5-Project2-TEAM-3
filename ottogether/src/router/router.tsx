@@ -56,21 +56,21 @@ export const router = createBrowserRouter([
         element: <EditPassword />
       },
       {
-         path: '/review',
-         element: <Review />
+				path: '/members',
+				element: <Members />
       },
       {
-         path: '/members',
-         element: <Members />
+				path: '/my-page',
+				element: <MyPage />
       },
       {
-         path: '/my-page',
-         element: <MyPage />
-      },
-      {
-        path: '/media/:mediaType/:id',
+				path: '/media/:mediaType/:id',
         element: <MovieDetail />
       },
+			{
+				 path: '/media/:mediaType/:id/review',
+				 element: <Review />
+			},
     ]
   },
   {
