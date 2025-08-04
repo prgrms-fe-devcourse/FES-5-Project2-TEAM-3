@@ -88,44 +88,67 @@ function Notifications({ user, profile }: Props) {
     }
   };
 
+  const handleMarkAllRead = async () => {
+    const unreadIds = notifications.filter((n) => !n.is_read).map((n) => n.id);
+    if (unreadIds.length === 0) return;
+
+    const { error } = await supabase
+      .from("notifications")
+      .update({ is_read: true })
+      .in("id", unreadIds);
+
+    if (!error) {
+      setNotifications((prev) =>
+        prev.map((n) =>
+          unreadIds.includes(n.id) ? { ...n, is_read: true } : n
+        )
+      );
+    }
+  };
+
   if (!user) return <div>로그인이 필요합니다.</div>;
   if (loading) return <div>알림을 불러오는 중...</div>;
 
   return (
     <div className={S.container}>
       <div className={S.header}>
-        <h1>{profile?.nickname ?? "Guest"} 님의 Notifications
-        </h1>
+        <h1>{profile?.nickname ?? "Guest"} 님의 Notifications</h1>
         <hr className={S.divider} />
       </div>
 
       <div className={S.tabs}>
-        <button
-          className={`${S.tab} ${activeTab === "all" ? S.active : ""}`}
-          onClick={() => setActiveTab("all")}
-        >
-          All <span>{notifications.length}</span>
-        </button>
-        <button
-          className={`${S.tab} ${activeTab === "likes" ? S.active : ""}`}
-          onClick={() => setActiveTab("likes")}
-        >
-          Likes{" "}
-          <span>
-            {notifications.filter((n) => n.type === "like_review" || n.type === "like_quote").length}
-          </span>
-        </button>
-        <button
-          className={`${S.tab} ${activeTab === "comments" ? S.active : ""}`}
-          onClick={() => setActiveTab("comments")}
-        >
-          Comments <span>{notifications.filter((n) => n.type === "comment").length}</span>
-        </button>
-        <button
-          className={`${S.tab} ${activeTab === "unread" ? S.active : ""}`}
-          onClick={() => setActiveTab("unread")}
-        >
-          Unread <span>{notifications.filter((n) => !n.is_read).length}</span>
+        <div className={S["tab-group"]}>
+          <button
+            className={`${S.tab} ${activeTab === "all" ? S.active : ""}`}
+            onClick={() => setActiveTab("all")}
+          >
+            All <span>{notifications.length}</span>
+          </button>
+          <button
+            className={`${S.tab} ${activeTab === "likes" ? S.active : ""}`}
+            onClick={() => setActiveTab("likes")}
+          >
+            Likes{" "}
+            <span>
+              {notifications.filter((n) => n.type === "like_review" || n.type === "like_quote").length}
+            </span>
+          </button>
+          <button
+            className={`${S.tab} ${activeTab === "comments" ? S.active : ""}`}
+            onClick={() => setActiveTab("comments")}
+          >
+            Comments <span>{notifications.filter((n) => n.type === "comment").length}</span>
+          </button>
+          <button
+            className={`${S.tab} ${activeTab === "unread" ? S.active : ""}`}
+            onClick={() => setActiveTab("unread")}
+          >
+            Unread <span>{notifications.filter((n) => !n.is_read).length}</span>
+          </button>
+        </div>
+
+        <button className={S.markAll} onClick={handleMarkAllRead}>
+          Mark All Read
         </button>
       </div>
 
