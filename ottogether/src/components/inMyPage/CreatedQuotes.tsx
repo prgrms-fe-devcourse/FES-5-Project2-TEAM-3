@@ -67,7 +67,15 @@ function CreatedQuotes({ user, profile }: Props) {
   if (!user) return <p className={S["my-notice"]}>로그인이 필요합니다.</p>;
   if (loading) return <p className={S["my-notice"]}>불러오는 중...</p>;
   if (quotes.length === 0)
-    return <p className={S["my-notice"]}>작성한 명대사가 없습니다.</p>;
+    return (
+      <div className={S["my-container"]}>
+      <h1 className={S["my-title"]}>
+        {profile?.nickname ?? "Guest"} 님이 작성한 명대사
+        <hr />
+      </h1>
+      <p className={S["my-notice"]}>작성한 명대사가 없습니다.</p>
+      </div>
+  );
 
   const quotesWithFlags = quotes.map((quote, idx) => {
     const currentDate = formatDate(quote.created_at);

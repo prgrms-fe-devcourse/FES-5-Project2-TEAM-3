@@ -15,20 +15,22 @@
 .my-notice {
   text-align: center;
   font-size: 0.95rem;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   color: var(--color-grey-400);
 }
 
-.my-liked-review-wrapper {
+.my-review-wrapper {
+  display: flex;
+  flex-direction: column;
   transition: margin 0.2s ease;
-  margin-top: 1.5rem;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
-
-.my-review-wrapper {
-  transition: margin 0.2s ease;
-  cursor: pointer;
+/* 날짜랑 카드 묶는 블록 */
+.date-block {
+  width: 100%;
+  margin-bottom: 0.5rem;
 }
 
 .my-new-date-group {
@@ -42,9 +44,9 @@
 .my-date {
   font-size: 0.9rem;
   color: var(--color-grey-400);
-  margin: 0.5rem 0 0.8rem 0.5rem;
-  text-align: right;
   font-weight: 500;
+  text-align: right;
+  margin: 0; /* 불필요한 마진 제거 */
 }
 
 @media (max-width: 1024px) {
@@ -93,6 +95,5 @@
 
   .my-date {
     font-size: 0.8rem;
-    margin: 0 0 0.5rem 0.3rem;
   }
 }

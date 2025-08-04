@@ -65,7 +65,15 @@ function CreatedReviews({ user, profile }: Props) {
   if (!user) return <p className={S["my-notice"]}>로그인이 필요합니다.</p>;
   if (loading) return <p className={S["my-notice"]}>불러오는 중...</p>;
   if (reviews.length === 0)
-    return <p className={S["my-notice"]}>작성한 리뷰가 없습니다.</p>;
+    return (
+      <div className={S["my-container"]}>
+        <h1 className={S["my-title"]}>
+          {profile?.nickname ?? "Guest"} 님이 작성한 리뷰
+          <hr />
+        </h1>
+        <p className={S["my-notice"]}>작성한 리뷰가 없습니다.</p>
+      </div>
+    );
 
   const reviewsWithFlags = reviews.map((review, idx) => {
     const currentDate = formatDate(review.created_at);
@@ -92,13 +100,22 @@ function CreatedReviews({ user, profile }: Props) {
             className={`${S["my-review-wrapper"]} ${
               review.showDate ? S["my-new-date-group"] : S["my-same-date-group"]
             }`}
-            onClick={() => navigate("/review", { state: { highlightId: review.id } })} // 👈 추가
+            onClick={() =>
+              navigate("/review", { state: { highlightId: review.id } })
+            }
           >
-            {review.showDate && <p className={S["my-date"]}>{review.currentDate}</p>}
+            {review.showDate && (
+              <div className={S["date-block"]}>
+                <p className={S["my-date"]}>{review.currentDate}</p>
+              </div>
+            )}
             <ReviewCard
               reviewData={review}
+              commentCount={review.comment_count ?? 0}
               profileData={profileData}
-              activePopUp={(id) => navigate("/review", { state: { highlightId: id } })}
+              activePopUp={(id) =>
+                navigate("/review", { state: { highlightId: id } })
+              }
             />
           </div>
         );
