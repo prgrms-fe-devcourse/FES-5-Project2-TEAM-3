@@ -1,9 +1,11 @@
 import type { Genre } from "./movie.type";
 
 export async function fetchGenres(): Promise<Genre[]> {
+  const BASE_URL = "https://api.themoviedb.org/3";
+
   try {
     const res = await fetch(
-      `/api/tmdb/genre/movie/list?language=ko`,
+      `${BASE_URL}/genre/movie/list?language=ko`,
       {
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
