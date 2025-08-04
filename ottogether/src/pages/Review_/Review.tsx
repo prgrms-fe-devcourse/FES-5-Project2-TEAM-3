@@ -1,10 +1,10 @@
 import ReviewCard, { findReviewById, findUserById } from "../../components/reviewCard/ReviewCard";
 import S from './Review.module.css';
 import type { Tables } from '../../supabase/supabase.type';
-import { getData } from "../../components/reviewCard/SupaData";
+// import { getData } from "../../components/reviewCard/SupaData";
 import { useEffect, useState } from "react";
 import ReviewCreate from "../../components/reviewCard/ReviewCreate";
-import ReviewDetailPopup from "../../components/ReviewDetailPopup/ReviewDetailPopup";
+import ReviewDetailPopup from "../../components/reviewDetailPopup/reviewDetailPopup";
 import { useLocation } from "react-router-dom";
 import { supabase } from "../../supabase/supabase";
 
@@ -83,34 +83,32 @@ function Review() {
     };
   }, [isPopupOpen]);
 
-  return (
-    <>
-      <div className={S["heading-container"]}>
-        <p className={S.heading}>Reviews and Rating</p>
-      </div>
-      <ReviewCreate reviewAdded={generateData} />
-      {reviewData &&
-        reviewData.map((element) => (
-          <div key={element.id}>
-            <ReviewCard
-              reviewData={element}
-              profileData={findUserById(element.user_id, profileData ?? [])}
-              activePopUp={activatePopup}
-            />
-          </div>
-        ))}
-      <div className={S["footer"]}></div>
-      {isPopupOpen && profileData && commentData && currentPopupReview && (
-        <ReviewDetailPopup
-          profileData={profileData}
-          reviewSingleData={currentPopupReview}
-          commentData={commentData}
-          closePopup={closePopup}
-          reviewUpdate={generateData}
-        />
-      )}
-    </>
-  );
+	useEffect(() => {
+		generateData();
+	}, [])
+
+	return (
+		<>
+			<div className={S["heading-container"]}>
+				<p className={S.heading}>Reviews and Rating</p>
+			</div>
+			<ReviewCreate reviewAdded={generateData}/>
+			{(reviewData && profileData) && reviewData.map(element => (
+        <div key={element.id}>
+          <ReviewCard
+            reviewData={element}
+            profileData={findUserById(element.user_id, profileData ?? undefined)}
+            activePopUp={activatePopup}
+          />
+        </div>
+      ))}
+			<div className={S["footer"]}></div>
+			{isPopupOpen
+			 && (profileData && reviewData && commentData && currentPopupReview)
+			  && <ReviewDetailPopup profileData={profileData} reviewSingleData={currentPopupReview} commentData={commentData} closePopup={closePopup} reviewUpdate={generateData}/>}
+		</>
+	)
+
 }
 
 export default Review;
