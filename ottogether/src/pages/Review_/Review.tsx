@@ -99,6 +99,7 @@ function Review() {
             profileData={findUserById(element.user_id, profileData ?? undefined)}
 						commentCount={calculateCommentCount(element.id, commentData!)}
             activePopUp={activatePopup}
+						onDataUpdate={generateData}
           />
         </div>
       ))}

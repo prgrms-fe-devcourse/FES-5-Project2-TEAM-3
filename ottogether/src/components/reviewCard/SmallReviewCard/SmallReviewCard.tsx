@@ -1,13 +1,13 @@
 
-import type { Tables } from '../../supabase/supabase.type';
-import S from "./ReviewCard.module.css";
-import StarRating from "./StarRating";
-import { formatDateNoYear } from "../../util/formatDate";
-import { useAuth } from '../../contexts/AuthProvider';
-import toggleReviewThumbs from './toggleReviewThumbs';
+import type { Tables } from '../../../supabase/supabase.type';
+import S from "./SmallReviewCard.module.css";
+import StarRating from "../StarRating";
+import { formatDateNoYear } from "../../../util/formatDate";
+import { useAuth } from '../../../contexts/AuthProvider';
+import toggleReviewThumbs from '../toggleReviewThumbs';
 import { useEffect, useState } from 'react';
-import { supabase } from '../../supabase/supabase';
-import { createNotification } from '../../util/createNotifications';
+import { supabase } from '../../../supabase/supabase';
+import { createNotification } from '../../../util/createNotifications';
 
 type Review = Tables<'review'>;
 type Profile = Tables<'profile'>;
@@ -15,9 +15,8 @@ type Profile = Tables<'profile'>;
 interface Prop{
 	reviewData : Review,
 	profileData : Profile | undefined,
-	commentCount : number,
-	activePopUp : (id : number) => void,
-	onDataUpdate: () => void;
+	// commentCount : number,
+	activePopUp : (id : number) => void
 }
 
 export function findUserById(inputId : string, profileData : Profile[]) : Profile | undefined{
@@ -29,31 +28,38 @@ export function findReviewById(inputId : number, reviewData : Review[]) : Review
 	return reviewData?.find(review => review.id !== null && review.id === inputId);
 }
 
-function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUpdate} : Prop) {
+function SmallReviewCard({reviewData, profileData, activePopUp} : Prop) {
 	const {isAuth, user} = useAuth();
 	const [isLiked, setIsLiked] = useState(false);
 	const [likeCount, setLikeCount] = useState(0);
-	// const [isDisLiked, setIsDisliked] = useState(false);
-	// const [disLikeCount, setDislikeCount] = useState(0);
-	// console.log('reviewData : ', reviewData,'\nprofileData : ' , profileData);
 	if (!(reviewData && profileData))
 	{
-		// console.error('Error : 올바르지 않은 프로필 혹은 리뷰입니다.', reviewData, '||', profileData);
+		console.error('Error : 올바르지 않은 프로필 혹은 리뷰입니다.', reviewData, '||', profileData);
 		return ;
 	}
+
 	const handleThumb = async (input : 'like' | 'dislike') => {
   if (!isAuth) {
     alert('로그인이 필요한 서비스입니다.');
     return;
   }
+  
   const { liked, error } = await toggleReviewThumbs(reviewData.id, user!.id, input);
+  
   if (error) {
     console.error('좋아요/싫어요 처리 중 오류:', error);
     return;
   }
+  
   if (input === 'like') {
     setIsLiked(liked!);
+    // if (liked && isDisLiked) setIsDisliked(false);
+    
     setLikeCount(prev => liked ? prev + 1 : prev - 1);
+    // if (isDisLiked) setDislikeCount(prev => prev - 1);
+
+
+
     if (liked && profileData.user_id && user && profileData.user_id !== user.id) {
         await createNotification({
           userId: profileData.user_id,
@@ -62,11 +68,15 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
           targetId: reviewData.id,
         });
       }
+
+    
   } else {
+    // setIsDisliked(liked!);
     if (liked && isLiked) setIsLiked(false);
+    
+    // setDislikeCount(prev => liked ? prev + 1 : prev - 1);
     if (isLiked) setLikeCount(prev => prev - 1);
   }
-	onDataUpdate();
 };
 
 	useEffect(() => {
@@ -87,7 +97,9 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 		if (reviewData && profileData)
 		{
 			setLikeCount(reviewData.like_count!);
+			// setDislikeCount(reviewData.dislike_count!);
 			checkThumb();
+			// calculateCommentCount(reviewData.id, commentData);
 		}
 	}, [reviewData])
 	
@@ -97,12 +109,11 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 		<header className={S.header}>
 			<img className={S['user-avatar']} src={profileData.avatar_url ?? "./beomTeacher.svg"} alt="profile_image" />
 			<p className={S['name-text']}>{profileData.nickname ?? 'Guest'}</p>
-			<p>·</p>
-			<p className={S['date-text']}>{formatDateNoYear(reviewData.updated_at!)}</p>
 			{((isAuth && user) && profileData.user_id == user.id) && <img src="/YouBadge.svg" alt="isItMeCheck"></img>} 
 			<div className={S['star-container']}>{StarRating(reviewData.rating)}</div>
 		</header>
-		<main>
+			<p className={S['date-text']}>{formatDateNoYear(reviewData.updated_at!)}</p>
+		<main className={S['main-container']}>
 			<p>{reviewData.text_content}</p>
 		</main>
 		<footer className={S.footer}>
@@ -112,7 +123,7 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 			</div>
 			<div className={S['reaction-item']}>
 				<img src="/comment.svg" alt="commentIcon" />
-				<p>{commentCount}</p>
+				{/* <p>{commentCount}</p> */}
 			</div>
 			<p className={S['read-more']} onClick={() => activePopUp(reviewData.id)}>Read More</p>
 		</footer>
@@ -120,4 +131,4 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 	</>
 	)
 }
-export default ReviewCard
+export default SmallReviewCard
