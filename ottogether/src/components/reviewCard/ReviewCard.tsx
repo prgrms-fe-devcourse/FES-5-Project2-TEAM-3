@@ -15,6 +15,7 @@ type Profile = Tables<'profile'>;
 interface Prop{
 	reviewData : Review,
 	profileData : Profile | undefined,
+	commentCount : number,
 	activePopUp : (id : number) => void
 }
 
@@ -26,11 +27,11 @@ export function findReviewById(inputId : number, reviewData : Review[]) : Review
 	return reviewData?.find(review => review.id !== null && review.id === inputId);
 }
 
-function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
+function ReviewCard({reviewData, profileData, commentCount, activePopUp} : Prop) {
 	const {isAuth, user} = useAuth();
 	const [isLiked, setIsLiked] = useState(false);
 	const [likeCount, setLikeCount] = useState(0);
-	const [isDisLiked, setIsDisliked] = useState(false);
+	// const [isDisLiked, setIsDisliked] = useState(false);
 	// const [disLikeCount, setDislikeCount] = useState(0);
 	if (!(reviewData && profileData))
 	{
@@ -52,7 +53,7 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
   
   if (input === 'like') {
     setIsLiked(liked!);
-    if (liked && isDisLiked) setIsDisliked(false);
+    // if (liked && isDisLiked) setIsDisliked(false);
     
     setLikeCount(prev => liked ? prev + 1 : prev - 1);
     // if (isDisLiked) setDislikeCount(prev => prev - 1);
@@ -70,7 +71,7 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 
     
   } else {
-    setIsDisliked(liked!);
+    // setIsDisliked(liked!);
     if (liked && isLiked) setIsLiked(false);
     
     // setDislikeCount(prev => liked ? prev + 1 : prev - 1);
@@ -89,9 +90,8 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 							.eq('review_id', reviewData.id)
 							.maybeSingle();
 			
-		if (data) {
-			data.reaction_type === 'like' ? setIsLiked(true) : setIsDisliked(true);
-		}
+		if (data?.reaction_type === 'like')
+			setIsLiked(true);
 		}
 
 		if (reviewData && profileData)
@@ -99,6 +99,7 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 			setLikeCount(reviewData.like_count!);
 			// setDislikeCount(reviewData.dislike_count!);
 			checkThumb();
+			// calculateCommentCount(reviewData.id, commentData);
 		}
 	}, [reviewData])
 	
@@ -127,7 +128,7 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 			</div> */}
 			<div className={S['reaction-item']}>
 				<img src="/comment.svg" alt="commentIcon" />
-				<p>{reviewData.comment_count}</p>
+				<p>{commentCount}</p>
 			</div>
 			<p className={S['read-more']} onClick={() => activePopUp(reviewData.id)}>Read More</p>
 		</footer>
