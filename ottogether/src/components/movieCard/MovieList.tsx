@@ -3,6 +3,7 @@ import S from "./MovieList.module.css"
 import MovieCard from "./MovieCard";
 import type { MovieData } from "../../tmdbApi/movie.type";
 import getMovieProvider from "../../tmdbApi/getMovieProvider";
+import MovieCardSkeleton from "./MovieCardSkeleton";
 
 interface MovieListProps {
   title: string;
@@ -13,6 +14,7 @@ export default function MovieList({ title, fetchFn }: MovieListProps) {
   const [movies, setMovies] = useState<MovieData[]>([]);
   const [startIndex, setStartIndex] = useState(0);
   const [ itemsPerPage, setItemsPerPage ] = useState(5);
+  const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
   /* 화면 너비에 따라 보여지는 item 수 조정 */
   useEffect(() => {
@@ -41,11 +43,14 @@ export default function MovieList({ title, fetchFn }: MovieListProps) {
   useEffect(() => {
     async function loadMovies() {
       try {
+        setIsLoading(true);
         const rawData = await fetchFn();
         const enrichedData = await getMovieProvider(rawData);
       setMovies(enrichedData);
       } catch (err) {
         console.error(err);
+      } finally {
+        setIsLoading(false);
       }
     }
     loadMovies();
@@ -74,9 +79,15 @@ const handlePrev = () => {
           <img src="/arrow-left.svg" alt="prev" />
          </button>
         <div className={S["movie-grid"]}>
-           {movies.slice(startIndex, startIndex + itemsPerPage).map((movie) => (
+           { isLoading ? (
+             Array.from({ length: itemsPerPage }).map((_, idx) => (
+               <MovieCardSkeleton key={`skeleton-${idx}`} />
+            ))
+           ) : (
+            movies.slice(startIndex, startIndex + itemsPerPage).map((movie) => (
            <MovieCard key={movie.id} movie={movie} />
           ))
+           )
           }
          </div>
        <button className={S["arrow-button"]} onClick={handleNext}>
