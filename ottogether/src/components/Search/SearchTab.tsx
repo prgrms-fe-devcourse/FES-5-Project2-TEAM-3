@@ -8,6 +8,7 @@ import SearchSeries from './SearchSeries';
 import SearchQuote from './SearchQuote';
 import SearchUser from './SearchUser';
 import warningIcon from '../../assets/icons/warning.svg';
+import SearchNotFound from './SearchNotFound';
 
 const TAB_TYPES = ['total', 'movie', 'series', 'quote', 'user'] as const;
 type TabType = typeof TAB_TYPES[number];
@@ -171,6 +172,14 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
       <>
         <div className={S["panel-item"]}>
           <div className={S["total-list"]}>
+            {
+              !hasResult.movie && !hasResult.series && !hasResult.quote && !hasResult.user &&
+              <section className={S["not-found"]}>
+                <SearchNotFound
+                keyword={keyword}
+               />
+              </section> 
+            }
             <section className={ !hasResult.movie ? S.hidden : '' }>
               <div className={S["section-title"]}>
                 <h3>Movies</h3>
