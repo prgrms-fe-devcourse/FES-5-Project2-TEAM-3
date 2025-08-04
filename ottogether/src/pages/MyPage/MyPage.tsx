@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import S from "./MyPage.module.css";
 import { supabase } from "../../supabase/supabase";
 import CreatedReviews from "../../components/inMyPage/CreatedReviews";
@@ -52,9 +53,16 @@ function AllContents({ user, profile }: { user: UserType; profile: ProfileType |
 }
 
 function MyPage() {
-  const [activeTab, setActiveTab] = useState("");
   const { user } = useAuth();
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState("");
   const [profile, setProfile] = useState<ProfileType | null>(null);
+
+   useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (!user) return;

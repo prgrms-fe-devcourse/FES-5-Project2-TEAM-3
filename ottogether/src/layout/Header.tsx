@@ -10,6 +10,7 @@ import { useAuth } from '../contexts/AuthProvider';
 import { supabase } from '../supabase/supabase';
 import { getRandomAvatar } from '../util/getRandomProfile';
 import DropdownMenu from './DropdownMenu';
+import NotificationsModal from '../components/Notifications/NotificationsModal';
 
 function Header() {
   /* user Login 상태 & 알림 유무 */
@@ -26,6 +27,43 @@ function Header() {
   /* 프로필 사진 */
   const [ avatar, setAvatar ] = useState<string | null>(null);
   const [ isAvatarLoading, setIsAvatarLoading ] = useState<boolean>(false);
+
+  const [showNotiModal, setShowNotiModal] = useState(false);
+  const notiRef = useRef<HTMLDivElement>(null);
+  /* 알림 모달 */
+  const handleToggleNotiModal = () => {
+    setShowNotiModal((prev) => !prev);
+    setHasNewNoti(false);
+  };
+
+  /* 바깥 클릭 시 모달 닫기 */
+  useEffect(() => {
+    if (!showNotiModal) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (notiRef.current && !notiRef.current.contains(e.target as Node)) {
+        setShowNotiModal(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showNotiModal]);
+
+  /* ESC 키 눌렀을 때 모달 닫기 */
+  useEffect(() => {
+    if (!showNotiModal) return;
+
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setShowNotiModal(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [showNotiModal]);
+
 
   useEffect(() => {
     if (!user) return;
@@ -164,9 +202,25 @@ function Header() {
             )
           }
         </button>
-        <div className={S['notification-wrapper']} onClick={()=>setHasNewNoti(false)}>
-          <img src={bellIcon} alt="알림" className={S.icon} />
-          { hasNewNoti && <span className={S["red-dot"]} /> }
+
+        <div className={S["notification-wrapper"]}>
+          <img
+            src={bellIcon}
+            alt="알림"
+            className={S.icon}
+            onClick={handleToggleNotiModal}
+          />
+          {hasNewNoti && <span className={S["red-dot"]} />}
+
+          {showNotiModal && (
+            <div className={S["notification-dropdown"]} ref={notiRef}>
+              <NotificationsModal
+                user={user}
+                profile={null}
+                onClose={() => setShowNotiModal(false)}
+              />
+            </div>
+          )}
         </div>
       </>
     );
@@ -177,7 +231,10 @@ function Header() {
         <button 
           type='button' 
           className={S["user-avatar"]}
-          onClick={()=> navigate('/my-page')}
+          onClick={()=> {
+            navigate('/my-page', { state: { activeTab: 'notifications' } });
+            setHasNewNoti(false);
+          }}
         >
           { isAvatarLoading ? (
             <div className={S["avatar-skeleton"]} aria-hidden={true} />
