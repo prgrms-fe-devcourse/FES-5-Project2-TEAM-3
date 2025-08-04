@@ -2,21 +2,18 @@ import type { Genre } from "./movie.type";
 
 export async function fetchGenres(): Promise<Genre[]> {
   try {
-    const res = await fetch(
-      `/api/tmdb/genre/movie/list?language=ko`,
-      {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
-          accept: "application/json",
-        },
-      }
-    );
+    const res = await fetch("/api/tmdb/genre/movie/list?language=ko", {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
+        accept: "application/json",
+      },
+    });
 
     if (!res.ok) throw new Error("장르 불러오기 실패");
 
     const data = await res.json();
 
-    // 로맨스 장르(id: 10749) 제거
+    // 불필요한 장르 (예: id 10749: 로맨스) 제거
     const filteredGenres = data.genres.filter((genre: Genre) => genre.id !== 10749);
 
     return filteredGenres;
@@ -25,7 +22,5 @@ export async function fetchGenres(): Promise<Genre[]> {
     return [];
   }
 }
-
-
 
 export default fetchGenres
