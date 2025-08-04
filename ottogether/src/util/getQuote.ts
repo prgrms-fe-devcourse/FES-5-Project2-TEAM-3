@@ -33,7 +33,26 @@ export async function getQuotes(
     return data
 }
 
+export async function getQuotesByMovieId(movieId : string, options:GetQuotesOptions = {}) : Promise<Quote[] | null> {
+    const {sortBy = "created_at", order = "desc", author} = options;
 
+    let query = supabase.from("quotes").select("*").eq('movie_id', +movieId);
+
+    if(author){
+        query = query.eq("author",author);
+    };
+
+    query = query.order(sortBy, {ascending: order === "asc"});
+
+    const {data, error} = await query;
+
+    if(error){
+        console.log('error');
+        return null
+    }
+
+    return data
+}
 
 
 

@@ -93,7 +93,7 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 	
 	return (
 	<>
-		<div className={S["card-container"]}>
+		<div id={reviewData.id + ''} className={S["card-container"]}>
 		<header className={S.header}>
 			<img className={S['user-avatar']} src={profileData.avatar_url ?? "./beomTeacher.svg"} alt="profile_image" />
 			<p className={S['name-text']}>{profileData.nickname ?? 'Guest'}</p>

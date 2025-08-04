@@ -5,9 +5,10 @@ import { supabase } from "../../supabase/supabase";
 
 interface Props{
 	reviewAdded : () => void;
+	movieId : string;
 }
 
-function ReviewCreate({reviewAdded} : Props) {
+function ReviewCreate({reviewAdded, movieId} : Props) {
 	const [inputClicked, setInputClicked] = useState(false);
 	const [content, setContent] = useState('');
 	const [rating, setRating] = useState(5);
@@ -46,6 +47,7 @@ function ReviewCreate({reviewAdded} : Props) {
 			rating,
 			text_content : content,
 			user_id : user.id,
+			movie_id : +movieId,
 		}
 		const { error } = await supabase.from('review').insert(newReview);
 		if (error){
@@ -72,7 +74,7 @@ function ReviewCreate({reviewAdded} : Props) {
 		return<div className={S["star-container"]}>
 			{
 				[1,2,3,4,5].map(num => (
-					<img key={num} src={num <= rating ? "./star/fullStar.svg" : "./star/emptyStar.svg"} alt="starRating" onClick={() => handleRating(num)}/>
+					<img key={num} src={num <= rating ? "/star/fullStar.svg" : "/star/emptyStar.svg"} alt="starRating" onClick={() => handleRating(num)}/>
 				))
 			}
 		</div>

@@ -276,7 +276,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		<div className={S["popup-overlay"]}>
 		<div className={S["popup-container"]}>
 			<header className={S.header}>
-				<img className={S.close} src="./close.svg" onClick={closePopup} alt="closeButton"/>
+				<img className={S.close} src="/close.svg" onClick={closePopup} alt="closeButton"/>
 				<div className={S.topbar}>
 					<img className={S['user-avatar']} src={(findUserById(reviewSingleData.user_id, profileData)?.avatar_url ?? "./beomTeacher.svg")} alt="profile_image" />
 					<p>{findUserById(reviewSingleData.user_id, profileData)?.nickname ?? 'User'} · {formatDateNoYear(reviewSingleData.updated_at!)}</p>
