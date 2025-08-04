@@ -14,15 +14,21 @@ function QuotesPage() {
     const [quotes, setQuotes] = useState<Quote[]>([]);
     const [highlightId, setHighlightId] = useState<number | null>(null);
     const location = useLocation();
+		const receivedQuotes = location.state?.quotes as Quote[] | undefined;
 
     const fetchData = async () => {
-    const data = await getQuotes();
-    if (data) setQuotes(data);
-  };
+			if (receivedQuotes)
+				setQuotes(receivedQuotes);
+			else
+			{
+    		const data = await getQuotes();
+    		if (data) setQuotes(data);
+			}
+  	};
 
     useEffect(() => {
     fetchData();
-  }, []);
+  }, [receivedQuotes]);
 
 
   useEffect(() => {

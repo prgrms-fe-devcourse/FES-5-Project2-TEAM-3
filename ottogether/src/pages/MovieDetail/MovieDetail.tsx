@@ -167,6 +167,10 @@ function MovieDetail() {
 		navigate(`/media/${mediaType}/${id}/favorites`, {state: {users : favoriteUsers}});
 	}
 
+	const handleMoreQuotes = () => {
+		navigate(`/media/${mediaType}/${id}/quotes`, { state: { quotes: quotesData } });
+	}
+
  return (<>
 		{ content &&
 			<>
@@ -263,7 +267,7 @@ function MovieDetail() {
 					<div className={S["notification-container"]}>
 					<h2>아직 이 영화에 작성된 명대사가 없습니다! 😭</h2>	
 					</div>
-					<button className={S["move-page"]}>리뷰 작성하러가기 →</button>
+					<button className={S["move-page"]} onClick={() => handleReviewCardClick()}>리뷰 작성하러가기 →</button>
 					</>
 				}
 
@@ -271,7 +275,7 @@ function MovieDetail() {
 				<div className={S["quotes-container"]}>
 					<div className={S["top-bar"]}>
 						<h2>Favorite Quotes</h2>
-						<button className={S["see-all"]}>See All</button>
+						<button className={S["see-all"]} onClick={handleMoreQuotes}>See All</button>
 					</div>
 					{quotesData[0] && 
 						<QuoteCard key={quotesData[0].id} quote={quotesData[0]} onRemove={(id : number) => (console.log(id))}></QuoteCard>
@@ -282,7 +286,7 @@ function MovieDetail() {
 							<div className={S["notification-container"]}>
 								<h2>아직 이 영화에 작성된 명대사가 없습니다! 🥲</h2>	
 							</div>
-							<button className={S["move-page"]}>명대사 작성하러가기 →</button>
+							<button className={S["move-page"]} onClick={handleMoreQuotes}>명대사 작성하러가기 →</button>
 						</>
 					}
 				</div>

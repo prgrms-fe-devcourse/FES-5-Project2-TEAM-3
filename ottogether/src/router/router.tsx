@@ -75,6 +75,10 @@ export const router = createBrowserRouter([
 				 path: '/media/:mediaType/:id/favorites',
 				 element: <Members />
 			},
+			{
+				 path: '/media/:mediaType/:id/quotes',
+				 element: <QuotesPage />
+			},
     ]
   },
   {
