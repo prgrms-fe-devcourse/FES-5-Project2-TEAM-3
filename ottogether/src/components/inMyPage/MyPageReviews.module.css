@@ -22,11 +22,13 @@
 .my-liked-review-wrapper {
   transition: margin 0.2s ease;
   margin-top: 1.5rem;
+  cursor: pointer;
 }
 
 
 .my-review-wrapper {
   transition: margin 0.2s ease;
+  cursor: pointer;
 }
 
 .my-new-date-group {

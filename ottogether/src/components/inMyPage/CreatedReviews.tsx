@@ -92,14 +92,13 @@ function CreatedReviews({ user, profile }: Props) {
             className={`${S["my-review-wrapper"]} ${
               review.showDate ? S["my-new-date-group"] : S["my-same-date-group"]
             }`}
+            onClick={() => navigate("/review", { state: { highlightId: review.id } })} // 👈 추가
           >
-            {review.showDate && (
-              <p className={S["my-date"]}>{review.currentDate}</p>
-            )}
+            {review.showDate && <p className={S["my-date"]}>{review.currentDate}</p>}
             <ReviewCard
               reviewData={review}
               profileData={profileData}
-              activePopUp={(id) => navigate(`/reviews/${id}`)}
+              activePopUp={(id) => navigate("/review", { state: { highlightId: id } })}
             />
           </div>
         );
