@@ -1,21 +1,27 @@
-import ReviewCard, { findReviewById, findUserById } from "../../components/reviewCard/ReviewCard"
-import S from './Review.module.css'
+import ReviewCard, { findReviewById, findUserById } from "../../components/reviewCard/ReviewCard";
+import S from './Review.module.css';
 import type { Tables } from '../../supabase/supabase.type';
-import { useEffect, useState } from "react"
+import { getData } from "../../components/reviewCard/SupaData";
+import { useEffect, useState } from "react";
 import ReviewCreate from "../../components/reviewCard/ReviewCreate";
-import ReviewDetailPopup from "../../components/ReviewDetailPopup/reviewDetailPopup";
+import ReviewDetailPopup from "../../components/ReviewDetailPopup/ReviewDetailPopup";
+import { useLocation } from "react-router-dom";
 import { supabase } from "../../supabase/supabase";
+
 
 type Review = Tables<'review'>;
 type Comment = Tables<'comment'>;
 type Profile = Tables<'profile'>;
 
 function Review() {
-	const [reviewData, setReviewData] = useState<Review[] | null>();
-	const [profileData, setProfileData] = useState<Profile[] | null>();
-	const [commentData, setCommentData] = useState<Comment[] | null>();
-	const [isPopupOpen, setIsPopupOpen] = useState(true);
-	const [currentPopupReview, setCurrentPopupReview] = useState<Review>();
+  const [reviewData, setReviewData] = useState<Review[] | null>(null);
+  const [profileData, setProfileData] = useState<Profile[] | null>(null);
+  const [commentData, setCommentData] = useState<Comment[] | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [currentPopupReview, setCurrentPopupReview] = useState<Review>();
+
+  const location = useLocation();
+  const highlightId = (location.state as { highlightId?: number })?.highlightId;
 
 	async function generateData(){
 		const {data : reviewData, error:reviewError} = await supabase
@@ -47,27 +53,33 @@ function Review() {
 		setCommentData(commentData);
 	}
 
-	const closePopup = () => {
-		setIsPopupOpen(false);
-	}
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
 
-	useEffect(() => {
-		setIsPopupOpen(false);
-	}, [])
-
-	const activatePopup = (id : number) => {
-		setIsPopupOpen(true);
-		setCurrentPopupReview(findReviewById(id, reviewData!));
-	}
-
-	useEffect(() => {
-    if (isPopupOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
+  const activatePopup = (id: number) => {
+    if (!reviewData) return;
+    const targetReview = findReviewById(id, reviewData);
+    if (targetReview) {
+      setIsPopupOpen(true);
+      setCurrentPopupReview(targetReview);
     }
+  };
+
+  useEffect(() => {
+    generateData();
+  }, []);
+
+  useEffect(() => {
+    if (reviewData && highlightId) {
+      activatePopup(highlightId);
+    }
+  }, [reviewData, highlightId]);
+
+  useEffect(() => {
+    document.body.style.overflow = isPopupOpen ? "hidden" : "auto";
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isPopupOpen]);
 
@@ -96,5 +108,7 @@ function Review() {
 			  && <ReviewDetailPopup profileData={profileData} reviewSingleData={currentPopupReview} commentData={commentData} closePopup={closePopup} reviewUpdate={generateData}/>}
 		</>
 	)
+
 }
-export default Review
+
+export default Review;
