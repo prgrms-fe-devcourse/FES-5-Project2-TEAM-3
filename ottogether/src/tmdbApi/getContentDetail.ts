@@ -1,15 +1,22 @@
 import type { MovieData } from "./movie.type";
 import { normalizeSeriesData, type SeriesData } from "./series.type";
 
-const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const BASE_URL = "https://api.themoviedb.org/3";
+
+const BASE_URL = "/api/tmdb";
+const TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
 
 export async function getContentDetail(
   mediaType: "movie" | "tv",
   id: number
 ): Promise<MovieData | null> {
   try {
-    const res = await fetch(`${BASE_URL}/${mediaType}/${id}?api_key=${TMDB_API_KEY}&language=ko-KR`);
+    const res = await fetch(`${BASE_URL}/${mediaType}/${id}?language=ko-KR`, {
+  headers: {
+    accept: "application/json",
+    Authorization: `Bearer ${TOKEN}`,
+  },
+});
+
     if (!res.ok) {
       throw new Error("Failed to fetch content detail");
     }
