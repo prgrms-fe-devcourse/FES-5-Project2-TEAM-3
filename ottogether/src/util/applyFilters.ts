@@ -45,7 +45,7 @@ export const applyFilters = async ( {
       /* ott 필터링 조건 적용 */
       if ( !isAllOttSelected ) {
         const providerRes = await fetch(
-          `/api/tmdb/${category}/${content.id}/watch/providers`,
+          `https://api.themoviedb.org/3/${category}/${content.id}/watch/providers`,
           {
             headers: {
               Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,

@@ -36,7 +36,7 @@ function SearchMovie({ keyword, filters, previewCount, onResult, shouldFetch }:S
       try {
         setIsLoading(true);
         const res = await fetch(
-          `/api/tmdb/search/movie?query=${encodeURIComponent(keyword)}&language=ko-KR&include_adult=false`,
+          `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(keyword)}&language=ko-KR&include_adult=false`,
           {
             headers: TMDB_HEADER_INFO,
           }
@@ -56,7 +56,7 @@ function SearchMovie({ keyword, filters, previewCount, onResult, shouldFetch }:S
             filteredMovies.map(async (movie: MovieData) => {
             try {
               const providerRes = await fetch(
-                `/api/tmdb/movie/${movie.id}/watch/providers`,
+                `https://api.themoviedb.org/3/movie/${movie.id}/watch/providers`,
                 {
                   headers: TMDB_HEADER_INFO
                 },
