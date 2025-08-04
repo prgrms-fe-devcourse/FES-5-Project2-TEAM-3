@@ -3,7 +3,7 @@ import S from './Review.module.css';
 import type { Tables } from '../../supabase/supabase.type';
 import { useEffect, useState } from "react";
 import ReviewCreate from "../../components/reviewCard/ReviewCreate";
-import ReviewDetailPopup, { calculateCommentCount } from "../../components/ReviewDetailPopup/reviewDetailPopup";
+import ReviewDetailPopup, { calculateCommentCount } from "../../components/reviewDetailPopup/reviewDetailPopup";
 import { useLocation } from "react-router-dom";
 import { supabase } from "../../supabase/supabase";
 
