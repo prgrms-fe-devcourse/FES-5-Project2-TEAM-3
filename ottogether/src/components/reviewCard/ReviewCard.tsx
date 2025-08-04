@@ -60,23 +60,13 @@ function ReviewCard({reviewData, profileData, activePopUp} : Prop) {
 
 
     if (liked && profileData.user_id && user && profileData.user_id !== user.id) {
-      const { data: senderProfile } = await supabase
-        .from("profile")
-        .select("nickname")
-        .eq("user_id", user.id)
-        .single();
-
-      const senderName = senderProfile?.nickname ?? "Guest";
-
-      await createNotification({
-        userId: profileData.user_id,
-        senderId: user.id,
-        type: "like_review",
-        targetId: reviewData.id,
-        message: `${senderName}님이 회원님의 리뷰를 좋아합니다.`,
-      });
-    }
-
+        await createNotification({
+          userId: profileData.user_id,
+          senderId: user.id,
+          type: "like_review",
+          targetId: reviewData.id,
+        });
+      }
 
     
   } else {

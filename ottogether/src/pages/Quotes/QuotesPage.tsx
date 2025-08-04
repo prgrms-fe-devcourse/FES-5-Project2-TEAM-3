@@ -5,12 +5,15 @@ import QuoteCard from "../../components/Quotes/QuoteCard";
 import QuoteCreate from "../../components/Quotes/QuoteCreate";
 import SortBtn from "../../components/Quotes/SortBtn";
 import S from "./QuotesPage.module.css";
+import { useLocation } from "react-router-dom";
 
 type Quote = Database["public"]["Tables"]["quotes"]["Row"];
 
 function QuotesPage() {
 
     const [quotes, setQuotes] = useState<Quote[]>([]);
+    const [highlightId, setHighlightId] = useState<number | null>(null);
+    const location = useLocation();
 
     const fetchData = async () => {
     const data = await getQuotes();
@@ -20,6 +23,14 @@ function QuotesPage() {
     useEffect(() => {
     fetchData();
   }, []);
+
+
+  useEffect(() => {
+    if (location.state?.highlightId) {
+      setHighlightId(Number(location.state.highlightId));
+    }
+  }, [location.state]);
+
 
   const handleRemove = (id: number) => {
   setQuotes((prevQuotes) => prevQuotes.filter((quote) => quote.id !== id));
@@ -45,11 +56,12 @@ const handleSortChange = async (option: { sortBy: "created_at" | "likes"; order:
       <div>
         <QuoteCreate onAdd={fetchData}/>
         {quotes.map((quote) => (
-        <QuoteCard
-          key={quote.id}
-          quote={quote}
-          onRemove={handleRemove}
-        />
+          <QuoteCard
+            key={quote.id}
+            quote={quote}
+            onRemove={handleRemove}
+            className={highlightId === quote.id ? S.highlight : ""} // 👈 여기로 이동
+          />
       ))}
 
       </div>

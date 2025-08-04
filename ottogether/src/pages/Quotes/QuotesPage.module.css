@@ -25,3 +25,10 @@
   height: 1px;
   background-color: white;
 }
+
+
+.highlight {
+  border: 2px solid rgba(255, 251, 0, 0.863);
+  border-radius: 8px;
+  padding: 0.5rem;
+}

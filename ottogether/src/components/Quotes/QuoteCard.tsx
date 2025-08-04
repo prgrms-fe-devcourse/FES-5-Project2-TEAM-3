@@ -83,21 +83,13 @@ export default function QuoteCard({
         return liked ? prev + 1 : prev - 1 
       });
 
+      
       if (liked && quote.user_id && quote.user_id !== user.id) {
-        const { data: senderProfile } = await supabase
-          .from("profile")
-          .select("nickname")
-          .eq("user_id", user.id)
-          .single();
-
-        const senderName = senderProfile?.nickname ?? "Guest";
-
         await createNotification({
           userId: quote.user_id,
           senderId: user.id,
           type: "like_quote",
           targetId: id,
-          message: `${senderName}님이 회원님의 명대사를 좋아합니다.`,
         });
       }
 
