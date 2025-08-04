@@ -15,14 +15,14 @@ interface SearchUserProps {
 }
 
 type Profile = Database['public']['Tables']['profile']['Row'];
-type ReviewLike = Database['public']['Tables']['review_like']['Row'];
-type QuotesLike = Database['public']['Tables']['quotes_like']['Row'];
+type ReviewData = Database['public']['Tables']['review']['Row'];
+type QuotesData = Database['public']['Tables']['quotes']['Row'];
 
 function SearchUser( { keyword, previewCount, onResult, shouldFetch }:SearchUserProps ) {
 
   const [ profileList, setProfileList ] = useState<Profile[]>([]);
-  const [ reviewList, setReviewList ] = useState<ReviewLike[]>([]);
-  const [ quotesList, setQuotesList ] = useState<QuotesLike[]>([]);
+  const [ reviewList, setReviewList ] = useState<ReviewData[]>([]);
+  const [ quotesList, setQuotesList ] = useState<QuotesData[]>([]);
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
   useEffect(() => {
@@ -31,15 +31,15 @@ function SearchUser( { keyword, previewCount, onResult, shouldFetch }:SearchUser
 
     const fetchData = async () => {
       setIsLoading(true);
-      const { profiles, reviewLikes, quotesLikes } = await searchUserProfile(keyword);
+      const { profiles, reviewData, quotesData } = await searchUserProfile(keyword);
 
       if (!previewCount) {
         setProfileList(profiles);
       } else {
         setProfileList(profiles.slice(0, previewCount));  
       }
-      setQuotesList(quotesLikes);
-      setReviewList(reviewLikes);
+      setQuotesList(quotesData);
+      setReviewList(reviewData);
 
       if (onResult) {
         onResult(profiles.length > 0);

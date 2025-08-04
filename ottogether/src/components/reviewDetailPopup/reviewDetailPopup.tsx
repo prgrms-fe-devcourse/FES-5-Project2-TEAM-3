@@ -32,6 +32,16 @@ interface Props{
 	}
 */
 
+
+	export const calculateCommentCount = (reviewId : number, data : Comment[]) : number => {
+		let result = 0;
+		for (const element of data) {
+			if (element.review_id === reviewId)	
+				result++;
+		}
+		return result;
+	}
+
 function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePopup, reviewUpdate} : Props) {
 	const {isAuth, user} = useAuth();
 	const [commentInputOpen, setCommentInputOpen] = useState(false);
@@ -148,20 +158,11 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 
 
       if (reviewSingleData.user_id && reviewSingleData.user_id !== user.id) {
-        const { data: senderProfile } = await supabase
-          .from("profile")
-          .select("nickname")
-          .eq("user_id", user.id)
-          .single();
-
-        const senderName = senderProfile?.nickname ?? "Guest";
-
         await createNotification({
           userId: reviewSingleData.user_id,
           senderId: user.id,
           type: "comment",
           targetId: reviewId,
-          message: `${senderName}님이 회원님의 리뷰에 댓글을 남겼습니다.`,
         });
       }
 
@@ -215,20 +216,12 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		</div>
 	}
 
-	const calculateCommentCount = (reviewId : number) : number => {
-		let result = 0;
-		for (const element of commentData) {
-			if (element.review_id === reviewId)	
-				result++;
-		}
-		return result;
-	}
 
 
 	useEffect(()=> {
 		if (reviewSingleData)
 		{
-			setCommentCount(calculateCommentCount(reviewSingleData.id));
+			setCommentCount(calculateCommentCount(reviewSingleData.id, commentData));
 			setRating(reviewSingleData.rating);
 		}
 

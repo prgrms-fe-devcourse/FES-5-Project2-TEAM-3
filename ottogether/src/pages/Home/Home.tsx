@@ -16,7 +16,7 @@ function Home() {
   const [selectedOtt, setSelectedOtt] = useState<string[]>(ottListTotal);
 
   useEffect(() => {
-    
+
   let ticking = false;
 
   const observer = new IntersectionObserver((entries) => {
@@ -44,7 +44,7 @@ function Home() {
     <div className={S.ottSelectorWrapper}>
     <OttSelector selected={selectedOtt} onToggle={handleToggleOtt} />
     </div>
-    <MovieList title="최신킹기" fetchFn={fetchPopularMovies} />
+    <MovieList title="최신 인기" fetchFn={fetchPopularMovies} />
       <div>
         {sectionGroups.slice(0, visibleIndex).map((group, idx) => (
           <div key={idx}>

@@ -9,6 +9,7 @@ import LikedQuotes from "../../components/inMyPage/LikedQuotes";
 import { useAuth } from "../../contexts/AuthProvider";
 import Settings from "../../components/inMyPage/MySettings/Settings";
 import ProfileBox from "../../components/inMyPage/ProfileBox";
+import type { Tables } from "../../supabase/supabase.type";
 import Notifications from "../../components/Notifications/Notifications";
 
 type UserType = {
@@ -16,16 +17,7 @@ type UserType = {
   email?: string;
 };
 
-type ProfileType = {
-  user_id: string;
-  nickname: string | null;
-  bio: string | null;
-  url: string | null;
-  header_url: string | null;
-  avatar_url: string | null;
-  preferred_ott: string[] | null;
-  favorite_genre: string[] | null;
-};
+type ProfileType = Tables<"profile">;
 
 function CreatedContents({ user, profile }: { user: UserType; profile: ProfileType | null }) {
   return (
@@ -44,7 +36,7 @@ function LikedContents({ user, profile }: { user: UserType; profile: ProfileType
       <br />
       <LikedReviews user={user} profile={profile} />
       <br />
-      <LikedQuotes user={user} profile={profile} />
+      <LikedQuotes user={user} />
     </>
   );
 }
@@ -70,15 +62,17 @@ function MyPage() {
     const fetchProfile = async () => {
       const { data, error } = await supabase
         .from("profile")
-        // 필요한 필드만 선택해서 ProfileType과 일치시킴
-        .select("user_id, nickname, bio, url, header_url, avatar_url, preferred_ott, favorite_genre")
+        // ✅ DB 타입이랑 필드 이름 맞추기
+        .select(
+          "user_id, nickname, bio, url, header_url, avatar_url, preferred_ott, favorite_genre"
+        )
         .eq("user_id", user.id)
         .single();
 
       if (error) {
         console.error("프로필 불러오기 오류:", error.message);
       } else {
-        setProfile(data);
+        setProfile(data as ProfileType); // ✅ data를 ProfileType으로 단언
       }
     };
 
@@ -104,7 +98,7 @@ function MyPage() {
       case "likedReviews":
         return <LikedReviews user={user} profile={profile} />;
       case "likedQuotes":
-        return <LikedQuotes user={user} profile={profile} />;
+        return <LikedQuotes user={user} />;
       case "notifications":
         return <Notifications user={user} profile={profile} />;
       case "settings":

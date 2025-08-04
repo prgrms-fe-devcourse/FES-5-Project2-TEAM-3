@@ -4,6 +4,7 @@ export async function fetchGenres(): Promise<Genre[]> {
   const BASE_URL = "https://api.themoviedb.org/3";
 
   try {
+
     const res = await fetch(
       `${BASE_URL}/genre/movie/list?language=ko`,
       {
@@ -14,11 +15,12 @@ export async function fetchGenres(): Promise<Genre[]> {
       }
     );
 
+
     if (!res.ok) throw new Error("장르 불러오기 실패");
 
     const data = await res.json();
 
-    // 로맨스 장르(id: 10749) 제거
+    // 불필요한 장르 (예: id 10749: 로맨스) 제거
     const filteredGenres = data.genres.filter((genre: Genre) => genre.id !== 10749);
 
     return filteredGenres;
@@ -27,7 +29,5 @@ export async function fetchGenres(): Promise<Genre[]> {
     return [];
   }
 }
-
-
 
 export default fetchGenres

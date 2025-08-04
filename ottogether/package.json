@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "type": "tsc -noEmit",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "supabase": "npx supabase gen types typescript --project-id ifvtongrzrnoyiflqmcs --schema public > src/supabase/supabase.type.ts"

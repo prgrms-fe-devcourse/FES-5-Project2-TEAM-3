@@ -5,7 +5,7 @@ import defaultAvatar from "../../../assets/default-profile/default-avatar3.png";
 import defaultHeader from "../../../assets/default_header.svg";
 import { uploadImage } from "../../../supabase/storage/uploadImage";
 import { upsertTable } from "../../../supabase/upsertTable";
-import { ErrorCode, ErrorMessages } from "../../../lib/errorCodes";
+import { ErrorCode } from "../../../lib/errorCodes";
 import { checkNicknameExists } from "../../../supabase/auth/checkNickname";
 import { supabase } from "../../../supabase/supabase";
 
@@ -41,6 +41,8 @@ function ProfileSettings({ user, profile }: Props) {
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: ErrorCode | undefined }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  console.log(fieldErrors);
+  
   useEffect(() => {
     if (profile) {
       setNickname(profile.nickname || "");

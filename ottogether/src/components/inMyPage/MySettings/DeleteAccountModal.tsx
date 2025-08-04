@@ -23,18 +23,13 @@ function DeleteAccountModal({ onClose, user }: Props) {
     if (!user) return;
 
     try {
-      console.log("🔎 탈퇴 요청 시작");
-      console.log("user:", user);
-
       const { data, error: sessionError } = await supabase.auth.getSession();
-      console.log("session data:", data, "session error:", sessionError);
 
       if (sessionError || !data.session) {
         throw new Error("로그인 세션을 불러올 수 없습니다.");
       }
 
       const token = data.session.access_token;
-      console.log("access_token:", token);
 
       const response = await fetch(
         "https://ifvtongrzrnoyiflqmcs.supabase.co/functions/v1/deleteUser",
@@ -48,12 +43,7 @@ function DeleteAccountModal({ onClose, user }: Props) {
         }
       );
 
-      console.log("response.ok:", response.ok);
-      console.log("response.status:", response.status);
-      console.log("response headers:", [...response.headers.entries()]);
-
       const result = await response.json().catch(() => null);
-      console.log("deleteUser result:", result);
 
       if (!response.ok || (result && result.error)) {
         throw new Error(result?.error || "탈퇴 중 오류가 발생했습니다.");

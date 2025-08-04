@@ -16,20 +16,20 @@ export const searchUserProfile = async ( keyword: string ) => {
     }
 
     // 해당하는 유저 정보가 없을 경우
-    if ( !profiles.length ) return { profiles: [], reviewLikes: [], quotesLikes: [] };
+    if ( !profiles.length ) return { profiles: [], reviewData: [], quotesData: [] };
     // 해당하는 유저가 있을 경우 user_id 확인
     const userIds = profiles.map(p => p.user_id);
 
 
-    /* review_like 데이터 조회 */
-    const { data: reviewLikes, error: reviewError } = await supabase
-      .from("review_like")
+    /* review 데이터 조회 */
+    const { data: reviewData, error: reviewError } = await supabase
+      .from("review")
       .select("*")
       .in("user_id", userIds);
     
-    /* quotes_like 데이터 조회 */
-    const { data: quotesLikes, error: quoteError } = await supabase
-      .from("quotes_like")
+    /* quotes 데이터 조회 */
+    const { data: quotesData, error: quoteError } = await supabase
+      .from("quotes")
       .select("*")
       .in("user_id", userIds);
 
@@ -45,12 +45,12 @@ export const searchUserProfile = async ( keyword: string ) => {
 
     return {
       profiles,
-      reviewLikes: reviewLikes ?? [],
-      quotesLikes: quotesLikes ?? [],
+      reviewData: reviewData ?? [],
+      quotesData: quotesData ?? [],
     };
 
   } catch (err) {
     console.error('유저 검색 실패:', err);
-    return { profiles: [], reviewLikes: [], quotesLikes: [] };
+    return { profiles: [], reviewData: [], quotesData: [] };
   }
 }

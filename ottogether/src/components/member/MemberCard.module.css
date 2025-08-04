@@ -9,8 +9,8 @@
 
 .cell {
 	display: flex;
-	width: 1100px;
-	height: 219px;
+	width: 90%;
+	min-height: 219px;
 	gap: 47px;
 	line-height: 25px;
 

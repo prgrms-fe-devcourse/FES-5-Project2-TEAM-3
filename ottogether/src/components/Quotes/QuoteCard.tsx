@@ -13,6 +13,7 @@ type Quote = Database['public']['Tables']['quotes']['Row'];
 type QuoteCardProps = {
   quote: Quote;
   onRemove: (id: number) => void;
+  className?: string;
   isSearch?: boolean;
   highlight?: React.ReactNode;
 };
@@ -20,6 +21,7 @@ type QuoteCardProps = {
 export default function QuoteCard({
   quote,
   onRemove,
+  className,
   isSearch = false,
   highlight
 }: QuoteCardProps) {
@@ -83,21 +85,13 @@ export default function QuoteCard({
         return liked ? prev + 1 : prev - 1 
       });
 
+      
       if (liked && quote.user_id && quote.user_id !== user.id) {
-        const { data: senderProfile } = await supabase
-          .from("profile")
-          .select("nickname")
-          .eq("user_id", user.id)
-          .single();
-
-        const senderName = senderProfile?.nickname ?? "Guest";
-
         await createNotification({
           userId: quote.user_id,
           senderId: user.id,
           type: "like_quote",
           targetId: id,
-          message: `${senderName}님이 회원님의 명대사를 좋아합니다.`,
         });
       }
 
@@ -145,7 +139,7 @@ export default function QuoteCard({
 };
 
   return (
-    <div className={`${S.card} ${isEditing ? S.editing : ''} ${isSearch ? S["search-quotes"] : ''}`.trim()}>
+    <div className={`${S.card} ${isEditing ? S.editing : ''} ${className ? className : ''} ${isSearch ? S["search-quotes"] : ''}`.trim()}>
       <div className={S.body}>
         <div className={S.top}>
           <img src={quoteLeft} alt="left quote" className={S.quoteIconLeft} />

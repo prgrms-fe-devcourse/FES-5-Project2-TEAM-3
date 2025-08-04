@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { getMovieDetail } from "../../tmdbApi";
 import type { MovieDetailType } from "../../lib/movieDetailType";
 import S from './ContentsDetail.module.css';
-import type { Tables } from '../../supabase/supabase.type';
+// import type { Tables } from '../../supabase/supabase.type';
 
 interface Props{
 	mediaId : number;
 	mediaType : 'movie' | 'tv';
 }
 
-type Review = Tables<'review'>;
+// type Review = Tables<'review'>;
 
 function extractMovieDetail(fullMovieData: any): MovieDetailType {
   return {
@@ -31,7 +31,7 @@ function extractMovieDetail(fullMovieData: any): MovieDetailType {
 function ContentsDetail({mediaId, mediaType} : Props) {
 	const IMAGE_URL = 'https://image.tmdb.org/t/p/original/'
 	const [mediaData, setMediaData] = useState<MovieDetailType | null>(null);
-	const [currentReviewData, setCurrentReviewData] = useState<Review | null>(null);
+	// const [currentReviewData, setCurrentReviewData] = useState<Review | null>(null);
 	useEffect(() => {
 		const dataUnboxing = async () => {
 			let data;

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabase/supabase";
-import { useAuth } from "../../contexts/AuthProvider";
 import type { Tables } from "../../supabase/supabase.type"; 
 import S from "./Notifications.module.css";
 
-// DB notifications Row 타입 그대로 가져옴
+type ProfileType = Tables<"profile">;
+type UserType = { id: string; email?: string };
+
 type NotificationRow = Tables<"notifications"> & {
   sender?: {
     nickname: string | null;
@@ -13,11 +14,15 @@ type NotificationRow = Tables<"notifications"> & {
   };
 };
 
-function Notifications() {
+interface Props {
+  user: UserType;
+  profile: ProfileType | null;
+}
+
+function Notifications({ user, profile }: Props) {
   const [activeTab, setActiveTab] = useState<"all" | "likes" | "comments" | "unread">("all");
   const [notifications, setNotifications] = useState<NotificationRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -79,9 +84,9 @@ function Notifications() {
     }
 
     if (noti.type === "comment" || noti.type === "like_review") {
-      navigate(`/reviews/${noti.target_id}`);
+      navigate("/review", { state: { highlightId: Number(noti.target_id) } });
     } else if (noti.type === "like_quote") {
-      navigate(`/quotes/${noti.target_id}`);
+      navigate("/quotes", { state: { highlightId: Number(noti.target_id) } });
     }
   };
 
@@ -91,7 +96,7 @@ function Notifications() {
   return (
     <div className={S.container}>
       <div className={S.header}>
-        <h1>Notifications</h1>
+        <h1>{profile?.nickname ?? "Guest"} 님의 Notifications</h1>
       </div>
 
       <div className={S.tabs}>
@@ -145,7 +150,7 @@ function Notifications() {
               </div>
               <div className={S.content}>
                 <p>
-                  <strong>{n.sender?.nickname ?? "알 수 없음"}</strong> {n.message}
+                  <strong>{n.sender?.nickname ?? "Guest"}</strong> {n.message}
                 </p>
               </div>
               <div className={S.meta}>

@@ -58,10 +58,6 @@ function ReviewCreate({reviewAdded} : Props) {
 
 	}
 
-	const handleEdit = async () => {
-
-	}
-
 	const handleCancel = () => {
 		setInputClicked(false);
 		setContent('');

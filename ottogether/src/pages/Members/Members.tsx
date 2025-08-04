@@ -5,13 +5,13 @@ import type { Tables } from '../../supabase/supabase.type';
 import { getData } from "../../components/reviewCard/SupaData"
 
 type Profile = Tables<'profile'>;
-type ReviewLike = Tables<'review_like'>;
-type QuotesLike = Tables<'quotes_like'>;
+type Review = Tables<'review'>;
+type Quotes = Tables<'quotes'>;
 
 function Members() {
 	const [profileData, setProfileData] = useState<Profile[]>();
-	const [reviewData, setReviewData] = useState<ReviewLike[] | null>();
-	const [quotesData, setQuotesData] = useState<QuotesLike[] | null>();
+	const [reviewData, setReviewData] = useState<Review[] | null>();
+	const [quotesData, setQuotesData] = useState<Quotes[] | null>();
 
 	const [currentPageNum, setCurrentPage] = useState(1);
 	const [profileCountPerPage] = useState(4);
@@ -19,8 +19,8 @@ function Members() {
 	useEffect(()=>{
 		async function generateData(){
 			setProfileData(await getData('profile') as Profile[] | undefined);
-			setReviewData(await getData('review_like') as ReviewLike[] | null);
-			setQuotesData(await getData('quotes_like') as QuotesLike[] | null);
+			setReviewData(await getData('review') as Review[] | null);
+			setQuotesData(await getData('quotes') as Quotes[] | null);
 		}
 		generateData()
 	}, [])

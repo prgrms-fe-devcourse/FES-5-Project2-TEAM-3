@@ -98,11 +98,15 @@ function LikedReviews({ user, profile }: Props) {
       {reviews.map((review) => {
         const profileData = profiles.find((p) => p.user_id === review.user_id);
         return (
-          <div key={review.id} className={S["my-liked-review-wrapper"]}>
+          <div
+            key={review.id}
+            className={S["my-liked-review-wrapper"]}
+            onClick={() => navigate("/review", { state: { highlightId: review.id } })} // 👈 추가
+          >
             <ReviewCard
               reviewData={review}
               profileData={profileData}
-              activePopUp={(id) => navigate(`/reviews/${id}`)}
+              activePopUp={(id) => navigate("/review", { state: { highlightId: id } })}
             />
           </div>
         );
