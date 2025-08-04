@@ -43,6 +43,8 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
     quote: true,
     user: true,
   })
+
+  const isFirstRender = useRef<boolean>(true);
   
   // 검색 fetch 요청 제한 관련 변수
   const SEARCH_COOLDOWN_MS = 1000; // 1초간 동일 키워드 검색 제한
@@ -73,8 +75,13 @@ const SearchTab = React.memo(function SearchTab( { keyword, filters }:SearchTabP
     const now = Date.now();
     const lastSearchedAt = searchHistory.current.get(normalizedKeyword);
 
+    if(isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     // 전체 요청 속도 제한
-    if (now - lastSearchTime.current < SEARCH_COOLDOWN_MS) {
+    if (!isFirstRender.current && now - lastSearchTime.current < SEARCH_COOLDOWN_MS) {
       console.error('검색 제한: 요청 속도 너무 빠름');
       setShouldFetch(false);
       return;
