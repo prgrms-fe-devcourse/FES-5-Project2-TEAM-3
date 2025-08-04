@@ -1,6 +1,4 @@
 import S from "./MemberCard.module.css"
-
-
 import type { Tables } from '../../supabase/supabase.type';
 import { formatDate } from "../../util/formatDate";
 
@@ -39,7 +37,7 @@ function MemberCard({profileData, reviewData, quotesData, isSearch = false} : Pr
 	}
 
 	return (
-		<div className={`${S.container} ${S.cell} ${isSearch ? S["search-container"] : ''}`}>
+		<div className={`${S.container} ${isSearch ? S["search-container"] : ''}`}>
 		{ 
 		profileData && profileData.map(data => (
 			<div key={data.user_id} className={`${S.cell} ${isSearch ? S["search-user"] : ''}`} onClick={() => onClickCell(data)}>
