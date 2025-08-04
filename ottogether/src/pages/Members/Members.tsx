@@ -2,7 +2,7 @@ import MemberCard from '../../components/member/MemberCard'
 import S from './Members.module.css'
 import { useEffect, useState } from "react";
 import type { Tables } from '../../supabase/supabase.type';
-import { getData } from "../../components/ReviewCard/SupaData"
+import { getData } from "../../components/reviewCard/SupaData"
 
 type Profile = Tables<'profile'>;
 type ReviewLike = Tables<'review_like'>;

@@ -50,7 +50,7 @@ function MemberCard({profileData, reviewData, quotesData, isSearch = false} : Pr
 					<h2>{data.nickname ?? 'Nickname'}</h2>
 					<p className={S["joined"]}><strong>Joined :</strong> {formatDate(data.created_at)}</p>
 					<p className={S["favorite-genre"]}><strong>Favorite Genre :</strong> {data.favorite_genre?.join(', ')}</p>
-					<p className={S["total-reviews"]}><strong>Total Reviews :</strong> {getUserLikeCount(data.user_id, "review")}{ isSearch ? <br /> : "|" }<strong>Total Quotes :</strong> {getUserLikeCount(data.user_id, "quotes")} </p>
+					<p className={S["total-reviews"]}><strong>Total Reviews :</strong> {getUserLikeCount(data.user_id, "review")}{ isSearch ? <br /> : " | " }<strong>Total Quotes :</strong> {getUserLikeCount(data.user_id, "quotes")} </p>
 				</div>
 					<img className={S.arrow} src='/Chevron_right.svg' alt="rightArrow" />
 			</div>
