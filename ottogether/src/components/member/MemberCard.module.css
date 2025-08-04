@@ -1,108 +1,136 @@
+/* MemberCard.module.css */
+
 .container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	padding-top: 34px;
-	gap: 34px;
-	width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 34px;
+  gap: 34px;
+  width: 100%;
+	padding-bottom: 34px;
 }
 
 .cell {
-	display: flex;
-	width: 90%;
-	min-height: 219px;
-	gap: 47px;
-	line-height: 25px;
+  display: flex;
+  width: 90%;
+  min-height: 219px;
+  gap: 47px;
+  line-height: 25px;
+	max-width: 900px;
+  /* 깔끔한 외곽선만 추가 */
+  border: 1px solid #c0c0c0;
+  border-radius: 8px;
+	align-items: center;
+  
+  &:hover {
+    cursor: pointer;
+  }
+  
+  .arrow {
+    padding-top: 55.5px;
+    width: 60px;
+    height: 60px;
+    margin-left: auto;
+  }
 
-	:hover {
-		cursor: pointer;
-	}
-	.arrow {
-		padding-top: 55.5px;
-		width: 60px;
-		height: 60px;
-		margin-left: auto;
-	}
+  img {
+    width: 171px;
+    height: 171px;
+    border-radius: 8px;
+  }
 
-	img {
-		width: 171px;
-		height: 171px;
-	}
-
-	h2 {
-		font-size: 36px;
+  h2 {
+    font-size: 36px;
 		padding-bottom: 10px;
-		padding-top: 10px;
-	}
-
-	p {
+		
+  }
+	
+  p {
 		font-size: 20px;
-		flex-grow: 1;
+  }
+
+	h2,p{
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
+		line-clamp: 1;
+		line-height: 1.5;
 	}
 }
 
 .profile-image {
-	background-color: var(--background);
+  background-color: var(--background);
+	padding: 20px;
 }
 
 .search-container {
-	flex-direction: row;
-	align-items: flex-start;
-	padding-top: 0;
-	gap: 1rem;
-	width: 100%;
-	flex-wrap: wrap;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-top: 0;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.info-container{
+	padding: 25px;
+	display: flex;
+	flex-direction: column;
 }
 
 .search-user {
-	width: 23rem;
-	height: 11rem;
-	border: 1px solid var(--foreground);
-	border-radius: 0.8rem;
-	padding: 1rem;
-	gap: 1.2rem;
+  width: 23rem;
+  height: 11rem;
+  padding: 1rem;
+  gap: 1.2rem;
+  
+  /* 깔끔한 외곽선만 추가 */
+  border: 1px solid #c0c0c0;
+  border-radius: 0.8rem;
+  
+  .profile-image {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+  }
 
-	.profile-image {
-		width: 8rem;
-		height: 8rem;
-		border-radius: 50%;
-	}
+  h2 {
+    width: 100%;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    height: 1.7rem;
+    color: var(--color-primary-300);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+  }
 
-	h2 {
-		width: 100%;
-		font-size: 1.5rem;
-		line-height: 1.5;
-		height: 1.7rem;
-		color: var(--color-primary-300);
-		overflow: hidden;
-		text-overflow: ellipsis;
-		line-clamp: 1;
-		display: -webkit-box;
-		-webkit-line-clamp: 1;
-		-webkit-box-orient: vertical;
-		white-space: normal;
-	}
+  p {
+    font-size: 1rem;
 
-	p {
-		font-size: 1rem;
+    strong {
+      font-weight: 300;
+      color: var(--color-primary-300);
+      opacity: 0.7;
+    }
+  }
 
-		strong {
-			font-weight: 300;
-			color: var(--color-primary-300);
-			opacity: 0.7;
-		}
-	}
+  .favorite-genre {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
 
-	.favorite-genre {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		line-clamp: 2;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-	}
-
-	.arrow {
-		display: none;
-	}
+  .arrow {
+    display: none;
+  }
 }
