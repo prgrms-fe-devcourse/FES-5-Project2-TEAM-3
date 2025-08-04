@@ -2,7 +2,7 @@ import type { MovieData } from "./movie.type";
 
 
 // const BASE_URL = 'https://api.themoviedb.org/3';
-const BASE_URL = "/api/tmdb";
+const BASE_URL = "https://api.themoviedb.org/3";
 
 const TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
 
