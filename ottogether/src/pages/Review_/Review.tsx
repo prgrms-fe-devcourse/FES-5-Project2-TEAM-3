@@ -81,11 +81,11 @@ function Review() {
 				<p className={S.heading}>Reviews and Rating</p>
 			</div>
 			<ReviewCreate reviewAdded={generateData}/>
-			{reviewData && reviewData.map(element => (
+			{(reviewData && profileData) && reviewData.map(element => (
         <div key={element.id}>
           <ReviewCard
             reviewData={element}
-            profileData={findUserById(element.user_id, profileData! ?? undefined)}
+            profileData={findUserById(element.user_id, profileData ?? undefined)}
             activePopUp={activatePopup}
           />
         </div>
