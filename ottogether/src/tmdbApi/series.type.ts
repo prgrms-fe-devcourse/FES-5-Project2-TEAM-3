@@ -6,7 +6,7 @@ export type SeriesData = {
   poster_path: string;
   first_air_date: string;
   vote_average: number;
-  genre_ids: number[];
+  genre_name: string[];
   provider_logo_path?: string | null;
   backdrop_path: string | null;
   overview: string | null;
@@ -17,19 +17,20 @@ export type SeriesData = {
 
 export function normalizeSeriesData(series: SeriesData): MovieData {
   return {
-    id: series.id,
-    title: series.name,
-    poster_path: series.poster_path,
-    release_date: series.first_air_date,
-    vote_average: series.vote_average,
-    genre_ids: series.genre_ids,
-    provider_logo_path: series.provider_logo_path ?? null,
-    backdrop_path: series.backdrop_path ?? null,
-    overview: series.overview ?? null,
-		tagline : series.tagline,
-		original_language : series.original_language,
-    media_type: 'tv',
-  };
+	id: series.id,
+	title: series.name,
+	poster_path: series.poster_path,
+	release_date: series.first_air_date,
+	vote_average: series.vote_average,
+	genre_names: series.genre_name,
+	provider_logo_path: series.provider_logo_path ?? null,
+	backdrop_path: series.backdrop_path ?? null,
+	overview: series.overview ?? null,
+	tagline: series.tagline,
+	original_language: series.original_language,
+	media_type: 'tv',
+	genre_ids: [],
+};
 }
 
 

@@ -13,7 +13,10 @@
 
 .card-container{
 	padding: 16px;
-	width: 976px;
+	max-width: 976px;
+	min-width: 400px;
+	width: 40%;
+	
 	margin : 0 auto;
 	background-color: #525252;
 	border-radius: 8px;
@@ -22,6 +25,8 @@
 
 .star-container{
 	margin-left: auto;
+	display: flex;
+	gap: 4px;
 }
 
 .footer{

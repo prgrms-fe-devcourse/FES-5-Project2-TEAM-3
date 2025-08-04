@@ -41,7 +41,7 @@ export async function getContentDetail(
 				poster_path: data.poster_path,
 				first_air_date: data.first_air_date,
 				vote_average: data.vote_average,
-				genre_ids: data.genres.map((g: any) => g.id),
+				genre_name: data.genres.map((g: any) => g.name),
 				provider_logo_path: null,
 				backdrop_path: data.backdrop_path,
 				overview: data.overview,
