@@ -25,13 +25,14 @@ function Review() {
   const highlightId = (location.state as { highlightId?: number })?.highlightId;
 
 	async function generateData(){
-		console.log(id);
+		// console.log(id);
 		if (!id) return ;
 		const {data : reviewData, error:reviewError} = await supabase
 				.from('review')
 				.select('*')
 				.eq('movie_id', +id)
-				.order('created_at', {ascending: false});
+				.order('created_at', {ascending: false })
+				.order('id', { ascending: false });
 		if (reviewError) {
 			console.error('Erorr! 리뷰 데이터를 불러오는 중 오류 : ', reviewError);
 			return;

@@ -30,7 +30,7 @@ export function useNotifications(userId: string | null) {
           filter: `user_id=eq.${userId}}`
         },
         (payload) => {
-          console.log('새 알림 도착:', payload.new);
+          // console.log('새 알림 도착:', payload.new);
           setNotifications((prev) => [payload.new as Notification, ...prev]);
         }
       )

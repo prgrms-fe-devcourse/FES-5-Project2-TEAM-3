@@ -1,58 +1,68 @@
-.user-avatar{
+.user-avatar {
 	width: 32px;
 	height: 32px;
 	border-radius: 16px;
 }
 
-.header{
+.header {
 	display: flex;
 	gap: 10px;
 	align-items: center;
 	padding-bottom: 16px;
 }
 
-.card-container{
+.card-container {
 	padding: 16px;
 	max-width: 976px;
 	min-width: 400px;
 	width: 100%;
-	
-	margin : 0 auto;
-	background-color: #525252;
+
+	margin: 0 auto;
+	background-color: var(--color-grey-700);
 	border-radius: 8px;
 	margin-bottom: 21px;
 
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
-.star-container{
+.star-container {
 	margin-left: auto;
 	display: flex;
 	gap: 4px;
 }
 
-.footer{
+.footer {
 	margin-top: 16px;
 	display: flex;
 }
 
-.read-more{
+.read-more {
 	margin-left: auto;
 	color: #ffca45;
 
-	&:hover{
+	&:hover {
 		cursor: pointer;
-		user-select : none;
+		user-select: none;
 	}
 }
 
-.reaction-item{
+.reaction-item {
+	background: transparent;
+	border: none;
+	color: var(--foreground);
 	display: flex;
 	gap: 5px;
 	padding-right: 24px;
 	align-items: center;
+	cursor: pointer;
+
+	img {
+		width: 1.1rem;
+		height: 1.1rem;
+	}
 }
 
-p{
+.review-container p {
 	size: 14px;
+	line-height: 1.5;
 }

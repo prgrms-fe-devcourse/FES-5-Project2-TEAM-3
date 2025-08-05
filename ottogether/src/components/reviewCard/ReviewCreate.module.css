@@ -1,19 +1,19 @@
-.input-container{
+.input-container {
 	/* width: 1028px; */
 	display: flex;
 	flex-direction: column;
-	width: 975px;
-	background-color: #525252;
+	max-width: 976px;
+	background-color: var(--color-grey-700);
 	border-radius: 16px;
 	border-width: 0px;
 	margin: 0 auto;
 	padding: 16px;
 	margin-bottom: 21px;
 
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
-.button-list{
+.button-list {
 	padding-top: 11px;
 	display: flex;
 	align-items: center;
@@ -21,36 +21,37 @@
 	box-sizing: border-box;
 }
 
-.write-btn{
+.write-btn {
 	margin-left: auto;
-	color: #FFCA45;
+	color: #ffca45;
 	font-size: 16px;
+	cursor: pointer;
 }
-.star-container{
+.star-container {
 	display: flex;
 	gap: 10px;
 }
 
-.review-input{
+.review-input {
 	padding: 20px 30px;
-	margin: 20px 0px ;
+	margin: 20px 0px;
 	border-radius: 16px;
 }
 
-.add{
+.add {
 	background-color: var(--color-primary-500);
 }
 
-.cancel{
-	background-color: #CCC2DC;
+.cancel {
+	background-color: #ccc2dc;
 }
 
-.button-container{
+.button-container {
 	display: flex;
 	gap: 15px;
 	margin-left: auto;
-	
-	button{
+
+	button {
 		width: 85px;
 		height: 40px;
 		border-radius: 12px;
@@ -59,10 +60,10 @@
 	}
 }
 
-.button-list.input-mode{
+.button-list.input-mode {
 	padding-top: 20px;
 }
 
 .button-list.input-mode .star-container {
-  margin: 0 auto;
+	margin: 0 auto;
 }

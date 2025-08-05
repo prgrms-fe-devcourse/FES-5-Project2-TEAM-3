@@ -5,7 +5,7 @@ import defaultAvatar from "../../../assets/default-profile/default-avatar3.png";
 import defaultHeader from "../../../assets/default_header.svg";
 import { uploadImage } from "../../../supabase/storage/uploadImage";
 import { upsertTable } from "../../../supabase/upsertTable";
-import { ErrorCode } from "../../../lib/errorCodes";
+import { ErrorCode, ErrorMessages } from "../../../lib/errorCodes";
 import { checkNicknameExists } from "../../../supabase/auth/checkNickname";
 import { supabase } from "../../../supabase/supabase";
 
@@ -40,8 +40,6 @@ function ProfileSettings({ user, profile }: Props) {
 
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: ErrorCode | undefined }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  console.log(fieldErrors);
   
   useEffect(() => {
     if (profile) {
@@ -202,15 +200,30 @@ function ProfileSettings({ user, profile }: Props) {
         <label>
           닉네임
           <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+          { fieldErrors.nickname &&
+          <p className={S.error} aria-live='polite'>{ErrorMessages[fieldErrors.nickname]}</p>
+          }
         </label>
         <label>
           소개
           <input type="text" value={bio} onChange={(e) => setBio(e.target.value)} />
+          { fieldErrors.bio &&
+          <p className={S.error} aria-live='polite'>{ErrorMessages[fieldErrors.bio]}</p>
+          }
         </label>
         <label>
           URL
           <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} />
+          { fieldErrors.url &&
+          <p className={S.error} aria-live='polite'>{ErrorMessages[fieldErrors.url]}</p>
+          }
         </label>
+        { fieldErrors.header &&
+          <p className={S.error} aria-live='polite'>헤더 사진: {ErrorMessages[fieldErrors.header]}</p>
+        }
+        { fieldErrors.avatar &&
+          <p className={S.error} aria-live='polite'>프로필 사진: {ErrorMessages[fieldErrors.avatar]}</p>
+        }
         <button type="submit" className={S["submit-btn"]} disabled={isSubmitting}>
           {isSubmitting ? "저장 중..." : "저장"}
         </button>

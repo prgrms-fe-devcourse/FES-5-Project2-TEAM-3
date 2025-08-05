@@ -55,7 +55,7 @@ function MovieDetail() {
   useEffect(() => {
     if (!mediaType || !id) return;
 
-     // ✅ mediaType 유효성 검사
+     // mediaType 유효성 검사
   if (mediaType !== "movie" && mediaType !== "tv") {
     console.error("❌ 잘못된 mediaType:", mediaType);
     return;
@@ -63,7 +63,6 @@ function MovieDetail() {
 
     const fetchData = async () => {
       const data = await getContentDetail(mediaType, Number(id));
-      console.log(`✅ ${mediaType} 상세 데이터`, data); // 여기서 콘솔로 확인
       setContent(data);
     };
 
@@ -123,6 +122,7 @@ function MovieDetail() {
 		if (!isAuth || !user)
 		{
 			alert('로그인이 필요한 서비스입니다.');
+			navigate('/login');
     	return;
 		}
 		const result = await toggleFavoriteMovie(user.id, +id);
@@ -140,7 +140,6 @@ function MovieDetail() {
 	}
 
 	const findFavoriteUser = (favor : Favorite[], profileData : Profile[]) => {
-		console.log('favorData :', favor, '\nprofileData : ', profileData);
 		if (!profileData)
 			return ;
 		let temp : Profile[] = [];
@@ -149,7 +148,6 @@ function MovieDetail() {
 			if (profile)
 				temp.push(profile);
 		}
-		console.log('favorite User List : ' ,temp);
 		setFavoriteUsers(temp);
 	}
 

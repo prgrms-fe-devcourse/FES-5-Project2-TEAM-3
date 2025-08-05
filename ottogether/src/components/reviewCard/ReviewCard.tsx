@@ -8,6 +8,7 @@ import toggleReviewThumbs from './toggleReviewThumbs';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase/supabase';
 import { createNotification } from '../../util/createNotifications';
+import { useNavigate } from 'react-router-dom';
 
 type Review = Tables<'review'>;
 type Profile = Tables<'profile'>;
@@ -21,7 +22,6 @@ interface Prop{
 }
 
 export function findUserById(inputId : string, profileData : Profile[]) : Profile | undefined{
-	// console.log("findUserById : \nInputID - ", inputId, '\nprofileData : ', profileData);
 	return profileData?.find(profile => profile.user_id !== null && profile.user_id === inputId);
 }
 
@@ -30,20 +30,20 @@ export function findReviewById(inputId : number, reviewData : Review[]) : Review
 }
 
 function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUpdate} : Prop) {
+	const navigate = useNavigate();
+
 	const {isAuth, user} = useAuth();
 	const [isLiked, setIsLiked] = useState(false);
 	const [likeCount, setLikeCount] = useState(0);
-	// const [isDisLiked, setIsDisliked] = useState(false);
-	// const [disLikeCount, setDislikeCount] = useState(0);
-	// console.log('reviewData : ', reviewData,'\nprofileData : ' , profileData);
 	if (!(reviewData && profileData))
 	{
-		// console.error('Error : 올바르지 않은 프로필 혹은 리뷰입니다.', reviewData, '||', profileData);
+		console.error('Error : 올바르지 않은 프로필 혹은 리뷰입니다.', reviewData, '||', profileData);
 		return ;
 	}
 	const handleThumb = async (input : 'like' | 'dislike') => {
   if (!isAuth) {
     alert('로그인이 필요한 서비스입니다.');
+		navigate('/login');
     return;
   }
   const { liked, error } = await toggleReviewThumbs(reviewData.id, user!.id, input);
@@ -94,7 +94,7 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 	}, [reviewData])
 	
 	return (
-	<>
+	<div className={S['review-container']}>
 		<div id={reviewData.id + ''} className={S["card-container"]}>
 		<header className={S.header}>
 			<img className={S['user-avatar']} src={profileData.avatar_url ?? "./beomTeacher.svg"} alt="profile_image" />
@@ -108,18 +108,18 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 			<p>{reviewData.text_content}</p>
 		</main>
 		<footer className={S.footer}>
-			<div className={S['reaction-item']} onClick={() => handleThumb('like')}>
+			<button className={S['reaction-item']} onClick={() => handleThumb('like')}>
 				<img src={isLiked ? "/thumbsUp.svg" : "/emptyThumbsUp.svg"} alt="ThumbsUpIcon" />
 				<p>{likeCount}</p>
-			</div>
-			<div className={S['reaction-item']}>
+			</button>
+			<button className={S['reaction-item']} onClick={() => activePopUp(reviewData.id)}>
 				<img src="/comment.svg" alt="commentIcon" />
 				<p>{commentCount}</p>
-			</div>
+			</button>
 			<p className={S['read-more']} onClick={() => activePopUp(reviewData.id)}>Read More</p>
 		</footer>
 		</div>
-	</>
+	</div>
 	)
 }
 export default ReviewCard

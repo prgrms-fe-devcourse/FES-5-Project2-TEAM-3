@@ -2,6 +2,7 @@ import { useState } from "react"
 import S from './ReviewCreate.module.css'
 import { useAuth } from "../../contexts/AuthProvider";
 import { supabase } from "../../supabase/supabase";
+import { useNavigate } from "react-router-dom";
 
 interface Props{
 	reviewAdded : () => void;
@@ -9,6 +10,8 @@ interface Props{
 }
 
 function ReviewCreate({reviewAdded, movieId} : Props) {
+	const navigate = useNavigate();
+	
 	const [inputClicked, setInputClicked] = useState(false);
 	const [content, setContent] = useState('');
 	const [rating, setRating] = useState(5);
@@ -34,6 +37,7 @@ function ReviewCreate({reviewAdded, movieId} : Props) {
 		if (!isAuth)
 		{
 			alert('로그인 후 이용하실 수 있는 서비스입니다.');
+			navigate('/login');
 			handleCancel();
 			return ;
 		}

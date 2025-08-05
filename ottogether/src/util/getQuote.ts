@@ -26,7 +26,7 @@ export async function getQuotes(
     const {data, error} = await query;
 
     if(error){
-        console.log('error');
+        console.error('error', error.message);
         return null
     }
 
@@ -47,7 +47,7 @@ export async function getQuotesByMovieId(movieId : string, options:GetQuotesOpti
     const {data, error} = await query;
 
     if(error){
-        console.log('error');
+        console.error('getQuote error:', error.message);
         return null
     }
 

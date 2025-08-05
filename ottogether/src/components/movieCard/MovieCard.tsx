@@ -58,6 +58,7 @@ function MovieCard({ movie }: MovieCardProps) {
     const userId = await getUserInfo("id");
     if (!userId) {
       alert("로그인이 필요합니다.");
+      navigate('/login');
       return;
     }
 
