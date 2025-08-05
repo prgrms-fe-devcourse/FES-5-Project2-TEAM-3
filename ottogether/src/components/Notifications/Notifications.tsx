@@ -82,7 +82,17 @@ function Notifications({ user, profile }: Props) {
     }
 
     if (noti.type === "comment" || noti.type === "like_review") {
-      navigate("/review", { state: { highlightId: Number(noti.target_id) } });
+      const { data: review } = await supabase
+        .from("review")
+        .select("movie_id, media_type")
+        .eq("id", noti.target_id)
+        .maybeSingle();
+
+      if (review) {
+        navigate(`/media/${review.media_type}/${review.movie_id}/review`, {
+          state: { highlightId: Number(noti.target_id) },
+        });
+      }
     } else if (noti.type === "like_quote") {
       navigate("/quotes", { state: { highlightId: Number(noti.target_id) } });
     }
