@@ -16,7 +16,7 @@ function Header() {
   /* user Login 상태 & 알림 유무 */
   const { user, isAuth, logout } = useAuth();
   // 나중에 전역 상태 context로 변경 필요
-  const [ hasNewNoti, setHasNewNoti ] = useState(true);
+  const [ hasNewNoti, setHasNewNoti ] = useState(false);
 
   /* 반응형 햄버거 버튼 제어 */
   const [ isMobile, setIsMobile ] = useState<boolean>(false);
@@ -30,10 +30,32 @@ function Header() {
 
   const [showNotiModal, setShowNotiModal] = useState(false);
   const notiRef = useRef<HTMLDivElement>(null);
+
+  /* unread 알림 체크 */
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchUnread = async () => {
+      const { data, error } = await supabase
+        .from("notifications")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("is_read", false);
+
+      if (!error) {
+        setHasNewNoti((data?.length ?? 0) > 0);
+      }
+    };
+    fetchUnread();
+
+    const interval = setInterval(fetchUnread, 10000);
+    return () => clearInterval(interval);
+
+  }, [user]);
+
   /* 알림 모달 */
   const handleToggleNotiModal = () => {
     setShowNotiModal((prev) => !prev);
-    setHasNewNoti(false);
   };
 
   /* 바깥 클릭 시 모달 닫기 */
@@ -204,22 +226,22 @@ function Header() {
         </button>
 
         <div className={S["notification-wrapper"]}>
-          <img
-            src={bellIcon}
-            alt="알림"
-            className={S.icon}
-            onClick={handleToggleNotiModal}
-          />
-          {hasNewNoti && <span className={S["red-dot"]} />}
+        <img
+          src={bellIcon}
+          alt="알림"
+          className={S.icon}
+          onClick={handleToggleNotiModal}
+        />
+        {hasNewNoti && <span className={S["red-dot"]} />}  {/* ✅ unread 있을 때만 표시 */}
 
-          {showNotiModal && (
-            <div className={S["notification-dropdown"]} ref={notiRef}>
-              <NotificationsModal
-                user={user}
-                profile={null}
-                onClose={() => setShowNotiModal(false)}
-              />
-            </div>
+        {showNotiModal && (
+          <div className={S["notification-dropdown"]} ref={notiRef}>
+            <NotificationsModal
+              user={user}
+              profile={null}
+              onClose={() => setShowNotiModal(false)}
+            />
+          </div>
           )}
         </div>
       </>
@@ -233,7 +255,6 @@ function Header() {
           className={S["user-avatar"]}
           onClick={()=> {
             navigate('/my-page', { state: { activeTab: 'notifications' } });
-            setHasNewNoti(false);
           }}
         >
           { isAvatarLoading ? (

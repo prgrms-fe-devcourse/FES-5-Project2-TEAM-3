@@ -12,6 +12,7 @@ import Settings from "../../components/inMyPage/MySettings/Settings";
 import ProfileBox from "../../components/inMyPage/ProfileBox";
 import type { Tables } from "../../supabase/supabase.type";
 import Notifications from "../../components/Notifications/Notifications";
+import NeedLogin from "../NeedLogin/NeedLogin";
 
 type UserType = {
   id: string;
@@ -87,7 +88,7 @@ function MyPage() {
   }, [user]);
 
   if (!user) {
-    return <div>로그인이 필요합니다.</div>;
+    return <NeedLogin />;
   }
 
   const renderContent = () => {

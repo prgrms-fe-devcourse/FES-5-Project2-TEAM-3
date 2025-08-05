@@ -37,8 +37,14 @@
 
 .tabs {
   display: flex;
-  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
+}
+
+.tab-group {
+  display: flex;
+  gap: 1rem;
 }
 
 .tab {
@@ -154,4 +160,17 @@
   color: #ccc;
   margin-left: 0.5rem;
   flex-shrink: 0;
+}
+
+.markAll {
+  background: none;
+  border: none;
+  color: #4da6ff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.markAll:hover {
+  color: #80c1ff;
 }
