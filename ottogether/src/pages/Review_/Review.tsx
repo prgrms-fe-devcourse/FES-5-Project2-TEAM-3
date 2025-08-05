@@ -89,8 +89,23 @@ function Review() {
   }, [isPopupOpen]);
 
 	useEffect(() => {
-		generateData();
-	}, [])
+  const hash = location.hash;
+
+  if (reviewData && hash) {
+    const targetId = hash.substring(1);
+		setTimeout(() => {
+			const targetElement = document.getElementById(targetId);
+			console.log('targetId : ', targetId, '\ntargetElem : ', targetElement);
+			
+			if (targetElement) {
+				targetElement.scrollIntoView({
+					behavior: 'smooth',
+					block: 'start',
+				});
+			}
+		}, 100)
+		}
+}, [location, reviewData]);
 
 	return (
 		<>

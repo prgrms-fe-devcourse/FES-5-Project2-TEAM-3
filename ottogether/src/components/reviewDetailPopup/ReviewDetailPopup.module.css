@@ -143,10 +143,10 @@
 .comment-cell {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
 	background-color: var(--color-grey-800);
 	border-radius: 16px;
 	padding: 16px;
+	padding-bottom: 26px;
 }
 
 .comment-header {
