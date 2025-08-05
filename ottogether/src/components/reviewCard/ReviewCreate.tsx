@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 interface Props{
 	reviewAdded : () => void;
 	movieId : string;
+	mediaType: "movie" | "tv";
 }
 
-function ReviewCreate({reviewAdded, movieId} : Props) {
+function ReviewCreate({reviewAdded, movieId, mediaType} : Props) {
 	const navigate = useNavigate();
 	
 	const [inputClicked, setInputClicked] = useState(false);
@@ -52,6 +53,7 @@ function ReviewCreate({reviewAdded, movieId} : Props) {
 			text_content : content,
 			user_id : user.id,
 			movie_id : +movieId,
+			media_type : mediaType,
 		}
 		const { error } = await supabase.from('review').insert(newReview);
 		if (error){

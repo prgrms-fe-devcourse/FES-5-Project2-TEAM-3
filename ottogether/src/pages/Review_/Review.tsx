@@ -14,7 +14,7 @@ type Comment = Tables<'comment'>;
 type Profile = Tables<'profile'>;
 
 function Review() {
-	const {id} = useParams<{id : string}>();
+	const {id, mediaType} = useParams<{id : string, mediaType: "movie" | "tv";}>();
   const [reviewData, setReviewData] = useState<Review[] | null>(null);
   const [profileData, setProfileData] = useState<Profile[] | null>(null);
   const [commentData, setCommentData] = useState<Comment[] | null>(null);
@@ -111,7 +111,7 @@ function Review() {
 			<div className={S["heading-container"]}>
 				<p className={S.heading}>Reviews and Rating</p>
 			</div>
-			{id && <ReviewCreate reviewAdded={generateData} movieId={id}/>}
+			{id && <ReviewCreate reviewAdded={generateData} movieId={id} mediaType={mediaType!}/>}
 			{(reviewData && profileData && commentData) && reviewData.map(element => (
         <div key={element.id}>
           <ReviewCard

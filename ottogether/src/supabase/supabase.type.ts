@@ -252,6 +252,7 @@ export type Database = {
           dislike_count: number | null
           id: number
           like_count: number | null
+          media_type: Database["public"]["Enums"]["mediaType"] | null
           movie_id: number | null
           rating: number
           text_content: string | null
@@ -264,6 +265,7 @@ export type Database = {
           dislike_count?: number | null
           id?: number
           like_count?: number | null
+          media_type?: Database["public"]["Enums"]["mediaType"] | null
           movie_id?: number | null
           rating: number
           text_content?: string | null
@@ -276,6 +278,7 @@ export type Database = {
           dislike_count?: number | null
           id?: number
           like_count?: number | null
+          media_type?: Database["public"]["Enums"]["mediaType"] | null
           movie_id?: number | null
           rating?: number
           text_content?: string | null
@@ -334,6 +337,7 @@ export type Database = {
     }
     Enums: {
       "Like/Dislike": "like" | "dislike"
+      mediaType: "tv" | "movie"
       notification_type:
         | "comment"
         | "review_like"
@@ -467,6 +471,7 @@ export const Constants = {
   public: {
     Enums: {
       "Like/Dislike": ["like", "dislike"],
+      mediaType: ["tv", "movie"],
       notification_type: [
         "comment",
         "review_like",
