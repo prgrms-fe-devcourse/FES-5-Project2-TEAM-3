@@ -88,10 +88,6 @@ function Review() {
     };
   }, [isPopupOpen]);
 
-	useEffect(() => {
-		generateData();
-	}, [])
-
 	return (
 		<>
 			<div className={S["heading-container"]}>

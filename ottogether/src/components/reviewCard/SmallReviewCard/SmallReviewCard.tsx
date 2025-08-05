@@ -16,7 +16,6 @@ type Profile = Tables<'profile'>;
 interface Prop{
 	reviewData : Review,
 	profileData : Profile | undefined,
-	// commentCount : number,
 	activePopUp : (id : number) => void
 }
 

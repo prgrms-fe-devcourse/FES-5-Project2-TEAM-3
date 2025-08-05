@@ -163,11 +163,14 @@ function MovieDetail() {
 		return sum.toFixed(2);
 	}
 
-	const handleReviewCardClick = (targetId : number = 0) => {
-		if (targetId !== 0)
-			navigate(`/media/${mediaType}/${id}/review#${targetId}`);
-		else
-			navigate(`/media/${mediaType}/${id}/review`);
+	const handleSeeAllReviews = () => {
+		navigate(`/media/${mediaType}/${id}/review`);
+	}
+
+	const handleReviewCardClick = (reviewId : number) => {
+		navigate(`/media/${mediaType}/${id}/review`, {
+			state: { highlightId : reviewId }
+		});
 	}
 
 	const handleMoreMembers = () => {
@@ -257,7 +260,7 @@ function MovieDetail() {
 				<div className={S["reviews-container"]}>
 					<div className={S["top-bar"]}>
 						<h2>Reviews</h2>
-						<button className={S["see-all"]} onClick={() => handleReviewCardClick()}>See All</button>
+						<button className={S["see-all"]} onClick={() => handleSeeAllReviews()}>See All</button>
 					</div>
 				{ currentReviewData.length !== 0 && 
 					<div className={S["review-container"]}>
@@ -274,7 +277,7 @@ function MovieDetail() {
 					<div className={S["notification-container"]}>
 					<h2>아직 이 영화에 작성된 명대사가 없습니다! 😭</h2>	
 					</div>
-					<button className={S["move-page"]} onClick={() => handleReviewCardClick()}>리뷰 작성하러가기 →</button>
+					<button className={S["move-page"]} onClick={() => handleSeeAllReviews()}>리뷰 작성하러가기 →</button>
 					</>
 				}
 
