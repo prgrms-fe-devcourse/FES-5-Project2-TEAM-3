@@ -14,7 +14,7 @@
 	max-width: 1000px;
 	max-height: 789px;
 	position: fixed;
-	background-color: #525252;
+	background-color: var(--color-grey-700);
 	border-radius: 8px;
 	z-index: 999;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -28,6 +28,15 @@
 		height: 0; /* 가로 스크롤바 높이 (필요하다면) */
 		background: transparent; /* 스크롤바 배경을 투명하게 */
 	}
+}
+
+.icon-button {
+	background: transparent;
+	border: none;
+	width: 2rem;
+	height: 2rem;
+	align-self: flex-end;
+	cursor: pointer;
 }
 
 .close {
@@ -44,12 +53,13 @@
 	gap: 8px;
 	align-items: center;
 	width: 100%;
+	margin-bottom: 1rem;
 }
 
 .star-container {
 	display: flex;
 	gap: 4px;
-	margin-left: auto;
+	/* margin-left: auto; */
 }
 
 .text-content {
@@ -65,10 +75,27 @@
 }
 
 .reaction-item {
+	background-color: transparent;
+	border: none;
+	color: var(--foreground);
 	display: flex;
 	gap: 5px;
 	padding-right: 24px;
 	align-items: center;
+
+	img {
+		width: 1.3rem;
+		height: 1.3rem;
+	}
+
+	.comment-icon {
+		width: 1.1rem;
+		height: 1.1rem;
+	}
+}
+
+.like-button {
+	cursor: pointer;
 }
 
 .divider {
@@ -97,9 +124,9 @@
 	margin: 20px 0px;
 	border-radius: 16px;
 	flex-grow: 1;
-	background-color: #666666;
+	background-color: var(--color-grey-600);
 	border-width: 0;
-	color: #4a4459;
+	color: var(--color-grey-300);
 	font-size: 14px;
 }
 
@@ -117,7 +144,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	background-color: #322f35;
+	background-color: var(--color-grey-800);
 	border-radius: 16px;
 	padding: 16px;
 }

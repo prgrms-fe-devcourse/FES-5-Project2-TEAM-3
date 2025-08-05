@@ -94,7 +94,7 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 	}, [reviewData])
 	
 	return (
-	<>
+	<div className={S['review-container']}>
 		<div id={reviewData.id + ''} className={S["card-container"]}>
 		<header className={S.header}>
 			<img className={S['user-avatar']} src={profileData.avatar_url ?? "./beomTeacher.svg"} alt="profile_image" />
@@ -108,18 +108,18 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 			<p>{reviewData.text_content}</p>
 		</main>
 		<footer className={S.footer}>
-			<div className={S['reaction-item']} onClick={() => handleThumb('like')}>
+			<button className={S['reaction-item']} onClick={() => handleThumb('like')}>
 				<img src={isLiked ? "/thumbsUp.svg" : "/emptyThumbsUp.svg"} alt="ThumbsUpIcon" />
 				<p>{likeCount}</p>
-			</div>
-			<div className={S['reaction-item']}>
+			</button>
+			<button className={S['reaction-item']} onClick={() => activePopUp(reviewData.id)}>
 				<img src="/comment.svg" alt="commentIcon" />
 				<p>{commentCount}</p>
-			</div>
+			</button>
 			<p className={S['read-more']} onClick={() => activePopUp(reviewData.id)}>Read More</p>
 		</footer>
 		</div>
-	</>
+	</div>
 	)
 }
 export default ReviewCard

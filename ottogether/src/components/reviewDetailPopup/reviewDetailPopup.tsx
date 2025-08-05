@@ -276,7 +276,9 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		<div className={S["popup-overlay"]}>
 		<div className={S["popup-container"]}>
 			<header className={S.header}>
-				<img className={S.close} src="/close.svg" onClick={closePopup} alt="closeButton"/>
+				<button className={S["icon-button"]} onClick={closePopup}>
+					<img className={S.close} src="/close.svg"  alt="closeButton"/>
+				</button>
 				<div className={S.topbar}>
 					<img className={S['user-avatar']} src={(findUserById(reviewSingleData.user_id, profileData)?.avatar_url ?? "/beomTeacher.svg")} alt="profile_image" />
 					<p>{findUserById(reviewSingleData.user_id, profileData)?.nickname ?? 'User'} · {formatDateNoYear(reviewSingleData.updated_at!)}</p>
@@ -289,12 +291,14 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 								<img src="/edit.svg" alt="editReviewButton" onClick={() => openEditReview(reviewSingleData.text_content!)}/>
 								<img src="/trashcan.svg" alt="deleteReviewButton" onClick={() => handleDeleteReview(reviewSingleData.id)}/>
 							</div>
-							<div className={S['star-container']}>{StarRating(reviewSingleData.rating)}</div>
 							</>
 							}
 						</>
 					} 
 				</div>
+				{ !reviewEditOpen &&
+					<div className={S['star-container']}>{StarRating(reviewSingleData.rating)}</div>
+				}
 			</header>
 			<div className={S['text-comment-text-container']}>
 				{!reviewEditOpen && <div className={S["text-content-container"]}><p>{reviewSingleData.text_content}</p></div>}
@@ -313,14 +317,14 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 				</div>
 				}
 				{!reviewEditOpen && <div className={S["reaction-container"]}>
-					<div className={S['reaction-item']}>
+					<button className={`${S['reaction-item']} ${S["like-button"]}`}>
 						<img src={isLiked ? "/thumbsUp.svg" : "/emptyThumbsUp.svg"} alt="ThumbsUpIcon" onClick={() => handleThumb('like')}/>
 						<p>{likeCount}</p>
-					</div>
-					<div className={S['reaction-item']}>
-						<img src="/comment.svg" alt="commentIcon" />
+					</button>
+					<button className={S['reaction-item']}>
+						<img className={S['comment-icon']} src="/comment.svg" alt="commentIcon" />
 						<p>{commentCount}</p>
-					</div>
+					</button>
 				</div>}
 			</div>
 			<div className={S.divider}></div>
