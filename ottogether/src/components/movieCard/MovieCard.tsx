@@ -43,17 +43,6 @@ function MovieCard({ movie }: MovieCardProps) {
 }, [id]);
 
 
-  // useEffect(() => {
-  //   const fetchLikedStatus = async () => {
-  //     const userId = await getUserInfo("id");
-  //     if (!userId) return;
-  //     const liked = await isMovieLiked(userId, id);
-  //     setLiked(liked);
-  //   };
-
-  //   fetchLikedStatus();
-  // }, [id]);
-
   const handleToggleLike = async () => {
     const userId = await getUserInfo("id");
     if (!userId) {
@@ -98,21 +87,17 @@ function MovieCard({ movie }: MovieCardProps) {
         <p className={S["release-date"]}>{release_date}</p>
         <h3 className={S["title"]}>{title}</h3>
         <div className={S["rating-wrapper"]}>
-  <div className={S["rating"]}>
-    <span>⭐</span>
-    <span className={S["rating-value"]}>
-            {(avgRating ?? vote_average).toFixed(2)} / {avgRating ? 5 : 10}
-          </span>
-
-          <div className={S["tmdb-tooltip"]}>
-            {avgRating
-              ? <span>TMDB: {vote_average.toFixed(1)} / 10</span>
-              : <img src="/ott/Tmdb.svg" alt="TMDB" />}
-          </div>
-        </div>
+          <div className={S["rating"]}>
+            <span>⭐</span>
+            <span className={S["rating-value"]}>
+              {(avgRating ?? 0).toFixed(2)} / 5
+            </span>
+           <div className={S["tmdb-tooltip"]}>
+            <span>TMDB: {vote_average.toFixed(1)} / 10</span>
+           </div>
+         </div>
+       </div>
       </div>
-      </div>
-      
       {provider_logo_path && (
         <div className={S["provider-logo"]}>
           <img

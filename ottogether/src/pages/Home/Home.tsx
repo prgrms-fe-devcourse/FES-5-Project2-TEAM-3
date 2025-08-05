@@ -20,7 +20,9 @@ function Home() {
   let ticking = false;
 
   const observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting && !ticking) {
+    if (entries[0].isIntersecting && 
+      !ticking &&
+      visibleIndex < Math.min(sectionGroups.length, 6)) {
       ticking = true;
       setTimeout(() => {
         setVisibleIndex((prev) => prev + 1);
@@ -32,7 +34,7 @@ function Home() {
   const sentinel = document.querySelector("#scroll-sentinel");
   if (sentinel) observer.observe(sentinel);
   return () => observer.disconnect();
-}, []);
+}, [visibleIndex, sectionGroups.length]);
 
   // const handleToggleOtt = (ottList:string[]) => {
   //   setSelectedOtt(ottList);
