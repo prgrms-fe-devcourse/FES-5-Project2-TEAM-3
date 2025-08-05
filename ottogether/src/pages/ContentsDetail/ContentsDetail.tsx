@@ -45,7 +45,6 @@ function ContentsDetail({mediaId, mediaType} : Props) {
 				data = await getMovieDetail(mediaId); //TODO : tv 패치 코드를 생성
 				setMediaData(extractMovieDetail(data)); //TODO : data를 파싱하고 저장하는 코드 작성
 			}
-			console.log(mediaType, ' data : ', data);
 		}
 		dataUnboxing();
 	}, [])

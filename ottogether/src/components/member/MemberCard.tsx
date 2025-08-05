@@ -15,10 +15,6 @@ interface Props{
 
 function MemberCard({profileData, reviewData, quotesData, isSearch = false} : Props) {
 
-	function onClickCell(data : Profile){
-		console.log(data.user_id, ' cell clicked!');
-	}
-
 	const getUserReviewCount = (reviewData : Review[], userId : string) => {
 		let count = 0;
 		for (const element of reviewData) {
@@ -40,7 +36,7 @@ function MemberCard({profileData, reviewData, quotesData, isSearch = false} : Pr
 		<div className={`${S.container} ${isSearch ? S["search-container"] : ''}`}>
 		{ 
 		profileData && profileData.map(data => (
-			<div key={data.user_id} className={`${S.cell} ${isSearch ? S["search-user"] : ''}`} onClick={() => onClickCell(data)}>
+			<div key={data.user_id} className={`${S.cell} ${isSearch ? S["search-user"] : ''}`}>
 				<img className={S['profile-image']} src={data.avatar_url as string ?? "./beomTeacher.svg"} alt="profileImage" />
 				<div className={S["info-container"]}>
 					<h2>{data.nickname ?? 'Nickname'}</h2>

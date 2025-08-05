@@ -21,7 +21,6 @@ interface Prop{
 }
 
 export function findUserById(inputId : string, profileData : Profile[]) : Profile | undefined{
-	// console.log("findUserById : \nInputID - ", inputId, '\nprofileData : ', profileData);
 	return profileData?.find(profile => profile.user_id !== null && profile.user_id === inputId);
 }
 
@@ -33,12 +32,9 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 	const {isAuth, user} = useAuth();
 	const [isLiked, setIsLiked] = useState(false);
 	const [likeCount, setLikeCount] = useState(0);
-	// const [isDisLiked, setIsDisliked] = useState(false);
-	// const [disLikeCount, setDislikeCount] = useState(0);
-	// console.log('reviewData : ', reviewData,'\nprofileData : ' , profileData);
 	if (!(reviewData && profileData))
 	{
-		// console.error('Error : 올바르지 않은 프로필 혹은 리뷰입니다.', reviewData, '||', profileData);
+		console.error('Error : 올바르지 않은 프로필 혹은 리뷰입니다.', reviewData, '||', profileData);
 		return ;
 	}
 	const handleThumb = async (input : 'like' | 'dislike') => {

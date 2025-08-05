@@ -20,7 +20,6 @@ interface Prop{
 }
 
 export function findUserById(inputId : string, profileData : Profile[]) : Profile | undefined{
-	// console.log("findUserById : \nInputID - ", inputId, '\nprofileData : ', profileData);
 	return profileData?.find(profile => profile.user_id !== null && profile.user_id === inputId);
 }
 
