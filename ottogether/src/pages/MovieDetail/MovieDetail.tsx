@@ -286,7 +286,7 @@ function MovieDetail() {
 				{ currentReviewData.length === 0 &&
 					<>
 					<div className={S["notification-container"]}>
-					<h2>아직 이 영화에 작성된 명대사가 없습니다! 😭</h2>	
+					<h2>아직 이 영화에 작성된 리뷰가 없습니다! 😭</h2>	
 					</div>
 					<button className={S["move-page"]} onClick={() => handleSeeAllReviews()}>리뷰 작성하러가기 →</button>
 					</>
