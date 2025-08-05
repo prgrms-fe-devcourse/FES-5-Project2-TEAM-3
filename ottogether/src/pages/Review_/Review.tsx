@@ -25,7 +25,6 @@ function Review() {
   const highlightId = (location.state as { highlightId?: number })?.highlightId;
 
 	async function generateData(){
-		// console.log(id);
 		if (!id) return ;
 		const {data : reviewData, error:reviewError} = await supabase
 				.from('review')

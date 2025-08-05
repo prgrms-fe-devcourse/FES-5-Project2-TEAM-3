@@ -12,6 +12,7 @@ import { findUserById } from "../../components/reviewCard/ReviewCard";
 import ProfileList from "./ProfileList";
 import QuoteCard from "../../components/Quotes/QuoteCard";
 import SmallReviewCard from "../../components/reviewCard/SmallReviewCard/SmallReviewCard";
+import MovieLoading from "./MovieLoading/MovieLoading";
 
 type Review = Tables<'review'>;
 type Favorite = Tables<'favorite_movies'>;
@@ -51,6 +52,7 @@ function MovieDetail() {
 	const [quotesData, setQuotesData] = useState<Quotes[]>([]);
 	const [profileData, setProfileData] = useState<Profile[]>([]);
 	const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!mediaType || !id) return;
@@ -84,34 +86,39 @@ function MovieDetail() {
 	const dataLoading = async () => {
 		if (!id)
 			return ;
-		const {data, error} = await supabase.from('review').select('*').eq('movie_id', +id).order('like_count', {ascending: false});
-		if (error)
-		{
-			console.error('Error : 유저 데이터를 불러오는 중 에러 : ', error);
-			return ;
-		}
-		setCurrentReviewData(data);
-		const {data:profileLoad, error:profileError} = await supabase.from('profile').select('*');
-		if (profileError)
-		{
-			console.error('Error : 프로필 데이터를 불러오는 중 에러 : ', profileError);
-			return ;
-		}
-		setProfileData(profileLoad);
-		const {data : favorData, error : favorError} = await supabase.from('favorite_movies').select('*').eq('movie_id', +id);
-		if (favorError)
-		{
-			console.error('Error : 좋아요 누른 인원을 불러오는 중 에러 : ', favorError);
-			return ;
-		}
-		findFavoriteUser(favorData,profileLoad);
-		const {data : quoteData, error : quoteError} = await supabase.from('quotes').select('*').eq('movie_id', +id).order('likes', {ascending: false});
-		if (quoteError)
-		{
-			console.error('Error : 명대사 불러오는 중 에러 : ', quoteError);
-			return ;
-		}
-		setQuotesData(quoteData);
+		try{
+			const {data, error} = await supabase.from('review').select('*').eq('movie_id', +id).order('like_count', {ascending: false});
+			if (error)
+			{
+				console.error('Error : 유저 데이터를 불러오는 중 에러 : ', error);
+				return ;
+			}
+			setCurrentReviewData(data);
+			const {data:profileLoad, error:profileError} = await supabase.from('profile').select('*');
+			if (profileError)
+			{
+				console.error('Error : 프로필 데이터를 불러오는 중 에러 : ', profileError);
+				return ;
+			}
+			setProfileData(profileLoad);
+			const {data : favorData, error : favorError} = await supabase.from('favorite_movies').select('*').eq('movie_id', +id);
+			if (favorError)
+			{
+				console.error('Error : 좋아요 누른 인원을 불러오는 중 에러 : ', favorError);
+				return ;
+			}
+			findFavoriteUser(favorData,profileLoad);
+			const {data : quoteData, error : quoteError} = await supabase.from('quotes').select('*').eq('movie_id', +id).order('likes', {ascending: false});
+			if (quoteError)
+			{
+				console.error('Error : 명대사 불러오는 중 에러 : ', quoteError);
+				return ;
+			}
+			setQuotesData(quoteData);
+			}
+			finally{
+				setIsLoading(false);
+			}
 	}
 	dataLoading();
 	}, [id])
@@ -179,6 +186,10 @@ function MovieDetail() {
 
 	const handleMoreQuotes = () => {
 		navigate(`/media/${mediaType}/${id}/quotes`, { state: { quotes: quotesData } });
+	}
+
+	if (isLoading){
+		return <MovieLoading />
 	}
 
  return (<>
