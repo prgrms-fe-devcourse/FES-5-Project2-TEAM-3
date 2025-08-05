@@ -1,144 +1,143 @@
 .page {
-  min-height: 100vh;
-  color: #f0f0f0;
+	min-height: 100vh;
+	color: #f0f0f0;
 }
 
 .banner {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  height: 300px;
-  margin: 0 auto;
-  overflow: hidden;
-  border-radius: 0 0 1rem 1rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+	position: relative;
+	width: 100%;
+	max-width: 1200px;
+	height: 300px;
+	margin: 0 auto;
+	overflow: hidden;
+	border-radius: 0 0 1rem 1rem;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .banner-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 .container {
-  display: flex;
-  gap: 2rem;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 0 0 0;
+	display: flex;
+	gap: 2rem;
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2rem 0;
 }
 
 .sidebar {
-  flex: 0 1 300px;
-  max-width: 300px;
-  min-width: 220px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+	flex: 0 1 300px;
+	max-width: 300px;
+	min-width: 220px;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
 }
 
 .nav-menu {
-  border: 1px solid var(--color-white-40);
-  border-radius: 1rem;
-  padding: 1.5rem 1rem;
-  color: #f0f0f0;
-  display: flex;
-  flex-direction: column;
+	border: 1px solid var(--color-white-40);
+	border-radius: 1rem;
+	padding: 1.5rem 1rem;
+	color: #f0f0f0;
+	display: flex;
+	flex-direction: column;
 }
 
 .nav-menu h4 {
-  font-size: 1rem;
-  color: #ddd;
-  margin-bottom: 0.5rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.4rem;
-  cursor: pointer;
-  transition: background 0.2s;
+	font-size: 1rem;
+	color: #ddd;
+	margin-bottom: 0.5rem;
+	padding: 0.4rem 0.8rem;
+	border-radius: 0.4rem;
+	cursor: pointer;
+	transition: background 0.2s;
 }
 
 .nav-menu h4:hover {
-  background: #2d2d2d;
+	background: #2d2d2d;
 }
 
 .nav-menu .active {
-  background: #3a86ff;
-  color: #fff;
-  font-weight: 600;
+	background: #3a86ff;
+	color: #fff;
+	font-weight: 600;
 }
 
 .nav-menu ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 0.8rem 0;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 0.8rem 0;
 }
 
 .nav-menu li {
-  padding: 0.5rem 0.8rem;
-  border-radius: 0.4rem;
-  cursor: pointer;
-  transition: background 0.2s;
-  font-size: 0.9rem;
+	padding: 0.5rem 0.8rem;
+	border-radius: 0.4rem;
+	cursor: pointer;
+	transition: background 0.2s;
+	font-size: 0.9rem;
 }
 
 .nav-menu li:hover {
-  background: #2d2d2d;
+	background: #2d2d2d;
 }
 
 .active {
-  background: #3a86ff;
-  color: #fff;
-  font-weight: 600;
+	background: #3a86ff;
+	color: #fff;
+	font-weight: 600;
 }
 
 .main-content {
-  flex: 1;
-  border: 1px solid var(--color-white-40);
-  border-radius: 1rem;
-  padding: 2rem;
-  color: #f5f5f5;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+	flex: 1;
+	border: 1px solid var(--color-white-40);
+	border-radius: 1rem;
+	padding: 2rem;
+	color: #f5f5f5;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
-  max-height: 650px;
-  overflow-y: auto;
+	max-height: 650px;
+	overflow-y: auto;
 
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .main-content::-webkit-scrollbar {
-  width: 10px;
+	width: 10px;
 }
 
 .main-content::-webkit-scrollbar-track {
-  background: var(--color-white-10);
-  border-radius: inherit;
-  margin: 4px;
+	background: var(--color-white-10);
+	border-radius: inherit;
+	margin: 4px;
 }
 
 .main-content::-webkit-scrollbar-thumb {
-  background: var(--color-white-40);
-  border-radius: 10px;
-  border: 3px solid transparent;
-  background-clip: content-box;
-}
-
-
-@media (max-width: 900px) {
-  .container {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    flex: none;
-    width: 100%;
-  }
+	background: var(--color-white-40);
+	border-radius: 10px;
+	border: 3px solid transparent;
+	background-clip: content-box;
 }
 
 @media (max-width: 900px) {
-  .sidebar {
-    flex: none;
-    width: 100%;
-    max-width: none;
-    min-width: 0;
-  }
+	.container {
+		flex-direction: column;
+	}
+
+	.sidebar {
+		flex: none;
+		width: 100%;
+	}
+}
+
+@media (max-width: 900px) {
+	.sidebar {
+		flex: none;
+		width: 100%;
+		max-width: none;
+		min-width: 0;
+	}
 }

@@ -77,11 +77,17 @@ function ProfileBox({ user, profile, setActiveTab }: Props) {
       </button>
 
       {/* 프로필 정보 */}
-      <img
-        src={profile?.avatar_url || ""}
-        alt="profile"
-        className={S["profile-img"]}
-      />
+      {
+        profile?.avatar_url ? (
+          <img
+            src={profile?.avatar_url}
+            alt="profile"
+            className={S["profile-img"]}
+          />
+        ) : (
+          <div className={S["avatar-skeleton"]} aria-hidden={true} />
+        )
+      }
       <h3>{profile?.nickname || "Guest"}</h3>
       <p>{profile?.bio || ""}</p>
       <a
