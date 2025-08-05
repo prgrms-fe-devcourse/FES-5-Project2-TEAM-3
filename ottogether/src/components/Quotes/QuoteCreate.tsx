@@ -100,7 +100,7 @@ if (!isExpanded) {
       <input 
       value={person}
       onChange={handlePersonChange}
-      placeholder="누가 말했을까"  
+      placeholder="누가 말한 대사인가요?"  
       />
       <span className={S.charCountPerson}>
   {person.length} / 30
