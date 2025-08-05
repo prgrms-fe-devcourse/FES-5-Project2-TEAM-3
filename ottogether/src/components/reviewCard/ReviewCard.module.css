@@ -62,6 +62,7 @@
 	}
 }
 
-.review-container > p {
+.review-container p {
 	size: 14px;
+	line-height: 1.5;
 }

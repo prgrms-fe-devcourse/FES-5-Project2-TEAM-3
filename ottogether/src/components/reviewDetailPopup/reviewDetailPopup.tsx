@@ -309,7 +309,10 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 				}
 			</header>
 			<div className={S['text-comment-text-container']}>
-				{!reviewEditOpen && <div className={S["text-content-container"]}><p>{reviewSingleData.text_content}</p></div>}
+				{!reviewEditOpen && 
+					<div className={S["text-content-container"]}>
+						<p className={S["text-content"]}>{reviewSingleData.text_content}</p>
+					</div>}
 				{reviewEditOpen &&
 				<div className={S["edit-container"]}>
 					{renderRating()}

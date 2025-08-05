@@ -65,7 +65,7 @@
 .text-content {
 	display: flex;
 	flex-direction: column;
-	padding-top: 16px;
+	padding-bottom: 16px;
 }
 
 .reaction-container {
@@ -259,5 +259,9 @@
 }
 
 .text-content-container {
-	margin-top: 5px;
+	margin: 5px 0;
+
+	p {
+		line-height: 1.5;
+	}
 }
