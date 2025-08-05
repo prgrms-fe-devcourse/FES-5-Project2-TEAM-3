@@ -153,6 +153,7 @@ export default function QuoteCard({
           {isEditing ? (
             <textarea className={S.editInput}
               value={editContent}
+							onClick={(e) => e.stopPropagation()}
               onChange={(e) => setEditContent(e.target.value)}
               placeholder="명대사를 입력하세요"
             />
@@ -173,6 +174,7 @@ export default function QuoteCard({
           {isEditing ? (
             <input className={S.editPerson}
               value={editPerson}
+							onClick={(e) => {e.stopPropagation();}}
               onChange={(e) => setEditPerson(e.target.value)}
               placeholder="누가 말했을까"
             />
