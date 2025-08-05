@@ -25,7 +25,6 @@ function LikedReviews({ user, profile }: Props) {
 
     const fetchLikedReviews = async () => {
       try {
-
         const { data: likedRows, error: likeError } = await supabase
           .from("review_like")
           .select("review_id")
@@ -106,13 +105,22 @@ function LikedReviews({ user, profile }: Props) {
           <div
             key={review.id}
             className={S["my-liked-review-wrapper"]}
-            onClick={() => navigate("/review", { state: { highlightId: review.id } })}
+            onClick={() =>
+              navigate(`/media/${review.media_type}/${review.movie_id}/review`, {
+                state: { highlightId: review.id },
+              })
+            }
           >
             <ReviewCard
               reviewData={review}
               commentCount={review.comment_count ?? 0}
               profileData={profileData}
-              activePopUp={(id) => navigate("/review", { state: { highlightId: id } })}
+              activePopUp={(id) =>
+                navigate(`/media/${review.media_type}/${review.movie_id}/review`, {
+                  state: { highlightId: id },
+                })
+              }
+              onDataUpdate={() => {}}
             />
           </div>
         );

@@ -75,10 +75,10 @@ function CreatedReviews({ user, profile }: Props) {
       </div>
     );
 
+  // 날짜 그룹 표시 여부 계산
   const reviewsWithFlags = reviews.map((review, idx) => {
     const currentDate = formatDate(review.created_at);
-    const prevDate =
-      idx > 0 ? formatDate(reviews[idx - 1].created_at) : null;
+    const prevDate = idx > 0 ? formatDate(reviews[idx - 1].created_at) : null;
     return {
       ...review,
       showDate: currentDate !== prevDate,
@@ -101,7 +101,9 @@ function CreatedReviews({ user, profile }: Props) {
               review.showDate ? S["my-new-date-group"] : S["my-same-date-group"]
             }`}
             onClick={() =>
-              navigate("/review", { state: { highlightId: review.id } })
+              navigate(`/media/${review.media_type}/${review.movie_id}/review`, {
+                state: { highlightId: review.id },
+              })
             }
           >
             {review.showDate && (
@@ -114,8 +116,11 @@ function CreatedReviews({ user, profile }: Props) {
               commentCount={review.comment_count ?? 0}
               profileData={profileData}
               activePopUp={(id) =>
-                navigate("/review", { state: { highlightId: id } })
+                navigate(`/media/${review.media_type}/${review.movie_id}/review`, {
+                  state: { highlightId: id },
+                })
               }
+              onDataUpdate={() => {}}
             />
           </div>
         );
