@@ -39,7 +39,7 @@ export async function getQuotesByMovieId(movieId : string, options:GetQuotesOpti
     let query = supabase.from("quotes").select("*").eq('movie_id', +movieId);
 
     if(author){
-        query = query.eq("author",author);
+      query = query.eq("author",author);
     };
 
     query = query.order(sortBy, {ascending: order === "asc"});

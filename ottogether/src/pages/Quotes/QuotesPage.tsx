@@ -51,8 +51,16 @@ function QuotesPage() {
 };
 
 const handleSortChange = async (option: { sortBy: "created_at" | "likes"; order: "asc" | "desc" }) => {
-  const data = await getQuotes(option);
-  if (data) setQuotes(data);
+  if (id)
+	{
+		const data = await getQuotesByMovieId(id, option);
+		if (data) setQuotes(data);
+	}
+	else {
+		const data = await getQuotes(option);
+		if (data) setQuotes(data);
+	}
+
 };
 
 
