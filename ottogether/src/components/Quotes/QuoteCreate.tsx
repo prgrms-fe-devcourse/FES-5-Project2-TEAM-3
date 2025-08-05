@@ -4,6 +4,7 @@ import { supabase } from '../../supabase/supabase';
 import type { TablesInsert } from '../../supabase/supabase.type';
 import { getUserInfo } from '../../supabase/auth/getUserInfo';
 import addIcon from '@/assets/icons/add.svg';
+import { useNavigate } from "react-router-dom";
 
 type Props = {
     onAdd: (id : number) => void;
@@ -11,6 +12,7 @@ type Props = {
 };
 
 function QuoteCreate({onAdd, movieId}:Props) {
+    const navigate = useNavigate();
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [content, setContent] = useState('');
@@ -28,6 +30,8 @@ function QuoteCreate({onAdd, movieId}:Props) {
 
     if (!userId) {
       console.error('로그인된 사용자를 찾을 수 없습니다.');
+      alert('로그인이 필요한 서비스입니다.');
+      navigate('/login');
       return;
     }
 
