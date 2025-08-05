@@ -42,7 +42,8 @@
 		flex-grow: 1;
 	}
 
-	h2,p{
+	h2,
+	p {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: -webkit-box;
@@ -79,6 +80,7 @@
 		width: 8rem;
 		height: 8rem;
 		border-radius: 50%;
+		padding-left: 0;
 	}
 
 	h2 {
@@ -94,6 +96,7 @@
 		-webkit-line-clamp: 1;
 		-webkit-box-orient: vertical;
 		white-space: normal;
+		padding-top: 0;
 	}
 
 	p {
