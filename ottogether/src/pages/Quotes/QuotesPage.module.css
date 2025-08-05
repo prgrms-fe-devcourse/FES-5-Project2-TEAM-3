@@ -1,34 +1,35 @@
 .headerWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 30px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 30px;
 }
 
 .header {
-  width: 1100px; 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 0;
-  margin-bottom: 15px;
+	width: 80%;
+	max-width: 1100px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 0;
+	margin-bottom: 15px;
 }
 
 .title {
-  font-size: 24px;
-  font-weight: bold;
-  color: white;
+	font-size: 24px;
+	font-weight: bold;
+	color: white;
 }
 
 .divider {
-  width: 1000px;
-  height: 1px;
-  background-color: white;
+	width: 80%;
+	max-width: 1000px;
+	height: 1px;
+	background-color: white;
 }
 
-
 .highlight {
-  border: 2px solid rgba(255, 251, 0, 0.863);
-  border-radius: 8px;
-  padding: 0.5rem;
+	border: 2px solid rgba(255, 251, 0, 0.863);
+	border-radius: 8px;
+	padding: 0.5rem;
 }
