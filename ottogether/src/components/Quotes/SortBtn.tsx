@@ -31,7 +31,6 @@ const SortBtn = ({ onChange }: SortBtnProps) => {
       <button className={S.sortToggleBtn} onClick={() => setOpen((prev) => !prev)}>
         Sort by ▼
       </button>
-
       {open && (
         <ul className={S.dropdown}>
           {sortOptions.map(({ label, option }) => (
