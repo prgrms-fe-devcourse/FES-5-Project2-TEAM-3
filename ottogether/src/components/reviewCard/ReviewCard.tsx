@@ -8,6 +8,7 @@ import toggleReviewThumbs from './toggleReviewThumbs';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase/supabase';
 import { createNotification } from '../../util/createNotifications';
+import { useNavigate } from 'react-router-dom';
 
 type Review = Tables<'review'>;
 type Profile = Tables<'profile'>;
@@ -29,6 +30,8 @@ export function findReviewById(inputId : number, reviewData : Review[]) : Review
 }
 
 function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUpdate} : Prop) {
+	const navigate = useNavigate();
+
 	const {isAuth, user} = useAuth();
 	const [isLiked, setIsLiked] = useState(false);
 	const [likeCount, setLikeCount] = useState(0);
@@ -40,6 +43,7 @@ function ReviewCard({reviewData, profileData, commentCount, activePopUp,onDataUp
 	const handleThumb = async (input : 'like' | 'dislike') => {
   if (!isAuth) {
     alert('로그인이 필요한 서비스입니다.');
+		navigate('/login');
     return;
   }
   const { liked, error } = await toggleReviewThumbs(reviewData.id, user!.id, input);

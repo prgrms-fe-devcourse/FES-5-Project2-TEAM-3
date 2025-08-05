@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase/supabase';
 import { createNotification } from '../../util/createNotifications';
 import toggleReviewThumbs from '../reviewCard/toggleReviewThumbs';
+import { useNavigate } from 'react-router-dom';
 
 
 type Review = Tables<'review'>;
@@ -44,6 +45,9 @@ interface Props{
 	}
 
 function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePopup, reviewUpdate} : Props) {
+
+	const navigate = useNavigate();
+		
 	const {isAuth, user} = useAuth();
 	const [commentInputOpen, setCommentInputOpen] = useState(false);
 	const [commentTextContent, setCommentTextContent] = useState('');
@@ -96,6 +100,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		if (!user)
 		{
 			alert('로그인 후 사용할 수 있는 서비스입니다!');
+			navigate('/login');
 			return ;
 		}
 		if (!confirm('정말 삭제하시겠습니까?'))
@@ -116,6 +121,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		if (!user)
 		{
 			alert('로그인 후 사용할 수 있는 서비스입니다!');
+			navigate('/login');
 			return ;
 		}
 		if (!confirm('정말 삭제하시겠습니까?'))
@@ -137,6 +143,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 		if (!isAuth)
 		{
 			alert('로그인 후 사용할 수 있는 서비스입니다!');
+			navigate('/login');
 			handleCancel();
 			return ;
 		}
@@ -222,6 +229,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 	const handleThumb = async (input : 'like' | 'dislike') => {
 		if (!isAuth) {
 			alert('로그인이 필요한 서비스입니다.');
+			navigate('/login');
 			return;
 		}
 		const { liked, error } = await toggleReviewThumbs(reviewSingleData.id, user!.id, input);
