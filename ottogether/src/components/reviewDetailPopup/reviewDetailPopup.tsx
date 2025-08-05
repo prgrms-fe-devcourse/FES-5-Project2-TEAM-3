@@ -257,6 +257,12 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 
 
 	useEffect(()=> {
+		const handleKeyDown = (e : KeyboardEvent) => {
+			if (e.key === 'Escape'){
+				handleCancel();
+				closePopup();
+			}
+		}
 		const checkThumb = async () => {
 			if (!user)
 				return ;
@@ -277,7 +283,10 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 			checkThumb();
 			setLikeCount(reviewSingleData.like_count!);
 		}
-
+		document.addEventListener('keydown', handleKeyDown);
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		}
 	}, [])
 
 	return (
