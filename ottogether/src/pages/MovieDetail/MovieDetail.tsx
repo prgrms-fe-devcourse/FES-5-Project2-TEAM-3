@@ -168,7 +168,7 @@ function MovieDetail() {
 	}
 
 	const handleReviewCardClick = (reviewId : number) => {
-		navigate(`/media/${mediaType}/${id}/review`, {
+		navigate(`/media/${mediaType}/${id}/review#review${reviewId}`, {
 			state: { highlightId : reviewId }
 		});
 	}
