@@ -6,14 +6,14 @@ import { useEffect, useState } from "react";
 import Hero from "./Hero";
 import S from "./Home.module.css";
 import OttSelector from "../../components/Search/OttSelector";
-import { ottListTotal } from "../../lib/data";
+// import { ottListTotal } from "../../lib/data";
 
 
 function Home() {
 
   const { sectionGroups, quotes } = useGenreSections()
   const [visibleIndex, setVisibleIndex] = useState(1);
-  const [selectedOtt, setSelectedOtt] = useState<string[]>(ottListTotal);
+  // const [selectedOtt, setSelectedOtt] = useState<string[]>(ottListTotal);
 
   useEffect(() => {
 
@@ -34,16 +34,16 @@ function Home() {
   return () => observer.disconnect();
 }, []);
 
-  const handleToggleOtt = (ottList:string[]) => {
-    setSelectedOtt(ottList);
-  };
+  // const handleToggleOtt = (ottList:string[]) => {
+  //   setSelectedOtt(ottList);
+  // };
 
   return (
     <>
     <Hero />
-    <div className={S.ottSelectorWrapper}>
+    {/* <div className={S.ottSelectorWrapper}>
     <OttSelector selected={selectedOtt} onToggle={handleToggleOtt} />
-    </div>
+    </div> */}
     <MovieList title="최신 인기" fetchFn={fetchPopularMovies} />
       <div>
         {sectionGroups.slice(0, visibleIndex).map((group, idx) => (
