@@ -58,7 +58,7 @@ function ProfileBox({ user, profile, setActiveTab }: Props) {
     };
 
     fetchCounts();
-  }, [user]);
+  }, [user?.id]);
 
   return (
     <div className={S["profile-box"]}>
