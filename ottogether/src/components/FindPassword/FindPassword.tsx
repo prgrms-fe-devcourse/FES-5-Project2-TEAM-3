@@ -48,7 +48,7 @@ function FindPassword({ onClose }: Props) {
       }
 
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/edit-password`,
+        redirectTo: `https://yourproject.vercel.app/edit-password`,
       });
 
       if (resetError) {
