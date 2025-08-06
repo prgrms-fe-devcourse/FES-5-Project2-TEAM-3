@@ -28,6 +28,7 @@ function CreatedReviews({ user, profile }: Props) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasNavigated, setHasNavigated] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -62,7 +63,6 @@ function CreatedReviews({ user, profile }: Props) {
     fetchMyReviews();
   }, [user]);
 
-  if (!user) return <p className={S["my-notice"]}>로그인이 필요합니다.</p>;
   if (loading) return <p className={S["my-notice"]}>불러오는 중...</p>;
   if (reviews.length === 0)
     return (
@@ -94,17 +94,13 @@ function CreatedReviews({ user, profile }: Props) {
       </h1>
       {reviewsWithFlags.map((review) => {
         const profileData = profiles.find((p) => p.user_id === review.user_id);
+
         return (
           <div
             key={review.id}
             className={`${S["my-review-wrapper"]} ${
               review.showDate ? S["my-new-date-group"] : S["my-same-date-group"]
             }`}
-            onClick={() =>
-              navigate(`/media/${review.media_type}/${review.movie_id}/review`, {
-                state: { highlightId: review.id },
-              })
-            }
           >
             {review.showDate && (
               <div className={S["date-block"]}>
@@ -115,10 +111,15 @@ function CreatedReviews({ user, profile }: Props) {
               reviewData={review}
               commentCount={review.comment_count ?? 0}
               profileData={profileData}
-              activePopUp={(id) =>
-                navigate(`/media/${review.media_type}/${review.movie_id}/review`, {
-                  state: { highlightId: id },
-                })
+              activePopUp={
+                hasNavigated
+                  ? () => {}
+                  : (id) => {
+                      setHasNavigated(true);
+                      navigate(`/media/${review.media_type}/${review.movie_id}/review`, {
+                        state: { highlightId: id },
+                      });
+                    }
               }
               onDataUpdate={() => {}}
             />
