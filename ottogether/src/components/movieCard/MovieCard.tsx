@@ -29,7 +29,7 @@ function MovieCard({ movie }: MovieCardProps) {
   const fetchLikedStatus = async () => {
     const userId = await getUserInfo("id");
     if (!userId) return;
-    const liked = await isMovieLiked(userId, id);
+    const liked = await isMovieLiked(userId, id, movie.media_type);
     setLiked(liked);
   };
 
@@ -51,7 +51,7 @@ function MovieCard({ movie }: MovieCardProps) {
       return;
     }
 
-    const result = await toggleFavoriteMovie(userId, id);
+    const result = await toggleFavoriteMovie(userId, id, movie.media_type);
     if (!result.error) {
       setLiked(result.liked);
     }
