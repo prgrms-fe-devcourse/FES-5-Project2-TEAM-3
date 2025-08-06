@@ -83,13 +83,13 @@ function MovieDetail() {
 
 	useEffect(() => {
 	const dataLoading = async () => {
-		if (!id)
+		if (!id || !mediaType)
 			return ;
 		try{
-			const {data, error} = await supabase.from('review').select('*').eq('movie_id', +id).order('like_count', {ascending: false});
+			const {data, error} = await supabase.from('review').select('*').eq('movie_id', +id).eq('media_type', mediaType).order('like_count', {ascending: false});
 			if (error)
 			{
-				console.error('Error : 유저 데이터를 불러오는 중 에러 : ', error);
+				console.error('Error : 리뷰 데이터를 불러오는 중 에러 : ', error);
 				return ;
 			}
 			setCurrentReviewData(data);
@@ -100,14 +100,14 @@ function MovieDetail() {
 				return ;
 			}
 			setProfileData(profileLoad);
-			const {data : favorData, error : favorError} = await supabase.from('favorite_movies').select('*').eq('movie_id', +id);
+			const {data : favorData, error : favorError} = await supabase.from('favorite_movies').select('*').eq('movie_id', +id).eq('media_type', mediaType);
 			if (favorError)
 			{
-				console.error('Error : 좋아요 누른 인원을 불러오는 중 에러 : ', favorError);
+				console.error('Error : 좋아요 누른 유저를 불러오는 중 에러 : ', favorError);
 				return ;
 			}
 			findFavoriteUser(favorData,profileLoad);
-			const {data : quoteData, error : quoteError} = await supabase.from('quotes').select('*').eq('movie_id', +id).order('likes', {ascending: false});
+			const {data : quoteData, error : quoteError} = await supabase.from('quotes').select('*').eq('movie_id', +id).eq('media_type', mediaType).order('likes', {ascending: false});
 			if (quoteError)
 			{
 				console.error('Error : 명대사 불러오는 중 에러 : ', quoteError);
