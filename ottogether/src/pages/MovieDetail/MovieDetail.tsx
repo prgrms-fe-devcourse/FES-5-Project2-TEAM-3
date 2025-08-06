@@ -195,7 +195,7 @@ function MovieDetail() {
 		{ content &&
 			<>
 			<div className={S["hero-section"]}>
-				<img className={S["hero-section-image"]} src={IMAGE_URL + content.backdrop_path} alt="hero-section-image" />
+				<img className={S["hero-section-image"]} src={content.backdrop_path ? IMAGE_URL + content.backdrop_path : '/hero-section-default-image.png'} alt="hero-section-image" />
 				<div className={S["header"]}>
 					<h1>{content.title}</h1>
 					<div className={S["average-rate-container"]}>
@@ -207,7 +207,7 @@ function MovieDetail() {
 			<div className={S["information"]}>
 				<div className={S["main-information"]}>
 				<div className={S["poster-wrapper"]}>
-					<img className={S['main-poster-image']} src={IMAGE_URL + content.poster_path} alt="main-poster-image" />
+					<img className={S['main-poster-image']} src={content.poster_path ? IMAGE_URL + content.poster_path : '/main-poster-default-image.png'} alt="main-poster-image" />
 						<button className={S["favorite-btn"]} onClick={handleFavorite}>
 							{	!isMyLove &&
 								<img src="/emptyFavorite.svg" alt="empty-favorite-icon" />
