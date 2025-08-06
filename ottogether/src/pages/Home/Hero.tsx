@@ -40,13 +40,15 @@ function Hero() {
       const id = movies[current];
       const detail = await getMovieDetail(id);
       if (detail) {
-        setMovie({
+        setTimeout(()=>{
+          setMovie({
           id: detail.id,
           title: detail.title,
           overview: detail.overview,
           backdrop_path: detail.backdrop_path,
           media_type: "movie",
         });
+        },300)
       }
     }
 
