@@ -73,9 +73,8 @@ function MovieDetail() {
 
 	useEffect(() => {
 			const fetchLikedStatus = async () => {
-				if (!id) return ;
-				if (!user) return;
-				const liked = await isMovieLiked(user.id, +id);
+				if (!id || !user || !mediaType) return ;
+				const liked = await isMovieLiked(user.id, +id, mediaType);
 				setIsMyLove(liked);
 			};
 	
@@ -124,7 +123,7 @@ function MovieDetail() {
 	}, [id])
 
 	const handleFavorite = async () => {
-		if (!id)
+		if (!id || !mediaType)
 			return ;
 		if (!isAuth || !user)
 		{
@@ -132,7 +131,7 @@ function MovieDetail() {
 			navigate('/login');
     	return;
 		}
-		const result = await toggleFavoriteMovie(user.id, +id);
+		const result = await toggleFavoriteMovie(user.id, +id, mediaType);
 		if (!result.error) {
       setIsMyLove(result.liked);
 			if (result.liked) {
