@@ -10,12 +10,15 @@ interface AuthContextType {
   user: User | null;
   isAuth: boolean;
   logout: () => void;
+  avatarUpdatedAt: Date | null;
+  updateAvatarTimestamp: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [ avatarUpdatedAt, setAvatarUpdatedAt ] = useState<Date | null>(null);
 
   useEffect(() => {
     // 초기 유저 가져오기
@@ -42,8 +45,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   };
 
+  const updateAvatarTimestamp = () => {
+    setAvatarUpdatedAt(new Date());
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isAuth: !!user, logout }}>
+    <AuthContext.Provider value={{ user, isAuth: !!user, logout, avatarUpdatedAt, updateAvatarTimestamp }}>
       {children}
     </AuthContext.Provider>
   );

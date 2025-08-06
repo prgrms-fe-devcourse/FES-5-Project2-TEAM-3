@@ -14,8 +14,7 @@ import NotificationsModal from '../components/Notifications/NotificationsModal';
 
 function Header() {
   /* user Login 상태 & 알림 유무 */
-  const { user, isAuth, logout } = useAuth();
-  // 나중에 전역 상태 context로 변경 필요
+  const { user, isAuth, logout, avatarUpdatedAt } = useAuth();
   const [ hasNewNoti, setHasNewNoti ] = useState(false);
 
   /* 반응형 햄버거 버튼 제어 */
@@ -110,7 +109,7 @@ function Header() {
       }
     };
     fetchAvatarUrl();
-  }, [user]);
+  }, [user, avatarUpdatedAt]);
 
   /* 검색창 팝업 */
   const [ showSearch, setShowSearch ] = useState(false);
@@ -217,7 +216,7 @@ function Header() {
           className={S["user-avatar"]}
           onClick={()=> navigate('/my-page')}
         >
-          { isAvatarLoading ? (
+          { (isAvatarLoading || avatar === null) ? (
             <div className={S["avatar-skeleton"]} aria-hidden={true} />
             ) : (
             <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />
@@ -257,7 +256,7 @@ function Header() {
             navigate('/my-page', { state: { activeTab: 'notifications' } });
           }}
         >
-          { isAvatarLoading ? (
+          { (isAvatarLoading || avatar === null) ? (
             <div className={S["avatar-skeleton"]} aria-hidden={true} />
             ) : (
             <img src={avatar ? avatar : getRandomAvatar()} alt="유저 프로필" aria-label='마이 페이지로 이동합니다' />

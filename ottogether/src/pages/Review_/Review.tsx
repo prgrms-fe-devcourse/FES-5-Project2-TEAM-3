@@ -103,6 +103,7 @@ function Review() {
 					behavior: 'smooth',
 					block: 'start',
 				});
+				history.replaceState(null, '', window.location.pathname + window.location.search);
 			}
 		}, 100)
 		}

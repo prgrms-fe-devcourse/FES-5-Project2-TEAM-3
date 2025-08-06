@@ -136,7 +136,7 @@ export default function QuoteCard({
   const isConfirmed = window.confirm('정말 삭제하시겠습니까?');
   if (!isConfirmed) return;  
 
-  const { error } = await supabase.from('quotes').delete().eq('id', id);
+  const { error } = await supabase.from('quotes').delete().eq('id', id).eq('media_type', quote.media_type!);
   if (!error) {
     alert('삭제되었습니다.');
     onRemove(id);

@@ -71,7 +71,7 @@ function RegisterDetail() {
     setGenres(genreList);
   }
 
-  /* Supabase Upsert 통신 - profile */
+  /* Supabase insert 통신 - profile */
   const submitProfileInfo = async ({
     userId,
     userEmail,
@@ -84,7 +84,7 @@ function RegisterDetail() {
     genres?: string[];
   }) => {
     return await upsertTable({
-      method: 'upsert',
+      method: 'insert',
       tableName: 'profile',
       uploadData: {
         user_id: userId,
@@ -92,8 +92,7 @@ function RegisterDetail() {
         preferred_ott: ottList,
         favorite_genre: genres,
         updated_at: new Date().toISOString(),
-      },
-      matchKey: "user_id"
+      }
     });
   };
 
@@ -125,6 +124,12 @@ function RegisterDetail() {
     if(!userId) {
       alert('로그인 정보가 만료되었습니다. 다시 로그인하신 후 시도해주세요.');
       navigate('/login');
+    }
+
+    // 제출 정보가 있을 경우 confirm
+    if( ottList.length !== 0 || genres.length !== 0 ) {
+      const confirmSkip = confirm('입력 중인 정보가 사라집니다. 계속하시겠습니까?');
+      if (!confirmSkip) return;
     }
 
     setIsSubmitting(true);
