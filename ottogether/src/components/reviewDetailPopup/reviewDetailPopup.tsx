@@ -298,7 +298,7 @@ function ReviewDetailPopup({profileData, reviewSingleData, commentData, closePop
 				</button>
 				<div className={S.topbar}>
 					<img className={S['user-avatar']} src={(findUserById(reviewSingleData.user_id, profileData)?.avatar_url ?? "/beomTeacher.svg")} alt="profile_image" />
-					<p>{findUserById(reviewSingleData.user_id, profileData)?.nickname ?? 'User'} · {formatDateNoYear(reviewSingleData.updated_at!)}</p>
+					<p>{findUserById(reviewSingleData.user_id, profileData)?.nickname ?? 'Guest'} · {formatDateNoYear(reviewSingleData.updated_at!)}</p>
 					{((isAuth && user) && (reviewSingleData.user_id == user.id)) && 
 						<>
 							<img className={S.you} src="/YouBadge.svg" alt="isItMeCheck"></img>
