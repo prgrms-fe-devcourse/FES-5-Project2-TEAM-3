@@ -57,6 +57,7 @@ function FilterPanel({
 
   const dialogRef = useRef<HTMLDialogElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const isModifiedRef = useRef<boolean>(isModified);
 
   /* 필터 임시저장값 초기화 */
   useEffect(() => {
@@ -69,6 +70,11 @@ function FilterPanel({
       setDraftReleaseRange([releaseFrom, releaseTo]);
     }
   }, [isOpen]);
+
+  /* Modified 최신 상태로 참조 */
+  useEffect(() => {
+    isModifiedRef.current = isModified;
+  }, [isModified]);
 
   /* 변경 여부 비교 */
   useEffect(() => {
@@ -90,7 +96,7 @@ function FilterPanel({
   /* 팝업창 제어 */
   const handleDialogClose = () => {
     
-    if (isModified) {
+    if (isModifiedRef.current) {
       const confirmClose = confirm('적용되지 않은 변경사항이 있습니다. 그래도 닫을까요?');
       if ( !confirmClose ) return;
     }
@@ -109,7 +115,11 @@ function FilterPanel({
     }
 
     const handleKeyDown = (e:KeyboardEvent) => {
-      if(e.key === 'Escape') handleDialogClose();
+      if(e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        handleDialogClose();
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown);
@@ -207,6 +217,8 @@ function FilterPanel({
     setDraftOtt(ottListTotal);
     setDraftGenres(genreListTotal);
     setDraftRatingRange([RATING_MIN, RATING_MAX]);
+    setRatingMinInput(String(RATING_MIN));
+    setRatingMaxInput(String(RATING_MAX));
     setDraftReleaseRange(['','']);
     setError('');
   };
