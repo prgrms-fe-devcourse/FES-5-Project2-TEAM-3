@@ -98,5 +98,6 @@
 
 	&:disabled {
 		color: var(--color-grey-600);
+		cursor: not-allowed;
 	}
 }
