@@ -22,9 +22,9 @@ function QuotesPage() {
   	};
 
 		const fetchDataByMovieId = async () => {
-			if (!id)
+			if (!id || !mediaType)
 				return ;
-			const data = await getQuotesByMovieId(id!);
+			const data = await getQuotesByMovieId(id!, mediaType);
 			if (data) setQuotes(data);
 		}
 
@@ -51,9 +51,9 @@ function QuotesPage() {
 };
 
 const handleSortChange = async (option: { sortBy: "created_at" | "likes"; order: "asc" | "desc" }) => {
-  if (id)
+  if (id && mediaType)
 	{
-		const data = await getQuotesByMovieId(id, option);
+		const data = await getQuotesByMovieId(id, mediaType, option);
 		if (data) setQuotes(data);
 	}
 	else {
