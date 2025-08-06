@@ -73,14 +73,19 @@ export const applyFilters = async ( {
       }
       
       /* 별점 필터링 조건 적용 */
-      const avgRating = avgRatingList[content.id] ?? null;
-      if (!(ratingMin === 0 && ratingMax === 5)) {
-        if (
-          avgRating === null || 
-          avgRating < ratingMin || 
-          avgRating > ratingMax
-        ) return null;
-      }
+      // 별점 데이터가 없으면 0 적용 (임시)
+      const avgRating = avgRatingList[content.id] ?? 0;
+
+      if (avgRating === null) return null;
+      if ( ratingMin !== 0 && avgRating < ratingMin ) return null;
+      if ( ratingMax !== 5 && avgRating > ratingMax ) return null;
+      // if (!(ratingMin === 0 && ratingMax === 5)) {
+      //   if (
+      //     avgRating === null || 
+      //     avgRating < ratingMin || 
+      //     avgRating > ratingMax
+      //   ) return null;
+      // }
 
       /* 상영일 필터링 조건 적용 */
       if (!(releaseFrom === '' && releaseTo === '')) {
