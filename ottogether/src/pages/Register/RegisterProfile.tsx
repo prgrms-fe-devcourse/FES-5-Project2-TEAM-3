@@ -14,6 +14,7 @@ import { upsertTable } from '../../supabase/upsertTable';
 import { getRandomAvatar, getRandomHeader } from '../../util/getRandomProfile';
 import { ErrorCode, ErrorMessages } from '../../lib/errorCodes';
 import { checkNicknameExists } from '../../supabase/auth/checkNickname';
+import { useAuth } from '../../contexts/AuthProvider';
 
 
 type FieldErrorState = {
@@ -26,6 +27,8 @@ type FieldErrorState = {
 }
 
 function RegisterProfile() {
+
+  const { updateAvatarTimestamp } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -312,6 +315,7 @@ function RegisterProfile() {
         navigate('/my-page')
       }
     } finally {
+      updateAvatarTimestamp();
       setIsSubmitting(false);
     }
   }
@@ -373,6 +377,7 @@ function RegisterProfile() {
         navigate('/my-page')
       }
     } finally {
+      updateAvatarTimestamp();
       setIsSubmitting(false);
     }
   }
