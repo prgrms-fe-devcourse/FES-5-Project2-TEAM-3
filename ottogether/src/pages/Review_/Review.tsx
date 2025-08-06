@@ -23,6 +23,7 @@ function Review() {
 
   const location = useLocation();
   const highlightId = (location.state as { highlightId?: number })?.highlightId;
+  const [hasOpenedHighlight, setHasOpenedHighlight] = useState(false);
 
 	async function generateData(){
 		if (!id) return ;
@@ -75,10 +76,11 @@ function Review() {
   }, []);
 
   useEffect(() => {
-    if (reviewData && highlightId) {
+    if (reviewData && highlightId && !hasOpenedHighlight) {
       activatePopup(highlightId);
+      setHasOpenedHighlight(true);
     }
-  }, [reviewData, highlightId]);
+  }, [reviewData, highlightId, hasOpenedHighlight]);
 
   useEffect(() => {
     document.body.style.overflow = isPopupOpen ? "hidden" : "auto";

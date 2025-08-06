@@ -102,15 +102,7 @@ function LikedReviews({ user, profile }: Props) {
       {reviews.map((review) => {
         const profileData = profiles.find((p) => p.user_id === review.user_id);
         return (
-          <div
-            key={review.id}
-            className={S["my-liked-review-wrapper"]}
-            onClick={() =>
-              navigate(`/media/${review.media_type}/${review.movie_id}/review`, {
-                state: { highlightId: review.id },
-              })
-            }
-          >
+          <div key={review.id} className={S["my-liked-review-wrapper"]}>
             <ReviewCard
               reviewData={review}
               commentCount={review.comment_count ?? 0}
