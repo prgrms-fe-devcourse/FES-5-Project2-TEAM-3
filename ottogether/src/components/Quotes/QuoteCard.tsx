@@ -151,12 +151,19 @@ export default function QuoteCard({
         <div className={S.top}>
           <img src={quoteLeft} alt="left quote" className={S.quoteIconLeft} />
           {isEditing ? (
-            <textarea className={S.editInput}
-              value={editContent}
-							onClick={(e) => e.stopPropagation()}
-              onChange={(e) => setEditContent(e.target.value)}
-              placeholder="명대사를 입력하세요"
-            />
+            <textarea
+           className={S.editInput}
+           value={editContent}
+             onClick={(e) => e.stopPropagation()}
+             onChange={(e) => {
+               const value = e.target.value;
+               if (value.length <= 300) {
+                 setEditContent(value);
+               } else {
+                 alert("명대사는 최대 300자까지 입력할 수 있습니다.");
+               }
+             }}
+             placeholder="명대사를 입력하세요"/>
           ) : (
             <p className={S.content}>{highlight ?? editContent}</p>
           )}
@@ -172,12 +179,17 @@ export default function QuoteCard({
             </button>
           </div>
           {isEditing ? (
-            <input className={S.editPerson}
-              value={editPerson}
-							onClick={(e) => {e.stopPropagation();}}
-              onChange={(e) => setEditPerson(e.target.value)}
-              placeholder="누가 말했을까"
-            />
+            <input
+            className={S.editPerson}
+            value={editPerson}
+            onClick={(e) => e.stopPropagation()}
+            onChange={(e) => {
+            const value = e.target.value;
+             if (value.length <= 30) {
+                setEditPerson(value);
+              } else {
+                alert("이름은 최대 30자까지 입력할 수 있습니다."); }}}
+            placeholder="누가 말했을까"/>
           ) : (
             <span className={S.person}> - {editPerson}</span>
           )}
