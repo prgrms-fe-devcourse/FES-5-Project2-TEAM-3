@@ -45,18 +45,21 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          media_type: Database["public"]["Enums"]["mediaType"] | null
           movie_id: number | null
           user_id: string | null
         }
         Insert: {
           created_at?: string
           id?: string
+          media_type?: Database["public"]["Enums"]["mediaType"] | null
           movie_id?: number | null
           user_id?: string | null
         }
         Update: {
           created_at?: string
           id?: string
+          media_type?: Database["public"]["Enums"]["mediaType"] | null
           movie_id?: number | null
           user_id?: string | null
         }
@@ -193,6 +196,7 @@ export type Database = {
           id: number
           is_visible: boolean | null
           likes: number
+          media_type: Database["public"]["Enums"]["mediaType"] | null
           movie_id: number | null
           person: string | null
           updated_at: string | null
@@ -205,6 +209,7 @@ export type Database = {
           id?: number
           is_visible?: boolean | null
           likes?: number
+          media_type?: Database["public"]["Enums"]["mediaType"] | null
           movie_id?: number | null
           person?: string | null
           updated_at?: string | null
@@ -217,6 +222,7 @@ export type Database = {
           id?: number
           is_visible?: boolean | null
           likes?: number
+          media_type?: Database["public"]["Enums"]["mediaType"] | null
           movie_id?: number | null
           person?: string | null
           updated_at?: string | null
