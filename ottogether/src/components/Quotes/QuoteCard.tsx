@@ -71,7 +71,7 @@ export default function QuoteCard({
 
   const handleNavigateToDetail = () => {
     if (!quote.movie_id) return;
-    navigate(`/media/movie/${quote.movie_id}`);
+    navigate(`/media/${quote.media_type}/${quote.movie_id}`);
   };
 
   const handleLike = async () => {
