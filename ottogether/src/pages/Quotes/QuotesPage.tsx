@@ -34,7 +34,7 @@ function QuotesPage() {
 
 		useEffect(() => {
 		if (receivedQuotes)
-			setQuotes(receivedQuotes);
+			fetchDataByMovieId();
 		else
 			fetchData();
 		}, []);
