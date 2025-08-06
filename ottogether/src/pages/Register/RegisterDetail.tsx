@@ -126,6 +126,12 @@ function RegisterDetail() {
       navigate('/login');
     }
 
+    // 제출 정보가 있을 경우 confirm
+    if( ottList.length !== 0 || genres.length !== 0 ) {
+      const confirmSkip = confirm('입력 중인 정보가 사라집니다. 계속하시겠습니까?');
+      if (!confirmSkip) return;
+    }
+
     setIsSubmitting(true);
     const profileResult = await submitProfileInfo( { userId, userEmail });
     const notiResult = await setNotificationSettings(userId);
