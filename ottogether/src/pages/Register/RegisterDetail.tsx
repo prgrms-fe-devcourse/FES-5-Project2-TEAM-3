@@ -71,7 +71,7 @@ function RegisterDetail() {
     setGenres(genreList);
   }
 
-  /* Supabase Upsert 통신 - profile */
+  /* Supabase insert 통신 - profile */
   const submitProfileInfo = async ({
     userId,
     userEmail,
@@ -84,7 +84,7 @@ function RegisterDetail() {
     genres?: string[];
   }) => {
     return await upsertTable({
-      method: 'upsert',
+      method: 'insert',
       tableName: 'profile',
       uploadData: {
         user_id: userId,
@@ -92,8 +92,7 @@ function RegisterDetail() {
         preferred_ott: ottList,
         favorite_genre: genres,
         updated_at: new Date().toISOString(),
-      },
-      matchKey: "user_id"
+      }
     });
   };
 
