@@ -11,7 +11,7 @@ type Quote = Database["public"]["Tables"]["quotes"]["Row"];
 
 function QuotesPage() {
     const [quotes, setQuotes] = useState<Quote[]>([]);
-		const {id} = useParams<{id : string}>();
+		const {id, mediaType} = useParams<{id : string, mediaType : 'movie' | 'tv'}>();
     const [highlightId, setHighlightId] = useState<number | null>(null);
     const location = useLocation();
 		const receivedQuotes = location.state?.quotes as Quote[] | undefined;
@@ -76,7 +76,7 @@ const handleSortChange = async (option: { sortBy: "created_at" | "likes"; order:
         <div className={S.divider} />
       </div>
       <div>
-				<QuoteCreate onAdd={fetchDataByMovieId} movieId={id!}/>
+				<QuoteCreate onAdd={fetchDataByMovieId} movieId={id!} mediaType={mediaType!} />
         {quotes.map((quote) => (
           <QuoteCard
             key={quote.id}

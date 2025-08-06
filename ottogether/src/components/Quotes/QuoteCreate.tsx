@@ -9,9 +9,10 @@ import { useNavigate } from "react-router-dom";
 type Props = {
     onAdd: (id : number) => void;
 		movieId : string;
+		mediaType : "movie" | "tv";
 };
 
-function QuoteCreate({onAdd, movieId}:Props) {
+function QuoteCreate({onAdd, movieId, mediaType}:Props) {
     const navigate = useNavigate();
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -43,6 +44,7 @@ function QuoteCreate({onAdd, movieId}:Props) {
       is_visible: true,
       user_id: userId,
 			movie_id : +movieId,
+			media_type : mediaType,
     };
 
     const { error } = await supabase.from('quotes').insert(newQuote);
