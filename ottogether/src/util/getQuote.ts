@@ -33,10 +33,10 @@ export async function getQuotes(
     return data
 }
 
-export async function getQuotesByMovieId(movieId : string, options:GetQuotesOptions = {}) : Promise<Quote[] | null> {
+export async function getQuotesByMovieId(movieId : string, mediaType : "movie" | "tv", options:GetQuotesOptions = {}) : Promise<Quote[] | null> {
     const {sortBy = "created_at", order = "desc", author} = options;
 
-    let query = supabase.from("quotes").select("*").eq('movie_id', +movieId);
+    let query = supabase.from("quotes").select("*").eq('movie_id', +movieId).eq('media_type', mediaType);
 
     if(author){
       query = query.eq("author",author);
