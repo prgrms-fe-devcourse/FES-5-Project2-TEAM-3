@@ -13,7 +13,6 @@ export async function createNotification({
   type: NotificationType;
   targetId: number;
 }) {
-
   const { data: settings, error: settingError } = await supabase
     .from("notification_settings")
     .select("comment, like_review, like_quote")
@@ -23,13 +22,11 @@ export async function createNotification({
   if (settingError) return;
 
   const allowComment = settings?.comment === true;
-  const allowLikeReview = settings?.like_review === true;
-  const allowLikeQuote = settings?.like_quote === true;
+  const allowLikes = (settings?.like_review === true) || (settings?.like_quote === true);
 
   if (
     (type === "comment" && !allowComment) ||
-    (type === "like_review" && !allowLikeReview) ||
-    (type === "like_quote" && !allowLikeQuote)
+    ((type === "like_review" || type === "like_quote") && !allowLikes)
   ) {
     return;
   }
@@ -40,13 +37,11 @@ export async function createNotification({
     like_quote: "님이 회원님의 명대사를 좋아합니다.",
   };
 
-  await supabase.from("notifications").insert([
-    {
-      user_id: userId,
-      sender_id: senderId,
-      type,
-      target_id: targetId,
-      message: messages[type],
-    },
-  ]);
+  await supabase.from("notifications").insert([{
+    user_id: userId,
+    sender_id: senderId,
+    type,
+    target_id: targetId,
+    message: messages[type],
+  }]);
 }
