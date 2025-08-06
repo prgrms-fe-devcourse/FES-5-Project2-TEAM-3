@@ -26,7 +26,7 @@ function LikedVideoContents({ user, profile }: Props) {
       try {
         const { data: favoriteRows, error } = await supabase
           .from("favorite_movies")
-          .select("movie_id")
+          .select("movie_id, media_type")
           .eq("user_id", user.id)
           .order("created_at", { ascending: false });
 
@@ -43,7 +43,9 @@ function LikedVideoContents({ user, profile }: Props) {
         }
 
         // 각 영화/드라마 상세 가져오기
-        const moviePromises = movieIds.map((id) => fetchContentById(id));
+        const moviePromises = (favoriteRows ?? [])
+          .filter((row) => row.movie_id !== null && row.media_type !== null)
+          .map((row) => fetchContentById(row.movie_id!, row.media_type!));
         const movieResults = await Promise.all(moviePromises);
         const validMovies = movieResults.filter((m): m is MovieData => m !== null);
 
